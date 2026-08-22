@@ -3,35 +3,39 @@ import { Worker, type Job, UnrecoverableError } from "bullmq";
 import redis from "#configs/redis.js";
 import logger from "#configs/logger.js";
 
-import { edgeProcessor } from "#features/timetable-designer/edge/edge.processor.js";
+import { nodeProcessor } from "./node.processor.js";
 
-const edgeJob = async (job: Job) => {
+const nodeJob = async (job: Job) => {
   try {
     switch (job.name) {
       case "create":
-        await edgeProcessor.add(job.data.edge);
+        await nodeProcessor.add(job.data.node);
         break;
 
       case "createMany":
-        await edgeProcessor.addMany(job.data.edges);
+        await nodeProcessor.addMany(job.data.nodes);
+        break;
+
+      case "update":
+        await nodeProcessor.update(job.data.node);
         break;
 
       case "delete":
-        await edgeProcessor.remove(job.data.designerId, job.data.edgeId);
+        await nodeProcessor.remove(job.data.designerId, job.data.nodeId);
         break;
 
       case "deleteMany":
-        await edgeProcessor.removeMany(job.data.designerId, job.data.edgeIds);
+        await nodeProcessor.removeMany(job.data.designerId, job.data.nodeIds);
         break;
 
       default:
-        throw new UnrecoverableError(`Unknown edge job type: ${job.name}`);
+        throw new UnrecoverableError(`Unknown node job type: ${job.name}`);
     }
   } catch (error: any) {
-    logger.error("edge job failed", {
+    logger.error("node job failed", {
       jobId: job.id,
       jobName: job.name,
-      edge: job.data,
+      node: job.data,
       attemptsMade: job.attemptsMade,
       message: error?.message,
       stack: error?.stack,
@@ -41,8 +45,8 @@ const edgeJob = async (job: Job) => {
   }
 };
 
-const createEdgeWorker = () =>
-  new Worker("edge", edgeJob, {
+const createNodeWorker = () =>
+  new Worker("node", nodeJob, {
     connection: redis,
     concurrency: 10,
 
@@ -55,4 +59,4 @@ const createEdgeWorker = () =>
     },
   });
 
-export default createEdgeWorker;
+export default createNodeWorker;

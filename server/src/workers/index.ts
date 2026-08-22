@@ -5,10 +5,12 @@ import { Worker } from "bullmq";
 import workerEventHandlers from "./workerEventHandlers.js";
 
 import emailWorker from "./email/email.worker.js";
-import roomWorker from "./room.worker.js";
-import subjectWorker from "./subject.worker.js";
-import facultyWorker from "./faculty.worker.js";
-import nodeWorker from "./node.worker.js";
+import roomWorker from "#features/timetable-designer/room/room.worker.js";
+import subjectWorker from "#features/timetable-designer/subject/subject.worker.js";
+import facultyWorker from "#features/timetable-designer/faculty/faculty.worker.js";
+import nodeWorker from "#features/timetable-designer/node/node.worker.js";
+import edgeWorker from "#features/timetable-designer/edge/edge.worker.js";
+import messageWorker from "#features/timetable-designer/message/message.worker.js";
 
 const workerFactories = [
   emailWorker,
@@ -16,6 +18,8 @@ const workerFactories = [
   subjectWorker,
   facultyWorker,
   nodeWorker,
+  edgeWorker,
+  messageWorker,
 ];
 
 let workers: Worker[] = [];

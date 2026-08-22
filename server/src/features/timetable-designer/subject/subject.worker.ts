@@ -2,31 +2,34 @@ import { Worker, Job, UnrecoverableError } from "bullmq";
 
 import redis from "#configs/redis.js";
 import logger from "#configs/logger.js";
-import { facultyProcessor } from "#features/timetable-designer/faculty/faculty.processor.js";
+import { subjectProcessor } from "./subject.processor.js";
 
-const facultyJob = async (job: Job) => {
+const subjectJob = async (job: Job) => {
   try {
     switch (job.name) {
       case "create":
-        await facultyProcessor.add(job.data.faculty);
+        await subjectProcessor.add(job.data.subject);
         break;
 
       case "update":
-        await facultyProcessor.update(job.data.faculty);
+        await subjectProcessor.update(job.data.subject);
         break;
 
-      case "delete":
-        await facultyProcessor.remove(job.data.facultyId);
+      case "remove":
+        await subjectProcessor.remove(job.data.id);
         break;
 
       default:
-        throw new UnrecoverableError(`Unknown faculty job type: ${job.name}`);
+        throw new UnrecoverableError(`Unknown subject job type: ${job.name}`);
     }
   } catch (error: any) {
-    logger.error("faculty job failed", {
+    const status = error?.response?.status;
+
+    logger.error("subject job failed", {
       jobId: job.id,
       jobName: job.name,
-      faculty: job.data,
+      subject: job.data,
+      status,
       attemptsMade: job.attemptsMade,
       message: error?.message,
       stack: error?.stack,
@@ -36,8 +39,8 @@ const facultyJob = async (job: Job) => {
   }
 };
 
-const createFacultyWorker = () =>
-  new Worker("faculty", facultyJob, {
+const createSubjectWorker = () =>
+  new Worker("subject", subjectJob, {
     connection: redis,
     concurrency: 10,
 
@@ -50,4 +53,4 @@ const createFacultyWorker = () =>
     },
   });
 
-export default createFacultyWorker;
+export default createSubjectWorker;

@@ -5,10 +5,13 @@ import type { Message } from "../types";
 interface MessageState {
   messages: Message[];
   isLoading: boolean;
+  hasMore: boolean;
   streamingMessageId: string | null;
 
   send: (msg: Message) => void;
+  setHasMore: (hasMore: boolean) => void;
   receive: (msg: Message) => void;
+  prependMany: (messages: Message[]) => void;
   update: (id: string, content: string, seq: number, timestamp: number) => void;
   start: (messageId: string) => void;
   finish: (messageId?: string) => void;
@@ -18,8 +21,10 @@ interface MessageState {
 export const useMessageStore = create<MessageState>((set) => ({
   messages: [],
   isLoading: false,
+  hasMore: false,
   streamingMessageId: null,
 
+  setHasMore: (hasMore) => set({ hasMore }),
   send: (msg) =>
     set((state) => ({
       messages: [...state.messages, msg],
@@ -29,6 +34,11 @@ export const useMessageStore = create<MessageState>((set) => ({
   receive: (msg) =>
     set((state) => ({
       messages: [...state.messages, msg],
+    })),
+
+  prependMany: (messages) =>
+    set((state) => ({
+      messages: [...messages, ...state.messages],
     })),
 
   update: (id, content, seq, timestamp) =>

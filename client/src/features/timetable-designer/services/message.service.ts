@@ -17,4 +17,18 @@ export const messageService = {
     useMessageStore.getState().send(message);
     messageSocket.send(message);
   },
+
+  get: async (page = 1) => {
+    const result = await messageSocket.get({
+      designerId: useDesignerStore.getState().designerId,
+      page,
+    });
+
+    console.log(result);
+
+    useMessageStore.getState().prependMany(result.messages);
+    useMessageStore.getState().setHasMore(result.hasMore);
+
+    return result.hasMore;
+  },
 };

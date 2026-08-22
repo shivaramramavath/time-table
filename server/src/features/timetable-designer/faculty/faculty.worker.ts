@@ -2,32 +2,31 @@ import { Worker, Job, UnrecoverableError } from "bullmq";
 
 import redis from "#configs/redis.js";
 import logger from "#configs/logger.js";
-import { roomProcessor } from "#features/timetable-designer/room/room.processor.js";
+import { facultyProcessor } from "./faculty.processor.js";
 
-const roomJob = async (job: Job) => {
+const facultyJob = async (job: Job) => {
   try {
     switch (job.name) {
       case "create":
-        roomProcessor.add(job.data.room);
+        await facultyProcessor.add(job.data.faculty);
         break;
+
       case "update":
-        roomProcessor.update(job.data.room);
+        await facultyProcessor.update(job.data.faculty);
         break;
-      case "remove":
-        roomProcessor.remove(job.data.id);
+
+      case "delete":
+        await facultyProcessor.remove(job.data.facultyId);
         break;
 
       default:
-        throw new UnrecoverableError(`Unknown room job type: ${job.name}`);
+        throw new UnrecoverableError(`Unknown faculty job type: ${job.name}`);
     }
   } catch (error: any) {
-    const status = error?.response?.status;
-
-    logger.error("room job failed", {
+    logger.error("faculty job failed", {
       jobId: job.id,
       jobName: job.name,
-      room: job.data,
-      status,
+      faculty: job.data,
       attemptsMade: job.attemptsMade,
       message: error?.message,
       stack: error?.stack,
@@ -37,16 +36,18 @@ const roomJob = async (job: Job) => {
   }
 };
 
-const createroomWorker = () =>
-  new Worker("room", roomJob, {
+const createFacultyWorker = () =>
+  new Worker("faculty", facultyJob, {
     connection: redis,
     concurrency: 10,
+
     removeOnComplete: {
       age: 0,
     },
+
     removeOnFail: {
       count: 100,
     },
   });
 
-export default createroomWorker;
+export default createFacultyWorker;
