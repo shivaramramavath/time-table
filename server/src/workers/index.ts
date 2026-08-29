@@ -11,6 +11,7 @@ import facultyWorker from "#features/timetable-designer/faculty/faculty.worker.j
 import nodeWorker from "#features/timetable-designer/node/node.worker.js";
 import edgeWorker from "#features/timetable-designer/edge/edge.worker.js";
 import messageWorker from "#features/timetable-designer/message/message.worker.js";
+import feedbackWorker from "#features/feedback/feedback.worker.js";
 
 const workerFactories = [
   emailWorker,
@@ -20,6 +21,7 @@ const workerFactories = [
   nodeWorker,
   edgeWorker,
   messageWorker,
+  feedbackWorker
 ];
 
 let workers: Worker[] = [];

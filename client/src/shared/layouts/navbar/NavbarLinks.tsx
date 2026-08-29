@@ -13,8 +13,8 @@ const links = [
     path: "/templates",
   },
   {
-    name: "About",
-    path: "/about",
+    name: "Feedback",
+    path: "/feedback",
   },
 ];
 
