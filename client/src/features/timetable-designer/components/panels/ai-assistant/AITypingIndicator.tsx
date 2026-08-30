@@ -4,14 +4,7 @@ import { motion } from "framer-motion";
 const AITypingIndicator = () => {
   return (
     <div className="flex items-center gap-2 py-2">
-      <div
-        className="
-          flex size-7
-          items-center justify-center
-          rounded-lg
-          border bg-muted/40
-        "
-      >
+      <div className="flex size-7 items-center justify-center rounded-lg border bg-muted/40">
         <Sparkles className="size-3.5 text-primary" />
       </div>
 
@@ -21,7 +14,7 @@ const AITypingIndicator = () => {
             key={item}
             animate={{
               opacity: [0.3, 1, 0.3],
-              y: [0, -2, 0],
+              y: [0, -2, 2, 0],
             }}
             transition={{
               duration: 1,
@@ -32,10 +25,6 @@ const AITypingIndicator = () => {
           />
         ))}
       </div>
-
-      <span className="text-[10px] text-muted-foreground">
-        Analyzing timetable...
-      </span>
     </div>
   );
 };

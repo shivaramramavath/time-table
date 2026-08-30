@@ -1,6 +1,6 @@
 import type { Request, Response, CookieOptions } from "express";
 import ApiError from "#utils/ApiError.js";
-import env from "#configs/env.js";
+import { env } from "#configs/env.js";
 import { REFRESH_TOKEN_EXPIRES_IN } from "#configs/constants.js";
 
 const baseCookieOptions: CookieOptions = {

@@ -2,29 +2,42 @@ import { create } from "zustand";
 
 import type { Message } from "../types";
 
+interface StreamingMessage {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+  seq?: number;
+  createdAt: string;
+}
+
 interface MessageState {
   messages: Message[];
+  streamingMessage: StreamingMessage | null;
+
   isLoading: boolean;
   hasMore: boolean;
-  streamingMessageId: string | null;
 
   send: (msg: Message) => void;
   setHasMore: (hasMore: boolean) => void;
   receive: (msg: Message) => void;
   prependMany: (messages: Message[]) => void;
-  update: (id: string, content: string, seq: number, timestamp: number) => void;
+
   start: (messageId: string) => void;
-  finish: (messageId?: string) => void;
+  update: ({ content, seq, timestamp }) => void;
+  finish: () => void;
+
   clear: () => void;
 }
 
 export const useMessageStore = create<MessageState>((set) => ({
   messages: [],
+  streamingMessage: null,
+
   isLoading: false,
   hasMore: false,
-  streamingMessageId: null,
 
   setHasMore: (hasMore) => set({ hasMore }),
+
   send: (msg) =>
     set((state) => ({
       messages: [...state.messages, msg],
@@ -41,60 +54,70 @@ export const useMessageStore = create<MessageState>((set) => ({
       messages: [...messages, ...state.messages],
     })),
 
-  update: (id, content, seq, timestamp) =>
-    set((state) => ({
-      messages: state.messages.map((message) => {
-        if (message.id !== id) {
-          return message;
-        }
-
-        if (message.seq !== undefined && seq <= message.seq) {
-          return message;
-        }
-
-        return {
-          ...message,
-          content: message.content + content,
-          seq,
-          createdAt: new Date(timestamp).toISOString(),
-        };
-      }),
-    })),
-
   start: (messageId) =>
+    set({
+      streamingMessage: {
+        id: messageId,
+        role: "assistant",
+        content: "",
+        createdAt: new Date().toISOString(),
+      },
+
+      isLoading: true,
+    }),
+
+  update: ({ content, seq, timestamp }) =>
     set((state) => {
-      const exists = state.messages.some((message) => message.id === messageId);
+      const streamingMessage = state.streamingMessage;
+
+      if (!streamingMessage) {
+        return state;
+      }
+
+      if (streamingMessage.seq !== undefined && seq <= streamingMessage.seq) {
+        return state;
+      }
 
       return {
-        messages: exists
-          ? state.messages
-          : [
-              ...state.messages,
-              {
-                id: messageId,
-                role: "assistant",
-                content: "",
-                createdAt: new Date().toISOString(),
-              },
-            ],
-        isLoading: true,
-        streamingMessageId: messageId,
+        streamingMessage: {
+          ...streamingMessage,
+          content: streamingMessage.content + content,
+          seq,
+          createdAt: new Date(timestamp).toISOString(),
+        },
       };
     }),
 
-  finish: (messageId) =>
-    set((state) => ({
-      isLoading: false,
-      streamingMessageId:
-        state.streamingMessageId === messageId
-          ? null
-          : state.streamingMessageId,
-    })),
+  finish: () =>
+    set((state) => {
+      const streamingMessage = state.streamingMessage;
+
+      if (!streamingMessage) {
+        return {
+          isLoading: false,
+          streamingMessage: null,
+        };
+      }
+
+      const message: Message = {
+        id: streamingMessage.id,
+        role: streamingMessage.role,
+        content: streamingMessage.content,
+        createdAt: streamingMessage.createdAt,
+      };
+
+      return {
+        messages: [...state.messages, message],
+        streamingMessage: null,
+        isLoading: false,
+      };
+    }),
 
   clear: () =>
     set({
       messages: [],
+      streamingMessage: null,
       isLoading: false,
-      streamingMessageId: null,
+      hasMore: false,
     }),
 }));

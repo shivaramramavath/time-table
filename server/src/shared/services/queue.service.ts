@@ -18,4 +18,5 @@ const emailQueue = new Queue("email", {
 export const queueService = {
   forgotPassword: (data: any) => emailQueue.add("forgot-password", data),
   registerGreeting: (data: any) => emailQueue.add("register-greeting", data),
+  feedback: (data: any) => emailQueue.add("feedback", data),
 };

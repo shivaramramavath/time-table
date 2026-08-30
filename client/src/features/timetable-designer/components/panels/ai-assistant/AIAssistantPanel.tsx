@@ -17,7 +17,6 @@ interface Props {
 const AIAssistantPanel = ({ onClose }: Props) => {
   useMessageListeners();
 
-  
   return (
     <motion.div
       initial={{
@@ -38,7 +37,18 @@ const AIAssistantPanel = ({ onClose }: Props) => {
       transition={{
         duration: 0.2,
       }}
-      className="flex h-[min(680px,calc(100vh-120px))] w-[380px] flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-2xl"
+      className="
+        flex
+        h-[min(680px,calc(100vh-120px))]
+        w-[380px]
+        flex-col
+        overflow-hidden
+        rounded-2xl
+        border
+        border-border
+        bg-background
+        shadow-2xl
+      "
     >
       {/* Header */}
       <div className="relative">
@@ -54,11 +64,18 @@ const AIAssistantPanel = ({ onClose }: Props) => {
         </Button>
       </div>
 
+      {/* Conversation */}
       <AIConversation />
 
-      <AISuggestions />
-
-      <AIPrompt />
+      {/* Bottom composer */}
+      <div
+        className="
+          relative shrink-0 bg-gradient-to-t from-background via-background/95 to-background/0 pt-20
+        "
+      >
+        <AISuggestions />
+        <AIPrompt />
+      </div>
     </motion.div>
   );
 };

@@ -16,6 +16,9 @@ const emailJob = async (job: Job) => {
       case "register-greeting":
         emailProcessor.registerGreeting(email, job.data);
         break;
+      case "feedback":
+        emailProcessor.feedback(job.data);
+        break;
 
       default:
         throw new UnrecoverableError(`Unknown email job type: ${job.name}`);

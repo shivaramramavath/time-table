@@ -1,6 +1,6 @@
 import http from "http";
 
-import env from "#configs/env.js";
+import { env } from "#configs/env.js";
 import logger from "#configs/logger.js";
 import { database } from "#configs/database.js";
 import { checkRedis } from "#configs/redis.js";

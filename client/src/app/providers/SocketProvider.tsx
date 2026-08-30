@@ -1,17 +1,13 @@
 import { useEffect, type ReactNode } from "react";
+import { toast } from "sonner";
 
 import { socketService } from "@/shared/socket/socket.service";
 import { useSocketStore } from "@/shared/socket/socket.store";
 import ConnectingScreen from "@/shared/components/ConnectingScreen";
-import { toast } from "sonner";
 import { authService } from "@/features/auth/services/auth.service";
-import { navigationService } from "@/shared/services/navigation.service";
+import { Outlet } from "react-router-dom";
 
-interface Props {
-  children: ReactNode;
-}
-
-const SocketProvider = ({ children }: Props) => {
+const SocketProvider = () => {
   const status = useSocketStore((state) => state.status);
   const setStatus = useSocketStore((state) => state.setStatus);
 
@@ -24,13 +20,10 @@ const SocketProvider = ({ children }: Props) => {
 
     const handleDisconnect = () => {
       setStatus("disconnected");
-      // navigationService.navigate("/timetables");
     };
 
-    const handleConnectError = async (err: Error) => {
-      console.error("Socket connection error:", err);
-
-      if (err.message === "Forbidden") {
+    const handleConnectError = async (error: Error) => {
+      if (error.message === "Forbidden") {
         try {
           await authService.refreshToken();
 
@@ -39,13 +32,11 @@ const SocketProvider = ({ children }: Props) => {
 
           return;
         } catch {
-          toast.error("Session expired. Please login again.");
           setStatus("disconnected");
           return;
         }
       }
 
-      toast.error(err.message);
       setStatus("reconnecting");
     };
 
@@ -66,14 +57,11 @@ const SocketProvider = ({ children }: Props) => {
     };
   }, [setStatus]);
 
-  if (
-    status === "connecting" ||
-    (status === "reconnecting" && !socketService.getSocket().active)
-  ) {
+  if (status !== "connected") {
     return <ConnectingScreen />;
   }
 
-  return children;
+  return <Outlet />;
 };
 
 export default SocketProvider;

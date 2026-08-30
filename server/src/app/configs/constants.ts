@@ -10,7 +10,6 @@ export const REFRESH_TOKEN_EXPIRES_IN = 7 * DAY;
 export const SESSION_TTL = 7 * DAY;
 
 export const BREVO_URL = "https://api.brevo.com/v3";
-export const BREVO_EMAIL = "ramavathshiva6300@gmail.com";
 
 export const DESIGNER_TTL = HOUR;
 export const PAGE_SIZE = 20;

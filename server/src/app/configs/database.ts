@@ -1,5 +1,5 @@
 import mongoose, { type ConnectOptions } from "mongoose";
-import env from "#configs/env.js";
+import { env } from "#configs/env.js";
 import logger from "#configs/logger.js";
 
 mongoose.connection.on("connected", () => {

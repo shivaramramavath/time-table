@@ -1,4 +1,4 @@
-import env from "#configs/env.js";
+import { env } from "#configs/env.js";
 import { createLogger, format, Logger, transports } from "winston";
 
 const { combine, timestamp, printf, colorize, errors, json } = format;

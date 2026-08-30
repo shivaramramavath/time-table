@@ -22,7 +22,7 @@ const TimetableDesignerPage = lazy(
   () => import("@/pages/TimetableDesignerPage"),
 );
 const TemplatesPage = lazy(() => import("@/pages/TemplatesPage"));
-const  FeedbackPage =  lazy(() => import("@/pages/FeedbackPage")) ;
+const FeedbackPage = lazy(() => import("@/pages/FeedbackPage"));
 
 const AppRouter = () => {
   return (
@@ -46,17 +46,14 @@ const AppRouter = () => {
             <Route path="/timetables" element={<TimetablesPage />} />
             <Route path="/templates" element={<TemplatesPage />} />
             <Route path="/feedback" element={<FeedbackPage />} />
-
           </Route>
 
-          <Route
-            path="/timetables/designer"
-            element={
-              <SocketProvider>
-                <TimetableDesignerPage />
-              </SocketProvider>
-            }
-          />
+          <Route element={<SocketProvider />}>
+            <Route
+              path="/timetables/designer"
+              element={<TimetableDesignerPage />}
+            />
+          </Route>
         </Route>
 
         <Route path="*" element={<NotFoundPage />} />

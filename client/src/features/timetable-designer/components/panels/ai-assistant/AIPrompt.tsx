@@ -50,7 +50,7 @@ const AIPrompt = () => {
   };
 
   return (
-    <div className="border-t border-border bg-background p-3">
+    <div className="absolute inset-x-0 bottom-0 p-3">
       <motion.form
         onSubmit={handleFormSubmit}
         initial={{
@@ -100,10 +100,6 @@ const AIPrompt = () => {
             </Button>
           </div>
         </div>
-
-        <p className="mt-1.5 text-center text-[9px] text-muted-foreground">
-          Enter to send · Shift + Enter for new line
-        </p>
       </motion.form>
     </div>
   );

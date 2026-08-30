@@ -1,6 +1,6 @@
 import { sendEmail } from "#services/send-email.js";
 import loadHtml from "#utils/loadHtml.js";
-import env from "#configs/env.js";
+import { env } from "#configs/env.js";
 
 type ForgotPassword = {
   token: string;
@@ -23,5 +23,10 @@ export const emailProcessor = {
       email,
     });
     return await sendEmail(email, "Welcome to Time Table", html);
+  },
+
+  feedback: async (feedback: any) => {
+    const html = await loadHtml("email.feedback.ejs", feedback);
+    return await sendEmail(env.EMAIL_ID, "Feedback", html);
   },
 };

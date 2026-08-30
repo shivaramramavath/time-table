@@ -1,7 +1,7 @@
 import crypto from "node:crypto";
 import jwt from "jsonwebtoken";
 
-import env from "#configs/env.js";
+import { env } from "#configs/env.js";
 import { ACCESS_TOKEN_EXPIRES_IN } from "#configs/constants.js";
 
 export interface AccessTokenPayload {

@@ -26,13 +26,8 @@ export const registerMessageListeners = () => {
     useMessageStore.getState().start(messageId);
   };
 
-  const handleToken = ({
-    messageId,
-    content,
-    seq,
-    timestamp,
-  }: MessageTokenEvent) => {
-    useMessageStore.getState().update(messageId, content, seq, timestamp);
+  const handleToken = (token: MessageTokenEvent) => {
+    useMessageStore.getState().update(token);
   };
 
   const handleRunFinish = ({ messageId }: MessageStartEvent) => {

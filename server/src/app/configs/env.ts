@@ -8,6 +8,8 @@ const envSchema = z.object({
 
   ORIGIN_URL: z.string().min(1, "ORIGIN is required"),
 
+  EMAIL_ID: z.string().min(1, "EMAIL_ID is required"),
+
   BREVO_API_KEY: z.string().min(1, "BREVO_API_KEY is required"),
 
   GROQ_API_KEY: z.string().min(1, "GROQ_API_KEY is required"),
@@ -28,9 +30,7 @@ if (!parsed.success) {
   process.exit(1);
 }
 
-const env = {
+export const env = {
   ...parsed.data,
   isProd: parsed.data.NODE_ENV === "production",
 };
-
-export default env;

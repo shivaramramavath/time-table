@@ -23,11 +23,11 @@ const AIMessage = ({ role, content }: Props) => {
         opacity: 1,
         y: 0,
       }}
-      className={cn("mb-3 flex", isUser ? "justify-end" : "justify-start")}
+      className={cn("mb-2 flex", isUser ? "justify-end" : "justify-start")}
     >
       <div
         className={cn(
-          "max-w-[88%] rounded-2xl border px-3 py-2.5 text-xs leading-5",
+          "max-w-[88%] rounded-2xl border px-2 py-2 text-xs leading-5",
           isUser
             ? "rounded-br-md border-primary/10 bg-primary text-primary-foreground"
             : "rounded-bl-md bg-card",

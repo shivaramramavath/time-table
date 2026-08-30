@@ -44,9 +44,7 @@ export const errorInterceptor = async (
 
       return httpClient(originalRequest);
     } catch {
-      Token.clearToken();
-      useAuthStore.getState().clearAuth();
-
+     
       navigationService.navigate("/login");
 
       return Promise.reject(error);

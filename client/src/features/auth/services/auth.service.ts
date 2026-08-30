@@ -87,11 +87,15 @@ export const authService = {
   },
 
   refreshToken: async () => {
-    const { data: response } = await authApi.refreshToken();
+    try {
+      const { data: response } = await authApi.refreshToken();
 
-    Token.setToken(response.token);
+      Token.setToken(response.token);
 
-    return response;
+      return response;
+    } catch {
+      clearAuthentication();
+    }
   },
 
   logout: async () => {

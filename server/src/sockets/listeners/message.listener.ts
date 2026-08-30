@@ -9,7 +9,7 @@ export const registerMessageListeners = (io: Server, socket: Socket) => {
   socket.on(
     "message:send",
     asyncSocketHandler("message:send", async ({ message }) => {
-      aiService.run(socket.data.user.userId, message.designerId, message);
+      aiService.generate(socket.data.user.userId, message.designerId, message);
     }),
   );
 
