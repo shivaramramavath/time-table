@@ -3,7 +3,7 @@ import { timetableRepository } from "./timetable.reposistory.js";
 
 export const timetableService = {
   create: async ({ userId }: { userId: string }) => {
-    const title = crypto.randomUUID().toString();
+    const title = "Untitled Timetable";
     const timetable = await timetableRepository.create({ title, userId });
     await timetableDesignerService.create(timetable._id);
 
@@ -25,7 +25,7 @@ export const timetableService = {
     return await timetableRepository.getRecentTimetables(userId, 5);
   },
 
-  get:(timetableId: string) => timetableRepository.get(timetableId),
+  get: (timetableId: string) => timetableRepository.get(timetableId),
 
   update: async (timetableId: string, data: any) => {
     return await timetableRepository.update(timetableId, data);

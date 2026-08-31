@@ -19,6 +19,12 @@ import {
 } from "../../hooks";
 
 import type { Edge, Node } from "../../types";
+import { registerNodeListeners } from "../../socket/node.listeners";
+import { useEffect } from "react";
+import { registerEdgeListeners } from "../../socket/edge.listeners";
+import { registerSubjectListeners } from "../../socket/subject.listeners";
+import { registerFacultyListeners } from "../../socket/faculty.listeners";
+import { registerRoomListeners } from "../../socket/room.listeners";
 
 interface Props {
   timetableId: string;
@@ -36,6 +42,26 @@ const DesignerCanvas = ({ timetableId, initialNodes, initialEdges }: Props) => {
     setNodes,
     setEdges,
   });
+
+  useEffect(() => {
+    return registerNodeListeners({ setNodes });
+  }, [setNodes]);
+
+  useEffect(() => {
+    return registerEdgeListeners({ setEdges });
+  }, [setEdges]);
+
+  useEffect(() => {
+    const cleanupSubject = registerSubjectListeners();
+    const cleanupFaculty = registerFacultyListeners();
+    const cleanupRoom = registerRoomListeners();
+
+    return () => {
+      cleanupSubject();
+      cleanupFaculty();
+      cleanupRoom();
+    };
+  }, []);
 
   const { onDragOver, onDrop } = useDesignerDnD();
 
