@@ -64,3 +64,28 @@ export interface ToolResult {
   data?: unknown;
   error?: string;
 }
+
+export type MessageChunkMetadata = {
+  langgraph_node?: string;
+  [key: string]: unknown;
+};
+
+export enum GraphStatus {
+  THINKING = "thinking",
+  ANALYZING = "analyzing",
+  UNDERSTANDING = "understanding",
+  RETRIEVING = "retrieving",
+  PLANNING = "planning",
+  VALIDATING = "validating",
+  EXECUTING = "executing",
+  VERIFYING = "verifying",
+  RESPONDING = "responding",
+}
+
+export type GraphUpdate = Record<
+  string,
+  {
+    status?: GraphStatus;
+    [key: string]: unknown;
+  }
+>;

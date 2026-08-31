@@ -1,13 +1,8 @@
-import { Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 
 const AITypingIndicator = () => {
   return (
     <div className="flex items-center gap-2 py-2">
-      <div className="flex size-7 items-center justify-center rounded-lg border bg-muted/40">
-        <Sparkles className="size-3.5 text-primary" />
-      </div>
-
       <div className="flex items-center gap-1">
         {[0, 1, 2].map((item) => (
           <motion.span

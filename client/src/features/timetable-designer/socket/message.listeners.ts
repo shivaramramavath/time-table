@@ -1,6 +1,9 @@
 import { socketService } from "@/shared/socket/socket.service";
 
-import { useMessageStore } from "../store/message.store";
+import {
+  useMessageStore,
+  type MessageStatusEvent,
+} from "../store/message.store";
 
 interface MessageStartEvent {
   messageId: string;
@@ -30,6 +33,10 @@ export const registerMessageListeners = () => {
     useMessageStore.getState().update(token);
   };
 
+  const handleStatus = (event: MessageStatusEvent) => {
+    useMessageStore.getState().setStatus(event);
+  };
+
   const handleRunFinish = ({ messageId }: MessageStartEvent) => {
     console.log("AI run finished:", messageId);
 
@@ -44,12 +51,14 @@ export const registerMessageListeners = () => {
 
   socket.on("message:start", handleRunStart);
   socket.on("message:token", handleToken);
+  socket.on("message:status", handleStatus);
   socket.on("message:finish", handleRunFinish);
   socket.on("message:error", handleRunError);
 
   return () => {
     socket.off("message:start", handleRunStart);
     socket.off("message:token", handleToken);
+    socket.off("message:status", handleStatus);
     socket.off("message:finish", handleRunFinish);
     socket.off("message:error", handleRunError);
   };

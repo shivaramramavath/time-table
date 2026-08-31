@@ -73,7 +73,7 @@ const AIAssistantPanel = ({ onClose }: Props) => {
           relative shrink-0 bg-gradient-to-t from-background via-background/95 to-background/0 pt-20
         "
       >
-        <AISuggestions />
+        {/* <AISuggestions /> */}
         <AIPrompt />
       </div>
     </motion.div>

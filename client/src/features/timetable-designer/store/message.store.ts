@@ -2,12 +2,30 @@ import { create } from "zustand";
 
 import type { Message } from "../types";
 
+export type AIStatus =
+  | "thinking"
+  | "analyzing"
+  | "understanding"
+  | "retrieving"
+  | "planning"
+  | "validating"
+  | "executing"
+  | "verifying"
+  | "responding";
+
+export interface MessageStatusEvent {
+  messageId: string;
+  status: AIStatus;
+}
+
 interface StreamingMessage {
   id: string;
-  role: "user" | "assistant";
+  role: "assistant";
   content: string;
   seq?: number;
   createdAt: string;
+
+  status: AIStatus;
 }
 
 interface MessageState {
@@ -23,8 +41,14 @@ interface MessageState {
   prependMany: (messages: Message[]) => void;
 
   start: (messageId: string) => void;
-  update: ({ content, seq, timestamp }) => void;
-  finish: () => void;
+
+  setStatus: (event: MessageStatusEvent) => void;
+
+  update: (data: { content: string; seq: number; timestamp: number }) => void;
+
+  finish: (messageId?: string) => void;
+
+  error: (messageId: string, message?: string) => void;
 
   clear: () => void;
 }
@@ -35,6 +59,8 @@ export const useMessageStore = create<MessageState>((set) => ({
 
   isLoading: false,
   hasMore: false,
+
+  // Normal messages
 
   setHasMore: (hasMore) => set({ hasMore }),
 
@@ -54,17 +80,51 @@ export const useMessageStore = create<MessageState>((set) => ({
       messages: [...messages, ...state.messages],
     })),
 
+  // AI START
+
   start: (messageId) =>
     set({
       streamingMessage: {
         id: messageId,
+
         role: "assistant",
+
         content: "",
+
         createdAt: new Date().toISOString(),
+
+        status: "thinking",
       },
 
       isLoading: true,
     }),
+
+  // AI STATUS
+
+  setStatus: ({ messageId, status }) =>
+    set((state) => {
+      const streamingMessage = state.streamingMessage;
+
+      if (!streamingMessage) {
+        return state;
+      }
+
+      // Ignore status events belonging
+      // to another AI run.
+      if (streamingMessage.id !== messageId) {
+        return state;
+      }
+
+      return {
+        streamingMessage: {
+          ...streamingMessage,
+
+          status,
+        },
+      };
+    }),
+
+  // AI TOKEN
 
   update: ({ content, seq, timestamp }) =>
     set((state) => {
@@ -81,14 +141,19 @@ export const useMessageStore = create<MessageState>((set) => ({
       return {
         streamingMessage: {
           ...streamingMessage,
+
           content: streamingMessage.content + content,
+
           seq,
+
           createdAt: new Date(timestamp).toISOString(),
         },
       };
     }),
 
-  finish: () =>
+  // AI FINISH
+
+  finish: (messageId) =>
     set((state) => {
       const streamingMessage = state.streamingMessage;
 
@@ -99,25 +164,60 @@ export const useMessageStore = create<MessageState>((set) => ({
         };
       }
 
+      if (messageId && streamingMessage.id !== messageId) {
+        return state;
+      }
+
       const message: Message = {
         id: streamingMessage.id,
-        role: streamingMessage.role,
+
+        role: "assistant",
+
         content: streamingMessage.content,
+
         createdAt: streamingMessage.createdAt,
       };
 
       return {
         messages: [...state.messages, message],
+
         streamingMessage: null,
+
         isLoading: false,
       };
     }),
 
+  // AI ERROR
+
+  error: (messageId, message = "Something went wrong.") =>
+    set((state) => {
+      const streamingMessage = state.streamingMessage;
+
+      if (!streamingMessage || streamingMessage.id !== messageId) {
+        return state;
+      }
+
+      return {
+        streamingMessage: {
+          ...streamingMessage,
+
+          statusMessage: message,
+        },
+
+        isLoading: false,
+      };
+    }),
+
+  // CLEAR
+
   clear: () =>
     set({
       messages: [],
+
       streamingMessage: null,
+
       isLoading: false,
+
       hasMore: false,
     }),
 }));

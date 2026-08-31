@@ -1,12 +1,23 @@
 import { Annotation } from "@langchain/langgraph";
 import type { BaseMessage } from "@langchain/core/messages";
 
-import type { DesignerContext, Intent, Plan, ToolResult } from "./types.js";
+import {
+  DesignerContext,
+  GraphStatus,
+  Intent,
+  Plan,
+  ToolResult,
+} from "./types.js";
 
 export const DesignerState = Annotation.Root({
   messages: Annotation<BaseMessage[]>({
     reducer: (left, right) => [...left, ...right],
     default: () => [],
+  }),
+
+  status: Annotation<GraphStatus>({
+    reducer: (_, value) => value,
+    default: () => GraphStatus.THINKING,
   }),
 
   userQuery: Annotation<string>({
