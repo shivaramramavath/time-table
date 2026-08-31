@@ -5,14 +5,13 @@ import { generateMessageId } from "#utils/generate-ids.js";
 import { messageEmitter } from "../message/message.emiter.js";
 import { Message } from "../message/message.model.js";
 import { messageService } from "../message/message.service.js";
-
-import { groq } from "./services/groq.config.js";
+import { designerGraph } from "./graph.js";
+import { DesignerGraphState } from "./designer.state.js";
 
 export const aiService = {
   async generate(userId: string, designerId: string, message: Message) {
     const messageId = generateMessageId();
 
-    // Save user message
     await messageService.create({
       ...message,
       id: message.id,
@@ -20,19 +19,28 @@ export const aiService = {
       role: "user",
     });
 
-    
     try {
       let seq = 0;
       let content = "";
-      
-      const stream = await groq.stream([new HumanMessage(message.content)]);
-      
-      // Tell frontend streaming has started
+
+      const input: Partial<DesignerGraphState> = {
+        userId,
+        designerId,
+        userQuery: message.content,
+
+        messages: [new HumanMessage(message.content)],
+      };
+
+      const stream = await designerGraph.stream(input, {
+        streamMode: ["updates", "messages"],
+      });
+
       await messageEmitter.start(userId, {
         messageId,
       });
 
       for await (const chunk of stream) {
+        // console.log(chunk);
         const token = typeof chunk.content === "string" ? chunk.content : "";
 
         if (!token) continue;

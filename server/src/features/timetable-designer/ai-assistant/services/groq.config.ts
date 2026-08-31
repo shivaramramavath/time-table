@@ -1,16 +1,21 @@
 import { ChatGroq } from "@langchain/groq";
 
 import { env } from "#configs/env.js";
+import { GROQ_LARGE_MODEL, GROQ_SMALL_MODEL } from "#configs/constants.js";
 
-/*
-openai/gpt-oss-20b
-
-openai/gpt-oss-120b
-
-*/
-
-export const groq = new ChatGroq({
+const groqSmall = new ChatGroq({
   apiKey: env.GROQ_API_KEY,
-  model: "openai/gpt-oss-120b",
-  temperature: 0.2,
+  model: GROQ_SMALL_MODEL,
+  temperature: 0,
 });
+
+const groqLarge = new ChatGroq({
+  apiKey: env.GROQ_API_KEY,
+  model: GROQ_LARGE_MODEL,
+  temperature: 0,
+});
+
+export const llmModels = {
+  small: groqSmall,
+  large: groqLarge,
+};
