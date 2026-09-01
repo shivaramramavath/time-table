@@ -11,11 +11,15 @@ export const edgeProcessor = {
     return edgeRepository.createMany(edges);
   },
 
-  remove: async (designerId: string, edgeId: string) => {
-    return edgeRepository.delete(designerId, edgeId);
+  update: async (edge: Edge) => {
+    return edgeRepository.update(edge.designerId, edge.id, edge);
   },
 
-  removeMany: async (designerId: string, edgeIds: string[]) => {
-    return edgeRepository.deleteMany(designerId, edgeIds);
+  remove: async (designerId: string, id: string) => {
+    return edgeRepository.delete(designerId, id);
+  },
+
+  removeMany: async (designerId: string, ids: string[]) => {
+    return edgeRepository.deleteMany(designerId, ids);
   },
 };

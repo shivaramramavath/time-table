@@ -1,57 +1,54 @@
-import { Subject, SubjectModel } from "./subject.model.js";
+import { SubjectModel, type Subject } from "./subject.model.js";
 
 export const subjectRepository = {
-  // -----------------------------------------
-  // GET BY ID
-  // -----------------------------------------
-
-  findById: async (designerId: string, id: string) => {
+  findById: async (designerId: string, id: string): Promise<Subject | null> => {
     return SubjectModel.findOne({
       designerId,
       id,
-    }).lean();
+    })
+      .lean()
+      .exec();
   },
 
-  // -----------------------------------------
-  // GET ALL
-  // -----------------------------------------
-
-  findAll: async (designerId: string) => {
+  findAll: async (designerId: string): Promise<Subject[]> => {
     return SubjectModel.find({
       designerId,
     })
       .sort({ createdAt: 1 })
-      .lean();
+      .lean()
+      .exec();
   },
 
-  // -----------------------------------------
-  // FIND BY CODE
-  // -----------------------------------------
-
-  findByCode: async (designerId: string, code: string) => {
+  findByCode: async (
+    designerId: string,
+    code: string,
+  ): Promise<Subject | null> => {
     return SubjectModel.findOne({
       designerId,
-      code,
-    }).lean();
+      code: code.toUpperCase(),
+    })
+      .lean()
+      .exec();
   },
 
-  // -----------------------------------------
-  // CREATE
-  // -----------------------------------------
+  create: async (subject: Subject): Promise<Subject> => {
+    const document = await SubjectModel.create(subject);
 
-  create: async (data: Subject) => {
-    const subject = await SubjectModel.create(data);
-
-    return subject.toObject();
+    return document.toObject();
   },
 
-  // -----------------------------------------
-  // UPDATE
-  // -----------------------------------------
+  createMany: async (subjects: Subject[]): Promise<Subject[]> => {
+    return SubjectModel.insertMany(subjects);
+  },
 
-  updateById: async (id: string, data: Partial<Subject>) => {
+  update: async (
+    designerId: string,
+    id: string,
+    data: Partial<Subject>,
+  ): Promise<Subject | null> => {
     return SubjectModel.findOneAndUpdate(
       {
+        designerId,
         id,
       },
       {
@@ -61,18 +58,32 @@ export const subjectRepository = {
         new: true,
         runValidators: true,
       },
-    ).lean();
+    )
+      .lean()
+      .exec();
   },
 
-  // -----------------------------------------
-  // DELETE
-  // -----------------------------------------
-
-  deleteById: async (id: string) => {
+  delete: async (designerId: string, id: string): Promise<boolean> => {
     const result = await SubjectModel.deleteOne({
+      designerId,
       id,
     });
 
     return result.deletedCount > 0;
+  },
+
+  deleteMany: async (designerId: string, ids: string[]): Promise<number> => {
+    if (ids.length === 0) {
+      return 0;
+    }
+
+    const result = await SubjectModel.deleteMany({
+      designerId,
+      id: {
+        $in: ids,
+      },
+    });
+
+    return result.deletedCount;
   },
 };

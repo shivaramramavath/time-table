@@ -1,49 +1,71 @@
 import { Schema, model, type InferSchemaType } from "mongoose";
 
-const roomSchema = new Schema({
-  id: {
-    type: String,
-    required: true,
+const roomSchema = new Schema(
+  {
+    id: {
+      type: String,
+      required: true,
+    },
+
+    designerId: {
+      type: String,
+      required: true,
+    },
+
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    roomNumber: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    capacity: {
+      type: Number,
+      required: true,
+      min: 1,
+    },
+
+    floor: {
+      type: Number,
+      required: true,
+    },
+
+    type: {
+      type: String,
+      required: true,
+      enum: ["classroom", "laboratory", "seminar-hall"],
+    },
+  },
+  {
+    timestamps: true,
+    versionKey: false,
+  },
+);
+
+roomSchema.index(
+  {
+    designerId: 1,
+    id: 1,
+  },
+  {
     unique: true,
-    index: true,
   },
+);
 
-  designerId: {
-    type: String,
-    required: true,
-    index: true,
+roomSchema.index(
+  {
+    designerId: 1,
+    roomNumber: 1,
   },
-
-  name: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-
-  roomNumber: {
-    type: String,
-    required: true,
+  {
     unique: true,
-    trim: true,
   },
-
-  capacity: {
-    type: Number,
-    required: true,
-    min: 1,
-  },
-
-  floor: {
-    type: Number,
-    required: true,
-  },
-
-  type: {
-    type: String,
-    required: true,
-    enum: ["classroom", "laboratory", "seminar-hall"],
-  },
-});
+);
 
 export type Room = InferSchemaType<typeof roomSchema>;
 

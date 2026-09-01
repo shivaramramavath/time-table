@@ -43,6 +43,9 @@ export const aiService = {
 
       const stream = await designerGraph.stream(input, {
         streamMode: ["updates", "messages"],
+        configurable: {
+          thread_id: designerId,
+        },
       });
 
       for await (const chunk of stream) {

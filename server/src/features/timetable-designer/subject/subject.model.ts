@@ -5,14 +5,11 @@ const subjectSchema = new Schema(
     id: {
       type: String,
       required: true,
-      unique: true,
-      index: true,
     },
 
     designerId: {
       type: String,
       required: true,
-      index: true,
     },
 
     name: {
@@ -24,7 +21,6 @@ const subjectSchema = new Schema(
     code: {
       type: String,
       required: true,
-      unique: true,
       uppercase: true,
       trim: true,
     },
@@ -75,7 +71,31 @@ const subjectSchema = new Schema(
         min: 1,
       },
     },
-  }
+  },
+  {
+    timestamps: true,
+    versionKey: false,
+  },
+);
+
+subjectSchema.index(
+  {
+    designerId: 1,
+    id: 1,
+  },
+  {
+    unique: true,
+  },
+);
+
+subjectSchema.index(
+  {
+    designerId: 1,
+    code: 1,
+  },
+  {
+    unique: true,
+  },
 );
 
 export type Subject = InferSchemaType<typeof subjectSchema>;

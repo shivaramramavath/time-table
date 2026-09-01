@@ -7,9 +7,9 @@ import {
   useNodesState,
 } from "@xyflow/react";
 
-import DesignerPanels from "../panels/DesignerPanels";
-
 import { usePreferencesStore } from "@/shared/preferences/preferences.store";
+
+import DesignerPanels from "../panels/DesignerPanels";
 
 import {
   useDesignerDnD,
@@ -18,13 +18,9 @@ import {
   useNodeTypes,
 } from "../../hooks";
 
+import { useDesignerSocketListeners } from "../../hooks/useDesignerSocketListeners";
+
 import type { Edge, Node } from "../../types";
-import { registerNodeListeners } from "../../socket/node.listeners";
-import { useEffect } from "react";
-import { registerEdgeListeners } from "../../socket/edge.listeners";
-import { registerSubjectListeners } from "../../socket/subject.listeners";
-import { registerFacultyListeners } from "../../socket/faculty.listeners";
-import { registerRoomListeners } from "../../socket/room.listeners";
 
 interface Props {
   timetableId: string;
@@ -36,32 +32,18 @@ const DesignerCanvas = ({ timetableId, initialNodes, initialEdges }: Props) => {
   const darkMode = usePreferencesStore((state) => state.darkMode);
 
   const [nodes, setNodes] = useNodesState(initialNodes);
+
   const [edges, setEdges] = useEdgesState(initialEdges);
+
+  useDesignerSocketListeners({
+    setNodes,
+    setEdges,
+  });
 
   const interactions = useDesignerInteractions({
     setNodes,
     setEdges,
   });
-
-  useEffect(() => {
-    return registerNodeListeners({ setNodes });
-  }, [setNodes]);
-
-  useEffect(() => {
-    return registerEdgeListeners({ setEdges });
-  }, [setEdges]);
-
-  useEffect(() => {
-    const cleanupSubject = registerSubjectListeners();
-    const cleanupFaculty = registerFacultyListeners();
-    const cleanupRoom = registerRoomListeners();
-
-    return () => {
-      cleanupSubject();
-      cleanupFaculty();
-      cleanupRoom();
-    };
-  }, []);
 
   const { onDragOver, onDrop } = useDesignerDnD();
 

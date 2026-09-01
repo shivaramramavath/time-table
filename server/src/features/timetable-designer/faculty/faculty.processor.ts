@@ -1,16 +1,25 @@
-import { Faculty } from "./faculty.model.js";
+import type { Faculty } from "./faculty.model.js";
+
 import { facultyRepository } from "./faculty.repository.js";
 
 export const facultyProcessor = {
   add: async (faculty: Faculty) => {
-    await facultyRepository.create(faculty);
+    return facultyRepository.create(faculty);
   },
 
-  update: async (faculty: Partial<Faculty>) => {
-    await facultyRepository.updateById(faculty.id!, faculty);
+  addMany: async (faculties: Faculty[]) => {
+    return facultyRepository.createMany(faculties);
   },
 
-  remove: async (facultyId: string) => {
-    await facultyRepository.deleteById(facultyId);
+  update: async (faculty: Faculty) => {
+    return facultyRepository.update(faculty.designerId, faculty.id, faculty);
+  },
+
+  remove: async (designerId: string, id: string) => {
+    return facultyRepository.delete(designerId, id);
+  },
+
+  removeMany: async (designerId: string, ids: string[]) => {
+    return facultyRepository.deleteMany(designerId, ids);
   },
 };

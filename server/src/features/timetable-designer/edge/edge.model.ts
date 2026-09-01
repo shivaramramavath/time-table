@@ -5,26 +5,21 @@ const edgeSchema = new Schema(
     id: {
       type: String,
       required: true,
-      unique: true,
-      index: true,
     },
 
     designerId: {
       type: String,
       required: true,
-      index: true,
     },
 
     source: {
       type: String,
       required: true,
-      index: true,
     },
 
     target: {
       type: String,
       required: true,
-      index: true,
     },
 
     sourceHandle: {
@@ -48,10 +43,15 @@ const edgeSchema = new Schema(
   },
 );
 
-edgeSchema.index({
-  designerId: 1,
-  id: 1,
-});
+edgeSchema.index(
+  {
+    designerId: 1,
+    id: 1,
+  },
+  {
+    unique: true,
+  },
+);
 
 edgeSchema.index({
   designerId: 1,

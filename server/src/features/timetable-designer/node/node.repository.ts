@@ -17,7 +17,9 @@ export const nodeRepository = {
   },
 
   create: async (node: Node): Promise<Node> => {
-    return NodeModel.create(node).then((document) => document.toObject());
+    const document = await NodeModel.create(node);
+
+    return document.toObject();
   },
 
   createMany: async (nodes: Node[]): Promise<Node[]> => {
@@ -54,6 +56,10 @@ export const nodeRepository = {
   },
 
   deleteMany: async (designerId: string, ids: string[]): Promise<number> => {
+    if (ids.length === 0) {
+      return 0;
+    }
+
     const result = await NodeModel.deleteMany({
       designerId,
       id: {

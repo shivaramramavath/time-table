@@ -19,9 +19,9 @@ const messageJob = async (job: Job<MessageJobData>) => {
     logger.error("message job failed", {
       jobId: job.id,
       jobName: job.name,
-      message: job.data,
+      data: job.data,
       attemptsMade: job.attemptsMade,
-      error: error?.message,
+      message: error?.message,
       stack: error?.stack,
     });
 
@@ -29,8 +29,8 @@ const messageJob = async (job: Job<MessageJobData>) => {
   }
 };
 
-const createMessageWorker = () =>
-  new Worker("message", messageJob, {
+export const messageWorker = () => {
+  return new Worker<MessageJobData>("message", messageJob, {
     connection: redis,
     concurrency: 10,
 
@@ -42,5 +42,5 @@ const createMessageWorker = () =>
       count: 100,
     },
   });
+};
 
-export default createMessageWorker;

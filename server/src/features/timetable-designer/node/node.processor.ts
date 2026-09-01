@@ -15,11 +15,11 @@ export const nodeProcessor = {
     return nodeRepository.update(node.designerId, node.id, node);
   },
 
-  remove: async (designerId: string, nodeId: string) => {
-    return nodeRepository.delete(designerId, nodeId);
+  remove: async (designerId: string, id: string) => {
+    return nodeRepository.delete(designerId, id);
   },
 
-  removeMany: async (designerId: string, nodeIds: string[]) => {
-    return nodeRepository.deleteMany(designerId, nodeIds);
+  removeMany: async (designerId: string, ids: string[]) => {
+    return nodeRepository.deleteMany(designerId, ids);
   },
 };

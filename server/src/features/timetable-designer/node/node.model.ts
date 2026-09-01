@@ -22,21 +22,17 @@ const nodeSchema = new Schema(
     id: {
       type: String,
       required: true,
-      unique: true,
-      index: true,
     },
 
     designerId: {
       type: String,
       required: true,
-      index: true,
     },
 
     type: {
       type: String,
       enum: ["institution", "program", "academic-year", "section"],
       required: true,
-      index: true,
     },
 
     position: {
@@ -55,14 +51,19 @@ const nodeSchema = new Schema(
   },
 );
 
-nodeSchema.index({
-  designerId: 1,
-  type: 1,
-});
+nodeSchema.index(
+  {
+    designerId: 1,
+    id: 1,
+  },
+  {
+    unique: true,
+  },
+);
 
 nodeSchema.index({
   designerId: 1,
-  id: 1,
+  type: 1,
 });
 
 export type Node = InferSchemaType<typeof nodeSchema>;

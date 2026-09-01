@@ -1,7 +1,7 @@
 import { RoomModel, type Room } from "./room.model.js";
 
 export const roomRepository = {
-  findById: async (designerId: string, id: string) => {
+  findById: async (designerId: string, id: string): Promise<Room | null> => {
     return RoomModel.findOne({
       designerId,
       id,
@@ -10,11 +10,19 @@ export const roomRepository = {
       .exec();
   },
 
-  findAll: async (designerId: string) => {
-    return RoomModel.find({ designerId }).sort({ roomNumber: 1 }).lean().exec();
+  findAll: async (designerId: string): Promise<Room[]> => {
+    return RoomModel.find({
+      designerId,
+    })
+      .sort({ roomNumber: 1 })
+      .lean()
+      .exec();
   },
 
-  findByRoomNumber: async (designerId: string, roomNumber: string) => {
+  findByRoomNumber: async (
+    designerId: string,
+    roomNumber: string,
+  ): Promise<Room | null> => {
     return RoomModel.findOne({
       designerId,
       roomNumber,
@@ -23,13 +31,24 @@ export const roomRepository = {
       .exec();
   },
 
-  create: async (data: Room) => {
-    return RoomModel.create(data);
+  create: async (room: Room): Promise<Room> => {
+    const document = await RoomModel.create(room);
+
+    return document.toObject();
   },
 
-  updateById: async (id: string, data: Partial<Room>) => {
+  createMany: async (rooms: Room[]): Promise<Room[]> => {
+    return RoomModel.insertMany(rooms);
+  },
+
+  update: async (
+    designerId: string,
+    id: string,
+    data: Partial<Room>,
+  ): Promise<Room | null> => {
     return RoomModel.findOneAndUpdate(
       {
+        designerId,
         id,
       },
       {
@@ -44,9 +63,27 @@ export const roomRepository = {
       .exec();
   },
 
-  deleteById: async (id: string) => {
-    return RoomModel.findOneAndDelete({
+  delete: async (designerId: string, id: string): Promise<boolean> => {
+    const result = await RoomModel.deleteOne({
+      designerId,
       id,
-    }).exec();
+    });
+
+    return result.deletedCount > 0;
+  },
+
+  deleteMany: async (designerId: string, ids: string[]): Promise<number> => {
+    if (ids.length === 0) {
+      return 0;
+    }
+
+    const result = await RoomModel.deleteMany({
+      designerId,
+      id: {
+        $in: ids,
+      },
+    });
+
+    return result.deletedCount;
   },
 };

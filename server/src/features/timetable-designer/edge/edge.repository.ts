@@ -26,6 +26,26 @@ export const edgeRepository = {
     return EdgeModel.insertMany(edges);
   },
 
+  update: async (
+    designerId: string,
+    id: string,
+    edge: Edge,
+  ): Promise<Edge | null> => {
+    return EdgeModel.findOneAndUpdate(
+      {
+        designerId,
+        id,
+      },
+      {
+        $set: edge,
+      },
+      {
+        new: true,
+        runValidators: true,
+      },
+    ).lean();
+  },
+
   delete: async (designerId: string, id: string): Promise<boolean> => {
     const result = await EdgeModel.deleteOne({
       designerId,
@@ -36,6 +56,10 @@ export const edgeRepository = {
   },
 
   deleteMany: async (designerId: string, ids: string[]): Promise<number> => {
+    if (ids.length === 0) {
+      return 0;
+    }
+
     const result = await EdgeModel.deleteMany({
       designerId,
       id: {
