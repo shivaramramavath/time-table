@@ -18,13 +18,14 @@ const messageSchema = new Schema(
     content: {
       type: String,
       required: true,
+      trim: true,
     },
 
     role: {
       type: String,
-      required: true,
       enum: ["system", "user", "assistant"],
       default: "user",
+      required: true,
     },
   },
   {
@@ -32,6 +33,11 @@ const messageSchema = new Schema(
     versionKey: false,
   },
 );
+
+messageSchema.index({
+  designerId: 1,
+  createdAt: 1,
+});
 
 export type Message = InferSchemaType<typeof messageSchema>;
 

@@ -44,7 +44,7 @@ const emailJob = async (job: Job) => {
   }
 };
 
-const createEmailWorker = () =>
+export const emailWorker = () =>
   new Worker("email", emailJob, {
     connection: redis,
     concurrency: 10,
@@ -55,5 +55,3 @@ const createEmailWorker = () =>
       count: 100,
     },
   });
-
-export default createEmailWorker;

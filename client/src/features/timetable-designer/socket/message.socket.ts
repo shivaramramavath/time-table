@@ -1,5 +1,5 @@
 import { emitAsync } from "@/shared/socket/emit-async";
-import type { Message } from "../../types";
+import type { Message } from "../types";
 
 type GetProps = {
   designerId: string;

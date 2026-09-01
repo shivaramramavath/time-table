@@ -7,7 +7,7 @@ import { GraphStatus } from "../types.js";
 import { analyzePrompt } from "../prompts/analyze.prompt.js";
 
 export async function analyzeNode(state: DesignerGraphState) {
-  const prompt = analyzePrompt(state.userQuery);
+  const prompt = analyzePrompt(state.userQuery, state.context.messages);
 
   const response = await llmModels.small.invoke([new SystemMessage(prompt)]);
 

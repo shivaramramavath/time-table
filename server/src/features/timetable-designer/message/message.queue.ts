@@ -1,7 +1,7 @@
 import { Queue } from "bullmq";
 
 import redis from "#configs/redis.js";
-import { Message } from "./message.model.js";
+import type { Message } from "./message.model.js";
 
 const queue = new Queue("message", {
   connection: redis,
@@ -21,9 +21,15 @@ const queue = new Queue("message", {
 
 export const messageQueue = {
   add: async (designerId: string, message: Message) => {
-    return queue.add("create", {
-      designerId,
-      message,
-    });
+    return queue.add(
+      "create",
+      {
+        designerId,
+        message,
+      },
+      {
+        jobId: `message:${message.id}`,
+      },
+    );
   },
 };

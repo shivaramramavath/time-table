@@ -1,4 +1,4 @@
-import { Worker, type Job, UnrecoverableError } from "bullmq";
+import { UnrecoverableError, Worker, type Job } from "bullmq";
 
 import redis from "#configs/redis.js";
 import logger from "#configs/logger.js";
@@ -9,8 +9,7 @@ const messageJob = async (job: Job<MessageJobData>) => {
   try {
     switch (job.name) {
       case "create":
-        await messageProcessor.create(job);
-        break;
+        return await messageProcessor.create(job);
 
       default:
         throw new UnrecoverableError(`Unknown message job type: ${job.name}`);
@@ -29,8 +28,8 @@ const messageJob = async (job: Job<MessageJobData>) => {
   }
 };
 
-export const messageWorker = () => {
-  return new Worker<MessageJobData>("message", messageJob, {
+export const messageWorker = () =>
+  new Worker<MessageJobData>("message", messageJob, {
     connection: redis,
     concurrency: 10,
 
@@ -42,5 +41,3 @@ export const messageWorker = () => {
       count: 100,
     },
   });
-};
-

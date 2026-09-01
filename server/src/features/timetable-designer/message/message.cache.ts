@@ -2,37 +2,51 @@ import { DESIGNER_TTL, PAGE_SIZE } from "#configs/constants.js";
 
 import redis from "#configs/redis.js";
 
-import { Message } from "./message.model.js";
+import type { Message } from "./message.model.js";
 import { messageQueue } from "./message.queue.js";
+import { messageRepository } from "./message.repository.js";
 
-const getKey = (designerId: string) => `messages:${designerId}`;
+const getKey = (designerId: string) => `designer:${designerId}:messages`;
 
 export const messageCache = {
-  async push(designerId: string, message: Message) {
-    const key = getKey(designerId);
+  async push(message: Message) {
+    const key = getKey(message.designerId);
 
-    await redis.rpush(key, JSON.stringify(message));
+    await redis
+      .multi()
+      .rpush(key, JSON.stringify(message))
+      .expire(key, DESIGNER_TTL)
+      .exec();
 
-    await redis.expire(key, DESIGNER_TTL);
+    await messageQueue.add(message.designerId, message);
 
-     await messageQueue.add(
-      designerId,
-      message,
-    );
+    return message;
   },
 
   async get(designerId: string, page = 1) {
     const key = getKey(designerId);
 
-    const total = await redis.llen(key);
+    let total = await redis.llen(key);
 
-    if (!total) {
-      return {
-        messages: [],
-        page,
-        pageSize: PAGE_SIZE,
-        hasMore: false,
-      };
+    if (total === 0) {
+      const messages = await messageRepository.findAll(designerId);
+
+      if (messages.length === 0) {
+        return {
+          messages: [],
+          page,
+          pageSize: PAGE_SIZE,
+          hasMore: false,
+        };
+      }
+
+      await redis
+        .multi()
+        .rpush(key, ...messages.map((message) => JSON.stringify(message)))
+        .expire(key, DESIGNER_TTL)
+        .exec();
+
+      total = messages.length;
     }
 
     const end = total - (page - 1) * PAGE_SIZE - 1;
@@ -48,14 +62,12 @@ export const messageCache = {
 
     const start = Math.max(0, end - PAGE_SIZE + 1);
 
-    const messages = await redis.lrange(key, start, end);
+    const values = await redis.lrange(key, start, end);
 
     return {
-      messages: messages.map((message) => JSON.parse(message)),
-
+      messages: values.map((value) => JSON.parse(value) as Message),
       page,
       pageSize: PAGE_SIZE,
-
       hasMore: start > 0,
     };
   },

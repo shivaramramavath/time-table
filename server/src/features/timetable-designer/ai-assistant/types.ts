@@ -55,6 +55,7 @@ export interface DesignerContext {
   faculties?: unknown[];
   subjects?: unknown[];
   rooms?: unknown[];
+  messages?: unknown[];
 }
 
 export interface ToolResult {
@@ -72,6 +73,7 @@ export type MessageChunkMetadata = {
 
 export enum GraphStatus {
   THINKING = "thinking",
+  LOADING_CONTEXT = "loading-context",
   ANALYZING = "analyzing",
   UNDERSTANDING = "understanding",
   RETRIEVING = "retrieving",

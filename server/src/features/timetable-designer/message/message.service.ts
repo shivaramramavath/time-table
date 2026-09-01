@@ -1,15 +1,17 @@
+import { generateMessageId } from "#utils/generate-ids.js";
 import { messageCache } from "./message.cache.js";
-import { Message } from "./message.model.js";
+import type { Message } from "./message.model.js";
 
 export const messageService = {
-  async create(message: Partial<Message>) {
-    await messageCache.push(message.designerId as string, message);
+  async create(
+    data: Message,
+  ): Promise<Message> {
+    const message: Message = {
+      ...data,
+      id: data.id ?? generateMessageId(),
+    };
 
-    return message;
-  },
-
-  async update(designerId: string, messageId: string, content: string) {
-    await messageCache.update(designerId, messageId, content);
+    return messageCache.push(message);
   },
 
   async get(designerId: string, page = 1) {

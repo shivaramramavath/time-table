@@ -1,21 +1,11 @@
-import React from "react";
 import { NavLink } from "react-router-dom";
 
 import { cn } from "@/shared/lib/utils";
 
 const links = [
-  {
-    name: "Timetables",
-    path: "/timetables",
-  },
-  {
-    name: "Templates",
-    path: "/templates",
-  },
-  {
-    name: "Feedback",
-    path: "/feedback",
-  },
+  { name: "Timetables", path: "/timetables" },
+  { name: "Templates", path: "/templates" },
+  { name: "Feedback", path: "/feedback" },
 ];
 
 const NavbarLinks = () => {
@@ -28,10 +18,9 @@ const NavbarLinks = () => {
               to={link.path}
               className={({ isActive }) =>
                 cn(
-                  "relative rounded-md px-3 py-2 text-sm font-medium",
-                  "text-muted-foreground transition-colors",
-                  "hover:text-foreground",
-                  isActive && "text-foreground",
+                  "rounded-md px-3 py-1.5 text-sm font-medium transition-all duration-200",
+                  "text-muted-foreground hover:bg-background/60 hover:text-foreground",
+                  isActive && "bg-background text-foreground shadow-sm",
                 )
               }
             >

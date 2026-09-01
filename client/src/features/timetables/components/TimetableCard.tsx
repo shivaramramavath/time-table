@@ -40,6 +40,10 @@ const TimetableCard = ({ timetable }: TimetableCardProps) => {
       onClick={handleOpen}
       className="group relative cursor-pointer overflow-hidden rounded-2xl border border-border/50 bg-surface-muted/5 p-4 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
     >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-8 top-4 h-24 w-24 rounded-full bg-blue-400/20 blur-3xl transition-opacity duration-300 group-hover:bg-blue-400/30"
+      />
       {/* Header */}
       <div className="flex items-start justify-between">
         <div className="flex min-w-0 items-center gap-3">

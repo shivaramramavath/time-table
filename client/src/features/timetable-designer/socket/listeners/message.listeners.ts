@@ -3,7 +3,7 @@ import { socketService } from "@/shared/socket/socket.service";
 import {
   useMessageStore,
   type MessageStatusEvent,
-} from "../store/message.store";
+} from "../../store/message.store";
 
 interface MessageStartEvent {
   messageId: string;

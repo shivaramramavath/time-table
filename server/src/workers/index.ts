@@ -4,14 +4,14 @@ import { Worker } from "bullmq";
 
 import workerEventHandlers from "./workerEventHandlers.js";
 
-import emailWorker from "./email/email.worker.js";
-import feedbackWorker from "#features/feedback/feedback.worker.js";
 import { roomWorker } from "#features/timetable-designer/room/room.worker.js";
 import { subjectWorker } from "#features/timetable-designer/subject/subject.worker.js";
 import { facultyWorker } from "#features/timetable-designer/faculty/faculty.worker.js";
 import { nodeWorker } from "#features/timetable-designer/node/node.worker.js";
 import { edgeWorker } from "#features/timetable-designer/edge/edge.worker.js";
 import { messageWorker } from "#features/timetable-designer/message/message.worker.js";
+import { emailWorker } from "./email/email.worker.js";
+import { feedbackWorker } from "#features/feedback/feedback.worker.js";
 
 const workerFactories = [
   emailWorker,

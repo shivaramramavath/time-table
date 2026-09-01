@@ -85,6 +85,8 @@ export const aiService = {
         designerId,
         content,
         role: "assistant",
+        createdAt: new Date(),
+        updatedAt: new Date(),
       });
 
       await messageEmitter.finish(userId, {
@@ -110,7 +112,7 @@ export const aiService = {
     metadata: MessageChunkMetadata,
     getSequence: (token: string) => number,
   ) {
-    if (metadata.langgraph_node !== "res") {
+    if (metadata.langgraph_node !== "ai-response") {
       return;
     }
 

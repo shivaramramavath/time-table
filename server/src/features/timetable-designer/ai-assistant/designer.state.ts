@@ -1,48 +1,34 @@
 import { Annotation } from "@langchain/langgraph";
-import type { BaseMessage } from "@langchain/core/messages";
 
-import {
-  DesignerContext,
-  GraphStatus,
-  Intent,
-  Plan,
-  ToolResult,
-} from "./types.js";
+import type { Message } from "../message/message.model.js";
 
-export const DesignerState = Annotation.Root({
-  messages: Annotation<BaseMessage[]>({
-    reducer: (left, right) => [...left, ...right],
-    default: () => [],
+export const DesignerGraphState = Annotation.Root({
+  userId: Annotation<string>,
+  designerId: Annotation<string>,
+  userQuery: Annotation<string>,
+
+  context: Annotation<{
+    messages: Message[];
+  }>({
+    reducer: (_, value) => value,
+    default: () => ({
+      messages: [],
+    }),
   }),
 
-  status: Annotation<GraphStatus>({
-    reducer: (_, value) => value,
-    default: () => GraphStatus.THINKING,
-  }),
+  intent: Annotation<{
+    type: "create" | "update" | "delete" | "query" | "mixed" | "unknown";
 
-  userQuery: Annotation<string>({
-    reducer: (_, value) => value,
-    default: () => "",
-  }),
+    entities: ("node" | "edge" | "faculty" | "subject" | "room")[];
 
-  userId: Annotation<string>({
+    requiresMutation: boolean;
+    requiresRetrieval?: boolean;
+    requiresReferenceResolution?: boolean;
+    isBulk?: boolean;
+    requiresConfirmation?: boolean;
+  } | null>({
     reducer: (_, value) => value,
-    default: () => "",
-  }),
-
-  timetableId: Annotation<string>({
-    reducer: (_, value) => value,
-    default: () => "",
-  }),
-
-  designerId: Annotation<string>({
-    reducer: (_, value) => value,
-    default: () => "",
-  }),
-
-  intent: Annotation<Intent | undefined>({
-    reducer: (_, value) => value,
-    default: () => undefined,
+    default: () => null,
   }),
 
   expandedQuery: Annotation<string>({
@@ -50,32 +36,14 @@ export const DesignerState = Annotation.Root({
     default: () => "",
   }),
 
-  context: Annotation<DesignerContext>({
-    reducer: (oldValue, newValue) => ({
-      ...oldValue,
-      ...newValue,
-    }),
-    default: () => ({}),
-  }),
-
-  plan: Annotation<Plan | undefined>({
+  retrievalRoute: Annotation<"retrieve" | "response">({
     reducer: (_, value) => value,
-    default: () => undefined,
+    default: () => "response",
   }),
 
-  results: Annotation<ToolResult[]>({
-    reducer: (left, right) => [...left, ...right],
-    default: () => [],
-  }),
-
-  errors: Annotation<string[]>({
-    reducer: (left, right) => [...left, ...right],
-    default: () => [],
-  }),
-
-  currentStep: Annotation<number>({
+  retrieval: Annotation<Record<string, unknown> | null>({
     reducer: (_, value) => value,
-    default: () => 0,
+    default: () => null,
   }),
 
   response: Annotation<string>({
@@ -83,21 +51,8 @@ export const DesignerState = Annotation.Root({
     default: () => "",
   }),
 
-  requiresApproval: Annotation<boolean>({
+  status: Annotation<string>({
     reducer: (_, value) => value,
-    default: () => false,
-  }),
-
-  verification: Annotation<
-    | {
-        success: boolean;
-        message?: string;
-      }
-    | undefined
-  >({
-    reducer: (_, value) => value,
-    default: () => undefined,
+    default: () => "thinking",
   }),
 });
-
-export type DesignerGraphState = typeof DesignerState.State;

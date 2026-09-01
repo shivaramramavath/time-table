@@ -29,7 +29,7 @@ const feedbackJob = async (job: Job) => {
   }
 };
 
-const createFeedbackWorker = () =>
+export const feedbackWorker = () =>
   new Worker("feedback", feedbackJob, {
     connection: redis,
 
@@ -43,5 +43,3 @@ const createFeedbackWorker = () =>
       count: 100,
     },
   });
-
-export default createFeedbackWorker;
