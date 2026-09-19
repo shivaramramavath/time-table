@@ -116,7 +116,7 @@ const AIConversation = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
             >
-              <AIMessage role={message.role} content={message.content} />
+              <AIMessage role={message.role} content={message.content}  />
             </motion.div>
           ))}
 

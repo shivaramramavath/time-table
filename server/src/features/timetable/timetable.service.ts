@@ -1,19 +1,34 @@
 import { timetableDesignerService } from "#features/timetable-designer/timetable-designer.service.js";
-import { timetableRepository } from "./timetable.reposistory.js";
+import { errors } from "#utils/errors.js";
+import { timetableRepository } from "./timetable.repository.js";
 
 export const timetableService = {
   create: async ({ userId }: { userId: string }) => {
     const title = "Untitled Timetable";
-    const timetable = await timetableRepository.create({ title, userId });
-    await timetableDesignerService.create(timetable._id);
+
+    const timetable = await timetableRepository.create({
+      title,
+      userId,
+    });
+
+    await timetableDesignerService.create(timetable._id.toString());
 
     return timetable;
   },
 
-  getTimetables: async ({ userId, pageParam, query }: any) => {
+  getTimetables: async ({
+    userId,
+    page,
+    query,
+  }: {
+    userId: string;
+    page: number;
+    query?: string;
+  }) => {
     const limit = 20;
-    const skip = (pageParam - 1) * limit;
-    return await timetableRepository.getTimetables({
+    const skip = (page - 1) * limit;
+
+    return timetableRepository.getTimetables({
       userId,
       query,
       skip,
@@ -22,16 +37,50 @@ export const timetableService = {
   },
 
   getRecentTimetables: async (userId: string) => {
-    return await timetableRepository.getRecentTimetables(userId, 5);
+    return timetableRepository.getRecentTimetables(userId, 5);
   },
 
-  get: (timetableId: string) => timetableRepository.get(timetableId),
-
-  update: async (timetableId: string, data: any) => {
-    return await timetableRepository.update(timetableId, data);
+  get: async (timetableId: string, userId: string) => {
+    return timetableRepository.getById(timetableId, userId);
   },
 
-  delete: async (timetableId: string) => {
-    return await timetableRepository.delete(timetableId);
+  generate: async ({
+    timetableId,
+    userId,
+  }: {
+    timetableId: string;
+    userId: string;
+  }) => {
+    const timetable = await timetableRepository.getById(timetableId, userId);
+
+    if (!timetable) {
+      throw errors.notFound("Timetable not found");
+    }
+
+    const updatedTimetable = await timetableRepository.update(
+      timetableId,
+      userId,
+      {
+        stage: "complete",
+      },
+    );
+
+    return updatedTimetable;
+  },
+
+  update: async (
+    timetableId: string,
+    userId: string,
+    data: {
+      title?: string;
+      description?: string;
+      stage?: "incomplete" | "editing" | "complete";
+    },
+  ) => {
+    return timetableRepository.update(timetableId, userId, data);
+  },
+
+  delete: async (timetableId: string, userId: string) => {
+    return timetableRepository.delete(timetableId, userId);
   },
 };

@@ -19,12 +19,16 @@ const TimetableCard = ({ timetable }: TimetableCardProps) => {
   });
 
   const handleOpen = () => {
-    if (timetable.stage === "incomplete") {
-      navigate(`/timetables/designer?timetableId=${timetable._id}`);
-      return;
+    switch (timetable.stage) {
+      case "incomplete":
+        navigate(`/timetables/designer?timetableId=${timetable._id}`);
+        break;
+      case "complete":
+        navigate(`/timetables/${timetable._id}/view`);
+        break;
+      default:
+        navigate(`/timetables/${timetable._id}`);
     }
-
-    navigate(`/timetables/${timetable._id}`);
   };
 
   const handleDelete = (event: React.MouseEvent<HTMLButtonElement>) => {

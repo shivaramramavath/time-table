@@ -11,13 +11,13 @@ const timetableSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
-      index: true,
     },
 
     title: {
       type: String,
       required: true,
       trim: true,
+      maxlength: 100,
     },
 
     description: {
@@ -30,7 +30,6 @@ const timetableSchema = new Schema(
       type: String,
       enum: ["incomplete", "editing", "complete"],
       default: "incomplete",
-      index: true,
     },
   },
   {
@@ -38,8 +37,23 @@ const timetableSchema = new Schema(
   },
 );
 
+timetableSchema.index({
+  userId: 1,
+  createdAt: -1,
+});
+
+timetableSchema.index({
+  userId: 1,
+  updatedAt: -1,
+});
+
+timetableSchema.index({
+  userId: 1,
+  title: 1,
+});
+
 export type Timetable = InferSchemaType<typeof timetableSchema>;
 
 export type TimetableDocument = HydratedDocument<Timetable>;
 
-export const TimetableModel = model("Timetable", timetableSchema);
+export const TimetableModel = model<Timetable>("Timetable", timetableSchema);

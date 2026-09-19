@@ -4,6 +4,7 @@ import {
   useMessageStore,
   type MessageStatusEvent,
 } from "../../store/message.store";
+import { toast } from "sonner";
 
 interface MessageStartEvent {
   messageId: string;
@@ -44,7 +45,7 @@ export const registerMessageListeners = () => {
   };
 
   const handleRunError = ({ message }: MessageErrorEvent) => {
-    console.error("AI error:", message);
+    toast.error(message);
 
     useMessageStore.getState().finish();
   };

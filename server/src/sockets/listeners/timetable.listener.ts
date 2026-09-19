@@ -15,7 +15,11 @@ export const registerTimetableListeners = (io: Server, socket: Socket) => {
         throw errors.badRequest("Missing timetableId");
       }
 
-      return await timetableService.update(timetableId, timetable);
+      return await timetableService.update(
+        timetableId,
+        socket.data.user.userId,
+        timetable,
+      );
     }),
   );
 
@@ -23,11 +27,28 @@ export const registerTimetableListeners = (io: Server, socket: Socket) => {
     "timetable:get",
     asyncSocketHandler("timetable:get", async (payload) => {
       const { timetableId } = payload;
-      
+
       if (!timetableId) {
         throw errors.badRequest("Missing timetableId");
       }
 
-      return await timetableService.get(timetableId);
-    }))
+      return await timetableService.get(timetableId, socket.data.user.userId);
+    }),
+  );
+
+  socket.on(
+    "timetable:generate",
+    asyncSocketHandler("timetable:generate", async (payload) => {
+      const { timetableId } = payload;
+
+      if (!timetableId) {
+        throw errors.badRequest("Missing timetableId");
+      }
+
+      return await timetableService.generate({
+        timetableId,
+        userId: socket.data.user.userId,
+      });
+    }),
+  );
 };

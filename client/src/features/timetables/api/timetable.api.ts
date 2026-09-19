@@ -2,7 +2,7 @@ import { httpClient } from "@/shared/api/httpClient";
 
 export const timetableApi = {
   create: async () => {
-    const { data } = await httpClient.post("/timetable/create");
+    const { data } = await httpClient.post("/timetable");
 
     return data.timetable;
   },

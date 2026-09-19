@@ -93,9 +93,8 @@ export const aiService = {
         messageId,
       });
     } catch (error) {
+      console.error("catch", error);
       await messageEmitter.error(userId, {
-        messageId,
-
         message: error instanceof Error ? error.message : "AI execution failed",
       });
 

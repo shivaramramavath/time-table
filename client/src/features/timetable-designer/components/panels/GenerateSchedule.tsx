@@ -4,9 +4,13 @@ import { Button } from "@/shared/ui/button";
 
 import useValidateGraph from "../../hooks/useValidateGraph";
 import { toast } from "sonner";
+import { timetableSocket } from "../../socket/timetable.socket";
+import { useDesignerStore } from "../../store/designer.store";
+import { navigationService } from "@/shared/services/navigation.service";
 
 const GenerateSchedule = () => {
   const { validateGraph } = useValidateGraph();
+  const timetableId = useDesignerStore((state) => state.timetableId);
 
   const handleGenerate = () => {
     const result = validateGraph();
@@ -16,7 +20,11 @@ const GenerateSchedule = () => {
       return;
     }
 
+    timetableSocket.generate(timetableId);
+
     toast.success("Generate schedule");
+
+    navigationService.navigate(`/timetables`);
   };
 
   return (
