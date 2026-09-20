@@ -1,36 +1,65 @@
 import "dotenv/config";
-import { z } from "zod";
 
-const envSchema = z.object({
-  PORT: z.coerce.number().default(8080),
+import { cleanEnv, email, port, str } from "envalid";
 
-  NODE_ENV: z.enum(["development", "production"]).default("development"),
+export const env = cleanEnv(process.env, {
+  // Application
+  PORT: port({
+    default: 8080,
+    desc: "Port on which the Node.js server runs",
+    example: "8080",
+  }),
 
-  ORIGIN_URL: z.string().min(1, "ORIGIN is required"),
+  NODE_ENV: str({
+    choices: ["development", "test", "production"],
+    default: "development",
+    desc: "Application environment",
+    example: "development",
+  }),
 
-  EMAIL_ID: z.string().min(1, "EMAIL_ID is required"),
+  ORIGIN_URL: str({
+    desc: "Frontend URL allowed to access the backend",
+    example: "http://localhost:3000",
+  }),
 
-  BREVO_API_KEY: z.string().min(1, "BREVO_API_KEY is required"),
+  // Email
+  EMAIL_ID: email({
+    desc: "Email address used by the application to send emails",
+    example: "admin@example.com",
+  }),
 
-  GROQ_API_KEY: z.string().min(1, "GROQ_API_KEY is required"),
+  BREVO_API_KEY: str({
+    desc: "API key used to authenticate with the Brevo email service",
+    example: "xkeysib-xxxxxxxxxxxxxxxxxxxxxxxx",
+  }),
 
-  JWT_SECRET_KEY: z.string().min(1, "JWT_SECRET_KEY is required"),
+  // AI
+  GROQ_API_KEY: str({
+    desc: "API key used to authenticate with the Groq API",
+    example: "gsk_xxxxxxxxxxxxxxxxxxxxxxxx",
+  }),
 
-  REDIS_HOST: z.string().min(1, "REDIS_HOST is required"),
-  REDIS_PORT: z.coerce.number(),
+  // Authentication
+  JWT_SECRET_KEY: str({
+    desc: "Secret key used to sign and verify JWT tokens",
+    example: "your-super-secret-jwt-key-at-least-32-chars",
+  }),
 
-  MONGODB_URI: z.string().min(1, "MONGODB_URI is required"),
+  // Redis
+  REDIS_HOST: str({
+    desc: "Hostname or IP address of the Redis server",
+    example: "localhost",
+  }),
+
+  REDIS_PORT: port({
+    default: 6379,
+    desc: "Port on which the Redis server is running",
+    example: "6379",
+  }),
+
+  // MongoDB
+  MONGODB_URI: str({
+    desc: "MongoDB connection URI used by the application",
+    example: "mongodb://localhost:27017/my_database",
+  }),
 });
-
-const parsed = envSchema.safeParse(process.env);
-
-if (!parsed.success) {
-  console.error("❌ Invalid environment variables");
-  console.error(parsed.error.message);
-  process.exit(1);
-}
-
-export const env = {
-  ...parsed.data,
-  isProd: parsed.data.NODE_ENV === "production",
-};

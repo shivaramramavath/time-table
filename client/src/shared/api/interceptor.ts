@@ -1,11 +1,7 @@
 import type { AxiosError, InternalAxiosRequestConfig } from "axios";
-
-import { toast } from "sonner";
-
 import { Token } from "@/features/auth/services/token.service";
 import { authService } from "@/features/auth/services/auth.service";
 import { httpClient } from "./httpClient";
-import { useAuthStore } from "@/features/auth/store/auth.store";
 import { navigationService } from "../services/navigation.service";
 
 interface RetryableRequestConfig extends InternalAxiosRequestConfig {
@@ -44,7 +40,6 @@ export const errorInterceptor = async (
 
       return httpClient(originalRequest);
     } catch {
-     
       navigationService.navigate("/login");
 
       return Promise.reject(error);
