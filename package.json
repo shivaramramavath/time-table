@@ -1,0 +1,28 @@
+{
+  "name": "time-table",
+  "version": "1.0.0",
+  "description": "<div align=\"center\">",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ramavathshivaram/time-table.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ramavathshivaram/time-table/issues"
+  },
+  "homepage": "https://github.com/ramavathshivaram/time-table#readme",
+  "dependencies": {
+    "husky": "^9.1.7"
+  }
+}
