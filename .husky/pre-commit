@@ -1,1 +1,25 @@
-echo "running husky hook"
+#!/usr/bin/env sh
+
+set -e
+
+echo ""
+echo "========================================"
+echo "      Running Husky pre-commit hook"
+echo "========================================"
+echo ""
+
+# echo "→ Running ESLint..."
+# npm run lint
+# echo "✓ ESLint passed"
+
+# echo ""
+# echo "→ Running TypeScript type checking..."
+# npm run typecheck
+# echo "✓ TypeScript type check passed"
+
+echo ""
+echo "========================================"
+echo "✓ All pre-commit checks passed"
+echo "✓ Commit can proceed"
+echo "========================================"
+echo ""

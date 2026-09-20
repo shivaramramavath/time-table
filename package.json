@@ -1,28 +1,27 @@
 {
   "name": "time-table",
   "version": "1.0.0",
-  "description": "<div align=\"center\">",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
+  "private": true,
+  "description": "AI-powered timetable generation system",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky"
+    "prepare": "husky",
+    "lint": "npm run lint:client && npm run lint:server",
+    "lint:client": "npm --prefix client run lint",
+    "lint:server": "npm --prefix server run lint",
+    "lint:fix": "npm run lint:client:fix && npm run lint:server:fix",
+    "lint:client:fix": "npm --prefix client run lint:fix",
+    "lint:server:fix": "npm --prefix server run lint:fix",
+    "format": "npm run format:client && npm run format:server",
+    "format:client": "npm --prefix client run format",
+    "format:server": "npm --prefix server run format",
+    "format:check": "npm run format:check:client && npm run format:check:server",
+    "format:check:client": "npm --prefix client run format:check",
+    "format:check:server": "npm --prefix server run format:check",
+    "typecheck": "npm run typecheck:client && npm run typecheck:server",
+    "typecheck:client": "npm --prefix client run typecheck",
+    "typecheck:server": "npm --prefix server run typecheck"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ramavathshivaram/time-table.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/ramavathshivaram/time-table/issues"
-  },
-  "homepage": "https://github.com/ramavathshivaram/time-table#readme",
-  "dependencies": {
+  "devDependencies": {
     "husky": "^9.1.7"
   }
 }
