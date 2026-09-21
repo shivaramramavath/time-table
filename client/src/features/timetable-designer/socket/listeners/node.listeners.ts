@@ -1,15 +1,13 @@
-import type { Node } from "@xyflow/react";
+import type { Node } from '@xyflow/react';
 
-import { registerDesignerListeners } from "./register-designer-listeners";
+import { registerDesignerListeners } from './register-designer-listeners';
 
 interface RegisterNodeListenersProps {
   setNodes: React.Dispatch<React.SetStateAction<Node[]>>;
 }
 
-export const registerNodeListeners = ({
-  setNodes,
-}: RegisterNodeListenersProps) => {
-  return registerDesignerListeners<Node>("node", {
+export const registerNodeListeners = ({ setNodes }: RegisterNodeListenersProps) => {
+  return registerDesignerListeners<Node>('node', {
     add: (node) => {
       setNodes((nodes) => {
         if (nodes.some((existing) => existing.id === node.id)) {

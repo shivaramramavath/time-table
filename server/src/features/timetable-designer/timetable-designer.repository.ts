@@ -1,6 +1,6 @@
-import { errors } from "#utils/errors.js";
+import { errors } from '#utils/errors.js';
 
-import { TimetableDesignerModel } from "./timetable-designer.model.js";
+import { TimetableDesignerModel } from './timetable-designer.model.js';
 
 export const timetableDesignerRepository = {
   create: async (timetableId: string) => {
@@ -17,7 +17,7 @@ export const timetableDesignerRepository = {
     try {
       return await TimetableDesignerModel.findOne({ timetableId }).lean();
     } catch {
-      throw errors.internal("Failed to get timetable Designer");
+      throw errors.internal('Failed to get timetable Designer');
     }
   },
 };

@@ -1,6 +1,6 @@
-import { errors } from "#utils/errors.js";
-import { getRandomDescription } from "./services/descriptions.js";
-import { TimetableModel, type TimetableDocument } from "./timetable.model.js";
+import { errors } from '#utils/errors.js';
+import { getRandomDescription } from './services/descriptions.js';
+import { TimetableModel, type TimetableDocument } from './timetable.model.js';
 
 interface GetTimetablesParams {
   userId: string;
@@ -12,7 +12,7 @@ interface GetTimetablesParams {
 interface UpdateTimetableData {
   title?: string;
   description?: string;
-  stage?: "incomplete" | "editing" | "complete";
+  stage?: 'incomplete' | 'editing' | 'complete';
 }
 
 export const timetableRepository = {
@@ -30,18 +30,11 @@ export const timetableRepository = {
         description: getRandomDescription(),
       });
     } catch (error) {
-      throw errors.internal(
-        error instanceof Error ? error.message : "Failed to create timetable",
-      );
+      throw errors.internal(error instanceof Error ? error.message : 'Failed to create timetable');
     }
   },
 
-  getTimetables: async ({
-    userId,
-    query = "",
-    skip,
-    limit,
-  }: GetTimetablesParams) => {
+  getTimetables: async ({ userId, query = '', skip, limit }: GetTimetablesParams) => {
     try {
       const filter: Record<string, unknown> = {
         userId,
@@ -50,7 +43,7 @@ export const timetableRepository = {
       if (query.trim()) {
         filter.title = {
           $regex: escapeRegex(query.trim()),
-          $options: "i",
+          $options: 'i',
         };
       }
 
@@ -60,7 +53,7 @@ export const timetableRepository = {
         .limit(limit)
         .lean();
     } catch {
-      throw errors.internal("Failed to get timetables");
+      throw errors.internal('Failed to get timetables');
     }
   },
 
@@ -73,7 +66,7 @@ export const timetableRepository = {
         .limit(limit)
         .lean();
     } catch {
-      throw errors.internal("Failed to get recent timetables");
+      throw errors.internal('Failed to get recent timetables');
     }
   },
 
@@ -84,15 +77,11 @@ export const timetableRepository = {
         userId,
       });
     } catch {
-      throw errors.internal("Failed to get timetable");
+      throw errors.internal('Failed to get timetable');
     }
   },
 
-  update: async (
-    timetableId: string,
-    userId: string,
-    data: UpdateTimetableData,
-  ) => {
+  update: async (timetableId: string, userId: string, data: UpdateTimetableData) => {
     try {
       return await TimetableModel.findOneAndUpdate(
         {
@@ -108,7 +97,7 @@ export const timetableRepository = {
         },
       );
     } catch {
-      throw errors.internal("Failed to update timetable");
+      throw errors.internal('Failed to update timetable');
     }
   },
 
@@ -119,11 +108,11 @@ export const timetableRepository = {
         userId,
       });
     } catch {
-      throw errors.internal("Failed to delete timetable");
+      throw errors.internal('Failed to delete timetable');
     }
   },
 };
 
 function escapeRegex(value: string) {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }

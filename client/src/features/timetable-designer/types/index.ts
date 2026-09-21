@@ -1,2 +1,2 @@
-export * from "./designer.types";
-export * from "./template.type";
+export * from './designer.types';
+export * from './template.type';

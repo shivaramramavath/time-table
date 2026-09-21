@@ -1,6 +1,6 @@
-import { socketService } from "@/shared/socket/socket.service";
+import { socketService } from '@/shared/socket/socket.service';
 
-import type { DeleteEvent } from "./designer-socket.types";
+import type { DeleteEvent } from './designer-socket.types';
 
 interface ListenerAdapter<T> {
   add: (entity: T) => void;

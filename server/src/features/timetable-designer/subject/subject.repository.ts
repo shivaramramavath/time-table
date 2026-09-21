@@ -1,4 +1,4 @@
-import { SubjectModel, type Subject } from "./subject.model.js";
+import { SubjectModel, type Subject } from './subject.model.js';
 
 export const subjectRepository = {
   findById: async (designerId: string, id: string): Promise<Subject | null> => {
@@ -19,10 +19,7 @@ export const subjectRepository = {
       .exec();
   },
 
-  findByCode: async (
-    designerId: string,
-    code: string,
-  ): Promise<Subject | null> => {
+  findByCode: async (designerId: string, code: string): Promise<Subject | null> => {
     return SubjectModel.findOne({
       designerId,
       code: code.toUpperCase(),

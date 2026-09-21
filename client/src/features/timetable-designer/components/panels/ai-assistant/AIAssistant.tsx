@@ -1,7 +1,7 @@
-import { memo, useState } from "react";
+import { memo, useState } from 'react';
 
-import AIAssistantTrigger from "./AIAssistantTrigger";
-import AIAssistantPanel from "./AIAssistantPanel";
+import AIAssistantTrigger from './AIAssistantTrigger';
+import AIAssistantPanel from './AIAssistantPanel';
 
 const AIAssistant = () => {
   const [open, setOpen] = useState(false);

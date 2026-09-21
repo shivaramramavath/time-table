@@ -1,7 +1,7 @@
-import { ChatGroq } from "@langchain/groq";
+import { ChatGroq } from '@langchain/groq';
 
-import { env } from "#configs/env.js";
-import { GROQ_LARGE_MODEL, GROQ_SMALL_MODEL } from "#configs/constants.js";
+import { env } from '#configs/env.js';
+import { GROQ_LARGE_MODEL, GROQ_SMALL_MODEL } from '#configs/constants.js';
 
 const groqSmall = new ChatGroq({
   apiKey: env.GROQ_API_KEY,

@@ -1,4 +1,4 @@
-export type TemplateVisibility = "private" | "public";
+export type TemplateVisibility = 'private' | 'public';
 
 export interface TemplateFormData {
   name: string;

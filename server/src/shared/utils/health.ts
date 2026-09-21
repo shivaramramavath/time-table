@@ -1,11 +1,11 @@
-import redis from "#configs/redis.js";
-import os from "os";
-import type { Request, Response } from "express";
+import redis from '#configs/redis.js';
+import os from 'os';
+import type { Request, Response } from 'express';
 
-const health=async (req: Request, res: Response) => {
-  const redisInfo = await redis.info("memory");
+const health = async (req: Request, res: Response) => {
+  const redisInfo = await redis.info('memory');
   res.status(200).json({
-    status: "ok",
+    status: 'ok',
     uptime: process.uptime(),
     timestamp: Date.now(),
     server: {
@@ -23,7 +23,6 @@ const health=async (req: Request, res: Response) => {
       info: redisInfo,
     },
   });
-}
+};
 
-
-export default health
+export default health;

@@ -1,6 +1,6 @@
-import type { Edge } from "./edge.model.js";
+import type { Edge } from './edge.model.js';
 
-import { edgeRepository } from "./edge.repository.js";
+import { edgeRepository } from './edge.repository.js';
 
 export const edgeProcessor = {
   add: async (edge: Edge) => {

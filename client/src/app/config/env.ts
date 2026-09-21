@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 const envSchema = z.object({
   VITE_BACKEND_URL: z.string().url(),
@@ -8,9 +8,9 @@ const envSchema = z.object({
 const parsedEnv = envSchema.safeParse(import.meta.env);
 
 if (!parsedEnv.success) {
-  console.error("❌ Invalid environment variables:");
+  console.error('❌ Invalid environment variables:');
 
-  throw new Error("Invalid environment variables");
+  throw new Error('Invalid environment variables');
 }
 
 export const env = {

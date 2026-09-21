@@ -1,10 +1,10 @@
-import { useCallback } from "react";
-import { useReactFlow } from "@xyflow/react";
+import { useCallback } from 'react';
+import { useReactFlow } from '@xyflow/react';
 
-import { generateEdgeId, generateNodeId } from "../utils/generate-ids";
-import { nodeService } from "../services/node.service";
-import { edgeService } from "../services/edge.service";
-import useAutoArrange from "./useAutoArrange";
+import { generateEdgeId, generateNodeId } from '../utils/generate-ids';
+import { nodeService } from '../services/node.service';
+import { edgeService } from '../services/edge.service';
+import useAutoArrange from './useAutoArrange';
 
 export const useDesignerControls = () => {
   const {
@@ -44,9 +44,7 @@ export const useDesignerControls = () => {
 
     const selectedEdges = edges.filter(
       (edge) =>
-        edge.selected ||
-        selectedNodeIds.has(edge.source) ||
-        selectedNodeIds.has(edge.target),
+        edge.selected || selectedNodeIds.has(edge.source) || selectedNodeIds.has(edge.target),
     );
 
     if (!selectedNodes.length && !selectedEdges.length) {
@@ -126,11 +124,11 @@ export const useDesignerControls = () => {
   }, [getNodes, getEdges, setNodes, addNodes, addEdges]);
 
   const undo = useCallback(() => {
-    console.log("Undo");
+    console.log('Undo');
   }, []);
 
   const redo = useCallback(() => {
-    console.log("Redo");
+    console.log('Redo');
   }, []);
 
   const hasSelection = getNodes().some((node) => node.selected);

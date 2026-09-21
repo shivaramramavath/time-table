@@ -1,7 +1,7 @@
-import { Sparkles } from "lucide-react";
-import { motion } from "framer-motion";
+import { Sparkles } from 'lucide-react';
+import { motion } from 'framer-motion';
 
-import { Button } from "@/shared/ui/button";
+import { Button } from '@/shared/ui/button';
 
 interface Props {
   onClick: () => void;

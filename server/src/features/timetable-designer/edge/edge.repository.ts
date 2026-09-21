@@ -1,4 +1,4 @@
-import { EdgeModel, type Edge } from "./edge.model.js";
+import { EdgeModel, type Edge } from './edge.model.js';
 
 export const edgeRepository = {
   findById: async (designerId: string, id: string): Promise<Edge | null> => {
@@ -26,11 +26,7 @@ export const edgeRepository = {
     return EdgeModel.insertMany(edges);
   },
 
-  update: async (
-    designerId: string,
-    id: string,
-    edge: Edge,
-  ): Promise<Edge | null> => {
+  update: async (designerId: string, id: string, edge: Edge): Promise<Edge | null> => {
     return EdgeModel.findOneAndUpdate(
       {
         designerId,

@@ -1,8 +1,8 @@
-import { Button } from "@/shared/ui/button";
-import { Card, CardContent } from "@/shared/ui/card";
-import { CalendarDays, Clock3, Sparkles } from "lucide-react";
-import { navigationService } from "@/shared/services/navigation.service";
-import GetStartedButton from "@/shared/components/GetStartedButton";
+import { Button } from '@/shared/ui/button';
+import { Card, CardContent } from '@/shared/ui/card';
+import { CalendarDays, Clock3, Sparkles } from 'lucide-react';
+import { navigationService } from '@/shared/services/navigation.service';
+import GetStartedButton from '@/shared/components/GetStartedButton';
 
 const LandingPage = () => {
   return (
@@ -10,13 +10,9 @@ const LandingPage = () => {
       {/* Navbar */}
       <header className="w-full border-b bg-background/80 backdrop-blur sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-          <h1 className="text-xl font-bold tracking-tight">
-            TimeTable Generator
-          </h1>
+          <h1 className="text-xl font-bold tracking-tight">TimeTable Generator</h1>
 
-          <Button onClick={() => navigationService.navigate("/login")}>
-            Login
-          </Button>
+          <Button onClick={() => navigationService.navigate('/login')}>Login</Button>
         </div>
       </header>
 
@@ -31,15 +27,12 @@ const LandingPage = () => {
             </h2>
 
             <p className="text-muted-foreground text-lg">
-              Automatically generate optimized college timetables with
-              intelligent scheduling, conflict detection, and faculty
-              management.
+              Automatically generate optimized college timetables with intelligent scheduling,
+              conflict detection, and faculty management.
             </p>
 
             <div className="flex gap-4">
-              <GetStartedButton
-                onClick={() => navigationService.navigate("/login")}
-              />
+              <GetStartedButton onClick={() => navigationService.navigate('/login')} />
 
               <Button variant="outline" size="lg">
                 Learn More

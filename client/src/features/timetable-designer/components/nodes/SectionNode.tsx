@@ -1,7 +1,7 @@
-import { memo } from "react";
+import { memo } from 'react';
 
-import DesignerNode from "./DesignerNode";
-import { BookOpen, DoorOpen, User } from "lucide-react";
+import DesignerNode from './DesignerNode';
+import { BookOpen, DoorOpen, User } from 'lucide-react';
 
 interface SectionNodeProps {
   data: {

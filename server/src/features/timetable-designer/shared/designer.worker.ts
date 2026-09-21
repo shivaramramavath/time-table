@@ -1,7 +1,7 @@
-import { Worker, type Job, UnrecoverableError } from "bullmq";
+import { Worker, type Job, UnrecoverableError } from 'bullmq';
 
-import redis from "#configs/redis.js";
-import logger from "#configs/logger.js";
+import redis from '#configs/redis.js';
+import logger from '#configs/logger.js';
 
 export interface DesignerProcessor<T> {
   add(entity: T): Promise<unknown>;
@@ -28,33 +28,29 @@ export const createDesignerWorker = <T>(
     async (job: Job) => {
       try {
         switch (job.name) {
-          case "create":
+          case 'create':
             await processor.add(job.data.entity);
             break;
 
-          case "createMany":
+          case 'createMany':
             if (!processor.addMany) {
-              throw new UnrecoverableError(
-                `${name} does not support createMany`,
-              );
+              throw new UnrecoverableError(`${name} does not support createMany`);
             }
 
             await processor.addMany(job.data.entities);
             break;
 
-          case "update":
+          case 'update':
             await processor.update(job.data.entity);
             break;
 
-          case "delete":
+          case 'delete':
             await processor.remove(job.data.designerId, job.data.id);
             break;
 
-          case "deleteMany":
+          case 'deleteMany':
             if (!processor.removeMany) {
-              throw new UnrecoverableError(
-                `${name} does not support deleteMany`,
-              );
+              throw new UnrecoverableError(`${name} does not support deleteMany`);
             }
 
             await processor.removeMany(job.data.designerId, job.data.ids);

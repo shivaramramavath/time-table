@@ -1,7 +1,7 @@
-import { useCallback } from "react";
-import dagre from "dagre";
-import { nodeService } from "../services/node.service";
-import { NODE_HEIGHT, NODE_WIDTH } from "../constants";
+import { useCallback } from 'react';
+import dagre from 'dagre';
+import { nodeService } from '../services/node.service';
+import { NODE_HEIGHT, NODE_WIDTH } from '../constants';
 
 const useAutoArrange = ({ getNodes, getEdges, setNodes }) => {
   return useCallback(() => {
@@ -15,7 +15,7 @@ const useAutoArrange = ({ getNodes, getEdges, setNodes }) => {
     graph.setDefaultEdgeLabel(() => ({}));
 
     graph.setGraph({
-      rankdir: "TB",
+      rankdir: 'TB',
       ranksep: NODE_WIDTH,
       nodesep: NODE_HEIGHT,
     });
@@ -60,7 +60,7 @@ const useAutoArrange = ({ getNodes, getEdges, setNodes }) => {
         position: newPosition,
         style: {
           ...node.style,
-          transition: "transform 0.35s cubic-bezier(0.4,0,0.2,1)",
+          transition: 'transform 0.35s cubic-bezier(0.4,0,0.2,1)',
         },
       };
     });

@@ -1,17 +1,17 @@
-import { memo, useMemo, useState } from "react";
+import { memo, useMemo, useState } from 'react';
 
-import { Input } from "@/shared/ui/input";
+import { Input } from '@/shared/ui/input';
 
-import SubjectCard from "./SubjectCard";
+import SubjectCard from './SubjectCard';
 
-import { useDesignerStore } from "../../../store/designer.store";
+import { useDesignerStore } from '../../../store/designer.store';
 
 interface Props {
   onEdit: (subjectId: string) => void;
 }
 
 const SubjectList = ({ onEdit }: Props) => {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
 
   const subjects = useDesignerStore((state) => state.subjects);
 
@@ -24,8 +24,7 @@ const SubjectList = ({ onEdit }: Props) => {
 
     return subjects.filter(
       (subject) =>
-        subject.name.toLowerCase().includes(search) ||
-        subject.code.toLowerCase().includes(search),
+        subject.name.toLowerCase().includes(search) || subject.code.toLowerCase().includes(search),
     );
   }, [subjects, query]);
 
@@ -45,7 +44,7 @@ const SubjectList = ({ onEdit }: Props) => {
 
         {!filteredSubjects.length && (
           <div className="py-8 text-center text-xs text-muted-foreground">
-            {query ? "No subjects found" : "No subjects yet"}
+            {query ? 'No subjects found' : 'No subjects yet'}
           </div>
         )}
       </div>

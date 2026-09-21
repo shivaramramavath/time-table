@@ -1,6 +1,6 @@
-import { Annotation } from "@langchain/langgraph";
+import { Annotation } from '@langchain/langgraph';
 
-import type { Message } from "../message/message.model.js";
+import type { Message } from '../message/message.model.js';
 
 export const DesignerGraphState = Annotation.Root({
   userId: Annotation<string>,
@@ -17,9 +17,9 @@ export const DesignerGraphState = Annotation.Root({
   }),
 
   intent: Annotation<{
-    type: "create" | "update" | "delete" | "query" | "mixed" | "unknown";
+    type: 'create' | 'update' | 'delete' | 'query' | 'mixed' | 'unknown';
 
-    entities: ("node" | "edge" | "faculty" | "subject" | "room")[];
+    entities: ('node' | 'edge' | 'faculty' | 'subject' | 'room')[];
 
     requiresMutation: boolean;
     requiresRetrieval?: boolean;
@@ -33,12 +33,12 @@ export const DesignerGraphState = Annotation.Root({
 
   expandedQuery: Annotation<string>({
     reducer: (_, value) => value,
-    default: () => "",
+    default: () => '',
   }),
 
-  retrievalRoute: Annotation<"retrieve" | "response">({
+  retrievalRoute: Annotation<'retrieve' | 'response'>({
     reducer: (_, value) => value,
-    default: () => "response",
+    default: () => 'response',
   }),
 
   retrieval: Annotation<Record<string, unknown> | null>({
@@ -48,11 +48,11 @@ export const DesignerGraphState = Annotation.Root({
 
   response: Annotation<string>({
     reducer: (_, value) => value,
-    default: () => "",
+    default: () => '',
   }),
 
   status: Annotation<string>({
     reducer: (_, value) => value,
-    default: () => "thinking",
+    default: () => 'thinking',
   }),
 });

@@ -1,27 +1,27 @@
-import { useReactFlow } from "@xyflow/react";
-import { NODE_HEIGHT, NODE_WIDTH } from "../constants";
-import { generateNodeId } from "../utils/generate-ids";
-import { nodeService } from "../services/node.service";
+import { useReactFlow } from '@xyflow/react';
+import { NODE_HEIGHT, NODE_WIDTH } from '../constants';
+import { generateNodeId } from '../utils/generate-ids';
+import { nodeService } from '../services/node.service';
 
 export const useDesignerDnD = () => {
   const { screenToFlowPosition, addNodes } = useReactFlow();
 
   const onDragStart = (event: React.DragEvent, nodeType: string) => {
-    event.dataTransfer.setData("application/reactflow", nodeType);
+    event.dataTransfer.setData('application/reactflow', nodeType);
 
-    event.dataTransfer.effectAllowed = "move";
+    event.dataTransfer.effectAllowed = 'move';
   };
 
   const onDragOver = (event: React.DragEvent) => {
     event.preventDefault();
 
-    event.dataTransfer.dropEffect = "move";
+    event.dataTransfer.dropEffect = 'move';
   };
 
   const onDrop = (event: React.DragEvent) => {
     event.preventDefault();
 
-    const nodeType = event.dataTransfer.getData("application/reactflow");
+    const nodeType = event.dataTransfer.getData('application/reactflow');
 
     if (!nodeType) {
       return;

@@ -1,6 +1,6 @@
-import { env } from "@/app/config/env";
-import { Token } from "@/features/auth/services/token.service";
-import { io, type Socket } from "socket.io-client";
+import { env } from '@/app/config/env';
+import { Token } from '@/features/auth/services/token.service';
+import { io, type Socket } from 'socket.io-client';
 
 class SocketService {
   private socket: Socket;
@@ -9,7 +9,7 @@ class SocketService {
     this.socket = io(env.backendUrl, {
       autoConnect: false,
       withCredentials: true,
-      transports: ["websocket"],
+      transports: ['websocket'],
     });
   }
 

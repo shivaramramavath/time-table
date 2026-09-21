@@ -1,20 +1,15 @@
-import { memo } from "react";
-import { Card } from "@/shared/ui/card";
+import { memo } from 'react';
+import { Card } from '@/shared/ui/card';
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-  TooltipProvider,
-} from "@/shared/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/shared/ui/tooltip';
 
-import { cn } from "@/shared/lib/utils";
+import { cn } from '@/shared/lib/utils';
 
-import { designerControls } from "../../constants/designer-controls";
-import { useDesignerControls } from "../../hooks/useDesignerControls";
+import { designerControls } from '../../constants/designer-controls';
+import { useDesignerControls } from '../../hooks/useDesignerControls';
 
 const iconButtonClass =
-  "h-9 w-9 p-0 flex items-center justify-center rounded-md transition-all hover:bg-muted duration-200";
+  'h-9 w-9 p-0 flex items-center justify-center rounded-md transition-all hover:bg-muted duration-200';
 
 const DesignerControls = () => {
   const {
@@ -31,13 +26,13 @@ const DesignerControls = () => {
   } = useDesignerControls();
 
   const actions = {
-    "select-all": selectAll,
+    'select-all': selectAll,
     delete: deleteSelected,
     duplicate: duplicateSelected,
-    "auto-arrange": autoArrange,
-    "zoom-in": zoomIn,
-    "zoom-out": zoomOut,
-    "fit-view": fitView,
+    'auto-arrange': autoArrange,
+    'zoom-in': zoomIn,
+    'zoom-out': zoomOut,
+    'fit-view': fitView,
     undo,
     redo,
   };
@@ -50,8 +45,7 @@ const DesignerControls = () => {
             const Icon = control.icon;
 
             const disabled =
-              (control.id === "delete" || control.id === "duplicate") &&
-              !hasSelection;
+              (control.id === 'delete' || control.id === 'duplicate') && !hasSelection;
 
             return (
               <Tooltip key={control.id}>

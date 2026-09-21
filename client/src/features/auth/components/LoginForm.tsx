@@ -1,9 +1,9 @@
-import React from "react";
-import { useForm, type SubmitHandler } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import React from 'react';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router-dom';
 
-import { Input } from "@/shared/ui/input";
-import { Button } from "@/shared/ui/button";
+import { Input } from '@/shared/ui/input';
+import { Button } from '@/shared/ui/button';
 import {
   Field,
   FieldError,
@@ -11,10 +11,10 @@ import {
   FieldLabel,
   FieldSeparator,
   FieldSet,
-} from "@/shared/ui/field";
+} from '@/shared/ui/field';
 
-import { authService } from "@/features/auth/services/auth.service";
-import GoogleLoginBtn from "./GoogleLoginBtn";
+import { authService } from '@/features/auth/services/auth.service';
+import GoogleLoginBtn from './GoogleLoginBtn';
 
 interface LoginFormData {
   email: string;
@@ -33,9 +33,9 @@ const LoginForm = () => {
   const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
     try {
       await authService.login(data);
-      navigate("/timetables");
+      navigate('/timetables');
     } catch (error) {
-      console.error("Login failed:", error);
+      console.error('Login failed:', error);
     }
   };
 
@@ -52,11 +52,11 @@ const LoginForm = () => {
               type="email"
               placeholder="abc@example.com"
               autoComplete="email"
-              {...register("email", {
-                required: "Email is required",
+              {...register('email', {
+                required: 'Email is required',
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: "Invalid email address",
+                  message: 'Invalid email address',
                 },
               })}
             />
@@ -81,24 +81,22 @@ const LoginForm = () => {
               id="password"
               type="password"
               autoComplete="current-password"
-              {...register("password", {
-                required: "Password is required",
+              {...register('password', {
+                required: 'Password is required',
                 minLength: {
                   value: 6,
-                  message: "Password must be at least 6 characters",
+                  message: 'Password must be at least 6 characters',
                 },
               })}
             />
 
-            {errors.password && (
-              <FieldError>{errors.password.message}</FieldError>
-            )}
+            {errors.password && <FieldError>{errors.password.message}</FieldError>}
           </Field>
         </FieldGroup>
       </FieldSet>
 
       <Button type="submit" className="mt-5 w-full" disabled={isSubmitting}>
-        {isSubmitting ? "Logging in..." : "Login"}
+        {isSubmitting ? 'Logging in...' : 'Login'}
       </Button>
 
       <FieldSeparator className="my-4 bg-transparent">OR</FieldSeparator>

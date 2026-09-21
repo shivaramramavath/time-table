@@ -1,11 +1,10 @@
-import { useEffect, type ReactNode } from "react";
-import { toast } from "sonner";
+import { useEffect } from 'react';
 
-import { socketService } from "@/shared/socket/socket.service";
-import { useSocketStore } from "@/shared/socket/socket.store";
-import ConnectingScreen from "@/shared/components/ConnectingScreen";
-import { authService } from "@/features/auth/services/auth.service";
-import { Outlet } from "react-router-dom";
+import { socketService } from '@/shared/socket/socket.service';
+import { useSocketStore } from '@/shared/socket/socket.store';
+import ConnectingScreen from '@/shared/components/ConnectingScreen';
+import { authService } from '@/features/auth/services/auth.service';
+import { Outlet } from 'react-router-dom';
 
 const SocketProvider = () => {
   const status = useSocketStore((state) => state.status);
@@ -15,15 +14,15 @@ const SocketProvider = () => {
     const socket = socketService.getSocket();
 
     const handleConnect = () => {
-      setStatus("connected");
+      setStatus('connected');
     };
 
     const handleDisconnect = () => {
-      setStatus("disconnected");
+      setStatus('disconnected');
     };
 
     const handleConnectError = async (error: Error) => {
-      if (error.message === "Forbidden") {
+      if (error.message === 'Forbidden') {
         try {
           await authService.refreshToken();
 
@@ -32,32 +31,32 @@ const SocketProvider = () => {
 
           return;
         } catch {
-          setStatus("disconnected");
+          setStatus('disconnected');
           return;
         }
       }
 
-      setStatus("reconnecting");
+      setStatus('reconnecting');
     };
 
-    socket.on("connect", handleConnect);
-    socket.on("disconnect", handleDisconnect);
-    socket.on("connect_error", handleConnectError);
+    socket.on('connect', handleConnect);
+    socket.on('disconnect', handleDisconnect);
+    socket.on('connect_error', handleConnectError);
 
-    setStatus("connecting");
+    setStatus('connecting');
 
     socketService.connect();
 
     return () => {
-      socket.off("connect", handleConnect);
-      socket.off("disconnect", handleDisconnect);
-      socket.off("connect_error", handleConnectError);
+      socket.off('connect', handleConnect);
+      socket.off('disconnect', handleDisconnect);
+      socket.off('connect_error', handleConnectError);
 
       socketService.disconnect();
     };
   }, [setStatus]);
 
-  if (status !== "connected") {
+  if (status !== 'connected') {
     return <ConnectingScreen />;
   }
 

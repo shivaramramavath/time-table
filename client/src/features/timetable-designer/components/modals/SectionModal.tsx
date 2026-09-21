@@ -1,28 +1,23 @@
-import { useEffect, useState } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
-import { useReactFlow } from "@xyflow/react";
+import { useEffect, useState } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
+import { useReactFlow } from '@xyflow/react';
 
-import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
-import { Label } from "@/shared/ui/label";
+import { Button } from '@/shared/ui/button';
+import { Input } from '@/shared/ui/input';
+import { Label } from '@/shared/ui/label';
 
-import {
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/shared/ui/dialog";
+import { DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/shared/ui/dialog';
 
-import { useModalStore } from "../../store/modal.store";
-import { nodeService } from "../../services/node.service";
+import { useModalStore } from '../../store/modal.store';
+import { nodeService } from '../../services/node.service';
 
-import { facultyService } from "../../services/faculty.service";
-import { subjectService } from "../../services/subject.service";
-import { roomService } from "../../services/room.service";
+import { facultyService } from '../../services/faculty.service';
+import { subjectService } from '../../services/subject.service';
+import { roomService } from '../../services/room.service';
 
-import SelectResourceIds from "./common/SelectResourceIds";
+import SelectResourceIds from './common/SelectResourceIds';
 
-import type { Section } from "../../types/node.types";
+import type { Section } from '../../types/node.types';
 
 interface Props {
   data: {
@@ -30,7 +25,7 @@ interface Props {
   } | null;
 }
 
-type BreakType = "lunch" | "short-break";
+type BreakType = 'lunch' | 'short-break';
 
 type SectionFormData = {
   label: string;
@@ -50,20 +45,13 @@ type SectionFormData = {
   }[];
 };
 
-const WORKING_DAYS = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
+const WORKING_DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-const DEFAULT_BREAKS: SectionFormData["breaks"] = [
+const DEFAULT_BREAKS: SectionFormData['breaks'] = [
   {
-    type: "lunch",
-    startTime: "13:00",
-    endTime: "14:00",
+    type: 'lunch',
+    startTime: '13:00',
+    endTime: '14:00',
   },
 ];
 
@@ -72,9 +60,7 @@ const SectionModal = ({ data }: Props) => {
 
   const { getNode, setNodes } = useReactFlow();
 
-  const section = (data?.id ? getNode(data.id)?.data : undefined) as
-    | Section["data"]
-    | undefined;
+  const section = (data?.id ? getNode(data.id)?.data : undefined) as Section['data'] | undefined;
 
   /*
    * Resource selections
@@ -102,25 +88,21 @@ const SectionModal = ({ data }: Props) => {
     formState: { errors },
   } = useForm<SectionFormData>({
     defaultValues: {
-      label: section?.label ?? "",
+      label: section?.label ?? '',
 
-      section: section?.section ?? "",
+      section: section?.section ?? '',
 
       strength: section?.strength ?? 60,
 
-      startTime: section?.time?.startTime ?? "09:00",
+      startTime: section?.time?.startTime ?? '09:00',
 
-      endTime: section?.time?.endTime ?? "17:00",
+      endTime: section?.time?.endTime ?? '17:00',
 
       numberOfPeriods: section?.time?.numberOfPeriods ?? 7,
 
-      workingDays: section?.time?.workingDays?.length
-        ? section.time.workingDays
-        : WORKING_DAYS,
+      workingDays: section?.time?.workingDays?.length ? section.time.workingDays : WORKING_DAYS,
 
-      breaks: section?.time?.breaks?.length
-        ? section.time.breaks
-        : DEFAULT_BREAKS,
+      breaks: section?.time?.breaks?.length ? section.time.breaks : DEFAULT_BREAKS,
     },
   });
 
@@ -129,7 +111,7 @@ const SectionModal = ({ data }: Props) => {
    */
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "breaks",
+    name: 'breaks',
   });
 
   /*
@@ -139,25 +121,21 @@ const SectionModal = ({ data }: Props) => {
     if (!section) return;
 
     reset({
-      label: section.label ?? "",
+      label: section.label ?? '',
 
-      section: section.section ?? "",
+      section: section.section ?? '',
 
       strength: section.strength ?? 60,
 
-      startTime: section.time?.startTime ?? "09:00",
+      startTime: section.time?.startTime ?? '09:00',
 
-      endTime: section.time?.endTime ?? "17:00",
+      endTime: section.time?.endTime ?? '17:00',
 
       numberOfPeriods: section.time?.numberOfPeriods ?? 7,
 
-      workingDays: section.time?.workingDays?.length
-        ? section.time.workingDays
-        : WORKING_DAYS,
+      workingDays: section.time?.workingDays?.length ? section.time.workingDays : WORKING_DAYS,
 
-      breaks: section.time?.breaks?.length
-        ? section.time.breaks
-        : DEFAULT_BREAKS,
+      breaks: section.time?.breaks?.length ? section.time.breaks : DEFAULT_BREAKS,
     });
 
     setSelectedFacultyIds(section.resources?.facultyIds ?? []);
@@ -228,11 +206,9 @@ const SectionModal = ({ data }: Props) => {
     <form onSubmit={handleSubmit(handleUpdate)}>
       {/* Header */}
       <DialogHeader>
-        <DialogTitle>{section?.label || "Section"}</DialogTitle>
+        <DialogTitle>{section?.label || 'Section'}</DialogTitle>
 
-        <DialogDescription>
-          Configure section timetable settings.
-        </DialogDescription>
+        <DialogDescription>Configure section timetable settings.</DialogDescription>
       </DialogHeader>
 
       <div className="max-h-[70vh] space-y-4 overflow-y-auto py-4 scrollbar">
@@ -246,16 +222,12 @@ const SectionModal = ({ data }: Props) => {
           <Input
             id="section-label"
             placeholder="e.g. CSE-A"
-            {...register("label", {
-              required: "Section name is required",
+            {...register('label', {
+              required: 'Section name is required',
             })}
           />
 
-          {errors.label && (
-            <p className="text-[10px] text-destructive">
-              {errors.label.message}
-            </p>
-          )}
+          {errors.label && <p className="text-[10px] text-destructive">{errors.label.message}</p>}
         </div>
 
         {/* ================================================= */}
@@ -268,15 +240,13 @@ const SectionModal = ({ data }: Props) => {
           <Input
             id="section"
             placeholder="e.g. A"
-            {...register("section", {
-              required: "Section is required",
+            {...register('section', {
+              required: 'Section is required',
             })}
           />
 
           {errors.section && (
-            <p className="text-[10px] text-destructive">
-              {errors.section.message}
-            </p>
+            <p className="text-[10px] text-destructive">{errors.section.message}</p>
           )}
         </div>
 
@@ -292,22 +262,20 @@ const SectionModal = ({ data }: Props) => {
             type="number"
             min={1}
             placeholder="60"
-            {...register("strength", {
+            {...register('strength', {
               valueAsNumber: true,
 
-              required: "Student strength is required",
+              required: 'Student strength is required',
 
               min: {
                 value: 1,
-                message: "Strength must be at least 1",
+                message: 'Strength must be at least 1',
               },
             })}
           />
 
           {errors.strength && (
-            <p className="text-[10px] text-destructive">
-              {errors.strength.message}
-            </p>
+            <p className="text-[10px] text-destructive">{errors.strength.message}</p>
           )}
         </div>
 
@@ -321,49 +289,39 @@ const SectionModal = ({ data }: Props) => {
           <div className="grid grid-cols-2 gap-3">
             {/* Start */}
             <div className="space-y-1">
-              <Label
-                htmlFor="section-start-time"
-                className="text-[10px] text-muted-foreground"
-              >
+              <Label htmlFor="section-start-time" className="text-[10px] text-muted-foreground">
                 Start Time
               </Label>
 
               <Input
                 id="section-start-time"
                 type="time"
-                {...register("startTime", {
-                  required: "Start time is required",
+                {...register('startTime', {
+                  required: 'Start time is required',
                 })}
               />
 
               {errors.startTime && (
-                <p className="text-[10px] text-destructive">
-                  {errors.startTime.message}
-                </p>
+                <p className="text-[10px] text-destructive">{errors.startTime.message}</p>
               )}
             </div>
 
             {/* End */}
             <div className="space-y-1">
-              <Label
-                htmlFor="section-end-time"
-                className="text-[10px] text-muted-foreground"
-              >
+              <Label htmlFor="section-end-time" className="text-[10px] text-muted-foreground">
                 End Time
               </Label>
 
               <Input
                 id="section-end-time"
                 type="time"
-                {...register("endTime", {
-                  required: "End time is required",
+                {...register('endTime', {
+                  required: 'End time is required',
                 })}
               />
 
               {errors.endTime && (
-                <p className="text-[10px] text-destructive">
-                  {errors.endTime.message}
-                </p>
+                <p className="text-[10px] text-destructive">{errors.endTime.message}</p>
               )}
             </div>
           </div>
@@ -380,22 +338,20 @@ const SectionModal = ({ data }: Props) => {
             id="section-number-of-periods"
             type="number"
             min={1}
-            {...register("numberOfPeriods", {
+            {...register('numberOfPeriods', {
               valueAsNumber: true,
 
-              required: "Number of periods is required",
+              required: 'Number of periods is required',
 
               min: {
                 value: 1,
-                message: "At least one period is required",
+                message: 'At least one period is required',
               },
             })}
           />
 
           {errors.numberOfPeriods && (
-            <p className="text-[10px] text-destructive">
-              {errors.numberOfPeriods.message}
-            </p>
+            <p className="text-[10px] text-destructive">{errors.numberOfPeriods.message}</p>
           )}
         </div>
 
@@ -415,8 +371,8 @@ const SectionModal = ({ data }: Props) => {
                 <input
                   type="checkbox"
                   value={day}
-                  {...register("workingDays", {
-                    required: "Select at least one working day",
+                  {...register('workingDays', {
+                    required: 'Select at least one working day',
                   })}
                   className="size-3.5"
                 />
@@ -427,9 +383,7 @@ const SectionModal = ({ data }: Props) => {
           </div>
 
           {errors.workingDays && (
-            <p className="text-[10px] text-destructive">
-              {errors.workingDays.message}
-            </p>
+            <p className="text-[10px] text-destructive">{errors.workingDays.message}</p>
           )}
         </div>
 
@@ -471,9 +425,9 @@ const SectionModal = ({ data }: Props) => {
               <>
                 {subject.code}
 
-                {" • "}
+                {' • '}
 
-                {subject.labDetails?.isLab ? "Laboratory" : "Theory"}
+                {subject.labDetails?.isLab ? 'Laboratory' : 'Theory'}
               </>
             )}
           />
@@ -510,9 +464,7 @@ const SectionModal = ({ data }: Props) => {
             <div>
               <Label>Breaks</Label>
 
-              <p className="text-[10px] text-muted-foreground">
-                Configure lunch and short breaks.
-              </p>
+              <p className="text-[10px] text-muted-foreground">Configure lunch and short breaks.</p>
             </div>
 
             <Button
@@ -521,9 +473,9 @@ const SectionModal = ({ data }: Props) => {
               size="sm"
               onClick={() =>
                 append({
-                  type: "short-break",
-                  startTime: "11:00",
-                  endTime: "11:15",
+                  type: 'short-break',
+                  startTime: '11:00',
+                  endTime: '11:15',
                 })
               }
             >
@@ -537,9 +489,7 @@ const SectionModal = ({ data }: Props) => {
                 <div className="grid grid-cols-[1fr_1fr_1fr_auto] items-end gap-2">
                   {/* Type */}
                   <div className="space-y-1">
-                    <Label className="text-[10px] text-muted-foreground">
-                      Type
-                    </Label>
+                    <Label className="text-[10px] text-muted-foreground">Type</Label>
 
                     <select
                       {...register(`breaks.${index}.type`)}
@@ -553,28 +503,24 @@ const SectionModal = ({ data }: Props) => {
 
                   {/* Start */}
                   <div className="space-y-1">
-                    <Label className="text-[10px] text-muted-foreground">
-                      Start
-                    </Label>
+                    <Label className="text-[10px] text-muted-foreground">Start</Label>
 
                     <Input
                       type="time"
                       {...register(`breaks.${index}.startTime`, {
-                        required: "Start time is required",
+                        required: 'Start time is required',
                       })}
                     />
                   </div>
 
                   {/* End */}
                   <div className="space-y-1">
-                    <Label className="text-[10px] text-muted-foreground">
-                      End
-                    </Label>
+                    <Label className="text-[10px] text-muted-foreground">End</Label>
 
                     <Input
                       type="time"
                       {...register(`breaks.${index}.endTime`, {
-                        required: "End time is required",
+                        required: 'End time is required',
                       })}
                     />
                   </div>
@@ -595,9 +541,7 @@ const SectionModal = ({ data }: Props) => {
 
             {fields.length === 0 && (
               <div className="rounded-md border border-dashed py-5 text-center">
-                <p className="text-xs text-muted-foreground">
-                  No breaks configured
-                </p>
+                <p className="text-xs text-muted-foreground">No breaks configured</p>
               </div>
             )}
           </div>

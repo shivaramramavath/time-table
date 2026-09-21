@@ -1,30 +1,28 @@
-import { lazy, Suspense } from "react";
-import { Route, Routes } from "react-router-dom";
+import { lazy, Suspense } from 'react';
+import { Route, Routes } from 'react-router-dom';
 
-import PublicRoute from "./PublicRoute";
-import ProtectedRoute from "./ProtectedRoute";
+import PublicRoute from './PublicRoute';
+import ProtectedRoute from './ProtectedRoute';
 
-import AuthLayout from "@/layouts/AuthLayout";
-import MainLayout from "@/layouts/MainLayout";
-import LoadingHeader from "../../shared/components/LoadingHeader";
+import AuthLayout from '@/layouts/AuthLayout';
+import MainLayout from '@/layouts/MainLayout';
+import LoadingHeader from '../../shared/components/LoadingHeader';
 
-const LandingPage = lazy(() => import("@/pages/LandingPage"));
-const NotFoundPage = lazy(() => import("@/pages/NotFoundPage"));
+const LandingPage = lazy(() => import('@/pages/LandingPage'));
+const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 
-const LoginPage = lazy(() => import("@/pages/LoginPage"));
-const RegisterPage = lazy(() => import("@/pages/RegisterPage"));
-const ForgotPasswordPage = lazy(() => import("@/pages/ForgotPasswordPage"));
-import ResetPasswordPage from "@/pages/ResetPasswordPage";
-import SocketProvider from "../providers/SocketProvider";
-import TimetableViewLayout from "@/features/timetavle-view/components/TimetableViewLayout";
+const LoginPage = lazy(() => import('@/pages/LoginPage'));
+const RegisterPage = lazy(() => import('@/pages/RegisterPage'));
+const ForgotPasswordPage = lazy(() => import('@/pages/ForgotPasswordPage'));
+import ResetPasswordPage from '@/pages/ResetPasswordPage';
+import SocketProvider from '../providers/SocketProvider';
+import TimetableViewLayout from '@/features/timetavle-view/components/TimetableViewLayout';
 
-const TimetablesPage = lazy(() => import("@/pages/TimetablesPage"));
-const TimetableDesignerPage = lazy(
-  () => import("@/pages/TimetableDesignerPage"),
-);
-const TimetableViewPage = lazy(() => import("@/pages/TimetableViewPage"));
-const TemplatesPage = lazy(() => import("@/pages/TemplatesPage"));
-const FeedbackPage = lazy(() => import("@/pages/FeedbackPage"));
+const TimetablesPage = lazy(() => import('@/pages/TimetablesPage'));
+const TimetableDesignerPage = lazy(() => import('@/pages/TimetableDesignerPage'));
+const TimetableViewPage = lazy(() => import('@/pages/TimetableViewPage'));
+const TemplatesPage = lazy(() => import('@/pages/TemplatesPage'));
+const FeedbackPage = lazy(() => import('@/pages/FeedbackPage'));
 
 const AppRouter = () => {
   return (
@@ -51,16 +49,10 @@ const AppRouter = () => {
           </Route>
 
           <Route element={<SocketProvider />}>
-            <Route
-              path="/timetables/designer"
-              element={<TimetableDesignerPage />}
-            />
+            <Route path="/timetables/designer" element={<TimetableDesignerPage />} />
           </Route>
 
-          <Route
-            path="/timetables/:timetableId/view"
-            element={<TimetableViewLayout />}
-          >
+          <Route path="/timetables/:timetableId/view" element={<TimetableViewLayout />}>
             <Route path=":sectionId" element={<TimetableViewPage />} />
           </Route>
         </Route>

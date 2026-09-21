@@ -1,19 +1,13 @@
-import { useTimetableMutation } from "@/features/timetables/hooks/timetable.query";
-import RecentTimetableCard from "./RecentTimetablesCard";
+import { useTimetableMutation } from '@/features/timetables/hooks/timetable.query';
+import RecentTimetableCard from './RecentTimetablesCard';
 
 const RecentTimetables = () => {
-  const {
-    data = [],
-    isLoading,
-    isError,
-  } = useTimetableMutation.useGetRecentTimetables();
+  const { data = [], isLoading, isError } = useTimetableMutation.useGetRecentTimetables();
 
   if (isLoading) {
     return (
       <section className="space-y-3">
-        <div className="text-sm text-muted-foreground">
-          Loading recent timetables...
-        </div>
+        <div className="text-sm text-muted-foreground">Loading recent timetables...</div>
       </section>
     );
   }
@@ -21,9 +15,7 @@ const RecentTimetables = () => {
   if (isError) {
     return (
       <section className="space-y-3">
-        <div className="text-sm text-destructive">
-          Failed to load recent timetables.
-        </div>
+        <div className="text-sm text-destructive">Failed to load recent timetables.</div>
       </section>
     );
   }
@@ -31,9 +23,7 @@ const RecentTimetables = () => {
   if (!data.length) {
     return (
       <section className="space-y-3">
-        <div className="text-sm text-muted-foreground">
-          No recent timetables.
-        </div>
+        <div className="text-sm text-muted-foreground">No recent timetables.</div>
       </section>
     );
   }

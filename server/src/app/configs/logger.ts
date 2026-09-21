@@ -1,16 +1,14 @@
-import { env } from "#configs/env.js";
-import { createLogger, format, Logger, transports } from "winston";
+import { env } from '#configs/env.js';
+import { createLogger, format, Logger, transports } from 'winston';
 
 const { combine, timestamp, printf, colorize, errors, json } = format;
 
-const logFormat = printf(
-  ({ level, message, timestamp, stack, ...meta }): string => {
-    return `${timestamp} ${level}: ${stack || message}`;
-  },
-);
+const logFormat = printf(({ level, message, timestamp, stack, ...meta }): string => {
+  return `${timestamp} ${level}: ${stack || message}`;
+});
 
 const logger: Logger = createLogger({
-  level: "info",
+  level: 'info',
 
   format: combine(timestamp(), errors({ stack: true }), json()),
 
@@ -18,7 +16,7 @@ const logger: Logger = createLogger({
     new transports.Console({
       format: combine(
         env.isProd ? format.uncolorize() : colorize(),
-        timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+        timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
         logFormat,
       ),
     }),

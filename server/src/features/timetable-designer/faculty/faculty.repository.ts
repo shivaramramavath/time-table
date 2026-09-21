@@ -1,4 +1,4 @@
-import { FacultyModel, type Faculty } from "./faculty.model.js";
+import { FacultyModel, type Faculty } from './faculty.model.js';
 
 export const facultyRepository = {
   findById: async (designerId: string, id: string): Promise<Faculty | null> => {
@@ -16,10 +16,7 @@ export const facultyRepository = {
       .lean();
   },
 
-  findByEmail: async (
-    designerId: string,
-    email: string,
-  ): Promise<Faculty | null> => {
+  findByEmail: async (designerId: string, email: string): Promise<Faculty | null> => {
     return FacultyModel.findOne({
       designerId,
       email: email.toLowerCase(),
@@ -36,11 +33,7 @@ export const facultyRepository = {
     return FacultyModel.insertMany(faculties);
   },
 
-  update: async (
-    designerId: string,
-    id: string,
-    faculty: Faculty,
-  ): Promise<Faculty | null> => {
+  update: async (designerId: string, id: string, faculty: Faculty): Promise<Faculty | null> => {
     return FacultyModel.findOneAndUpdate(
       {
         designerId,

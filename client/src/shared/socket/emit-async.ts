@@ -1,4 +1,4 @@
-import { socketService } from "./socket.service";
+import { socketService } from './socket.service';
 
 export interface SocketResponse<T = unknown> {
   success: boolean;
@@ -11,7 +11,7 @@ export function emitAsync<T>(event: string, payload?: unknown): Promise<T> {
 
   return new Promise<T>((resolve, reject) => {
     if (!socket.connected) {
-      reject(new Error("Socket is not connected"));
+      reject(new Error('Socket is not connected'));
       return;
     }
 

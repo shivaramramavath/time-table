@@ -1,9 +1,9 @@
-import type { Subject } from "../types";
-import { useDesignerStore } from "../store/designer.store";
-import { subjectSocket } from "../socket/subject.socket";
+import type { Subject } from '../types';
+import { useDesignerStore } from '../store/designer.store';
+import { subjectSocket } from '../socket/subject.socket';
 
 export const subjectService = {
-  getAll: (query = ""): Subject[] => {
+  getAll: (query = ''): Subject[] => {
     const subjects = useDesignerStore.getState().subjects;
 
     const search = query.trim().toLowerCase();
@@ -14,8 +14,7 @@ export const subjectService = {
 
     return subjects.filter(
       (subject) =>
-        subject.name.toLowerCase().includes(search) ||
-        subject.code.toLowerCase().includes(search),
+        subject.name.toLowerCase().includes(search) || subject.code.toLowerCase().includes(search),
     );
   },
 
@@ -33,11 +32,7 @@ export const subjectService = {
   update: async (subjectId: string, subject: Subject) => {
     useDesignerStore.getState().updateSubject(subjectId, subject);
 
-    subjectSocket.update(
-      useDesignerStore.getState().designerId,
-      subjectId,
-      subject,
-    );
+    subjectSocket.update(useDesignerStore.getState().designerId, subjectId, subject);
     return subject;
   },
 

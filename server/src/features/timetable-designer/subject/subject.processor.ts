@@ -1,6 +1,6 @@
-import type { Subject } from "./subject.model.js";
+import type { Subject } from './subject.model.js';
 
-import { subjectRepository } from "./subject.repository.js";
+import { subjectRepository } from './subject.repository.js';
 
 export const subjectProcessor = {
   add: async (subject: Subject) => {

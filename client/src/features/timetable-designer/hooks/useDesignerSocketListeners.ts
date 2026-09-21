@@ -1,12 +1,12 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
-import { registerNodeListeners } from "../socket/listeners/node.listeners";
-import { registerEdgeListeners } from "../socket/listeners/edge.listeners";
-import { registerSubjectListeners } from "../socket/listeners/subject.listeners";
-import { registerFacultyListeners } from "../socket/listeners/faculty.listeners";
-import { registerRoomListeners } from "../socket/listeners/room.listeners";
+import { registerNodeListeners } from '../socket/listeners/node.listeners';
+import { registerEdgeListeners } from '../socket/listeners/edge.listeners';
+import { registerSubjectListeners } from '../socket/listeners/subject.listeners';
+import { registerFacultyListeners } from '../socket/listeners/faculty.listeners';
+import { registerRoomListeners } from '../socket/listeners/room.listeners';
 
-import type { Edge, Node } from "../types";
+import type { Edge, Node } from '../types';
 
 interface UseDesignerSocketListenersProps {
   setNodes: React.Dispatch<React.SetStateAction<Node[]>>;

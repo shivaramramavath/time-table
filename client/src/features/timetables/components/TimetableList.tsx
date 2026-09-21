@@ -1,10 +1,10 @@
-import { useEffect } from "react";
-import { useInView } from "react-intersection-observer";
+import { useEffect } from 'react';
+import { useInView } from 'react-intersection-observer';
 
-import { useTimetableMutation } from "@/features/timetables/hooks/timetable.query";
+import { useTimetableMutation } from '@/features/timetables/hooks/timetable.query';
 
-import TimetableCard from "./TimetableCard";
-import TimetableCardSkeleton from "./TimetableCardSkeleton";
+import TimetableCard from './TimetableCard';
+import TimetableCardSkeleton from './TimetableCardSkeleton';
 
 interface TimetableListProps {
   query: string;
@@ -16,7 +16,7 @@ const TimetableList = ({ query }: TimetableListProps) => {
 
   const { ref, inView } = useInView({
     threshold: 0,
-    rootMargin: "200px",
+    rootMargin: '200px',
   });
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const TimetableList = ({ query }: TimetableListProps) => {
 
   const timetables = data?.pages.flat() ?? [];
 
-  if (status === "pending") {
+  if (status === 'pending') {
     <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
       {Array.from({ length: 6 }).map((_, index) => (
         <TimetableCardSkeleton key={index} />
@@ -35,19 +35,15 @@ const TimetableList = ({ query }: TimetableListProps) => {
     </div>;
   }
 
-  if (status === "error") {
+  if (status === 'error') {
     return (
-      <div className="py-10 text-center text-sm text-destructive">
-        Error fetching timetables.
-      </div>
+      <div className="py-10 text-center text-sm text-destructive">Error fetching timetables.</div>
     );
   }
 
   if (!timetables.length) {
     return (
-      <div className="py-10 text-center text-sm text-muted-foreground">
-        No timetables found.
-      </div>
+      <div className="py-10 text-center text-sm text-muted-foreground">No timetables found.</div>
     );
   }
 
@@ -70,11 +66,7 @@ const TimetableList = ({ query }: TimetableListProps) => {
           </div>
         )}
 
-        {!hasNextPage && (
-          <div className="text-xs text-muted-foreground">
-            No more timetables
-          </div>
-        )}
+        {!hasNextPage && <div className="text-xs text-muted-foreground">No more timetables</div>}
       </div>
     </div>
   );

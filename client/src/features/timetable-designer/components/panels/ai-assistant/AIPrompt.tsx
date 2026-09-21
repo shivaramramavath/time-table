@@ -1,14 +1,14 @@
-import { Loader2, SendHorizontal, Sparkles } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { Loader2, SendHorizontal, Sparkles } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
 
-import { Button } from "@/shared/ui/button";
-import { cn } from "@/shared/lib/utils";
-import { messageService } from "@/features/timetable-designer/services/message.service";
-import { useMessageStore } from "@/features/timetable-designer/store/message.store";
+import { Button } from '@/shared/ui/button';
+import { cn } from '@/shared/lib/utils';
+import { messageService } from '@/features/timetable-designer/services/message.service';
+import { useMessageStore } from '@/features/timetable-designer/store/message.store';
 
 const AIPrompt = () => {
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
 
   const isLoading = useMessageStore((state) => state.isLoading);
 
@@ -19,7 +19,7 @@ const AIPrompt = () => {
 
     if (!textarea) return;
 
-    textarea.style.height = "auto";
+    textarea.style.height = 'auto';
     textarea.style.height = `${Math.min(textarea.scrollHeight, 140)}px`;
   }, [message]);
 
@@ -30,7 +30,7 @@ const AIPrompt = () => {
 
     messageService.send(content);
 
-    setMessage("");
+    setMessage('');
 
     requestAnimationFrame(() => {
       textareaRef.current?.focus();
@@ -43,7 +43,7 @@ const AIPrompt = () => {
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (event.key !== "Enter" || event.shiftKey) return;
+    if (event.key !== 'Enter' || event.shiftKey) return;
 
     event.preventDefault();
     handleSubmit();
@@ -64,8 +64,8 @@ const AIPrompt = () => {
       >
         <div
           className={cn(
-            "flex items-end overflow-hidden rounded-xl border border-border bg-card transition-colors",
-            "focus-within:border-primary/30",
+            'flex items-end overflow-hidden rounded-xl border border-border bg-card transition-colors',
+            'focus-within:border-primary/30',
           )}
         >
           <div className="flex h-10 items-center pl-3">

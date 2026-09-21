@@ -1,6 +1,6 @@
-import { DESIGNER_TTL } from "#configs/constants.js";
-import redis from "#configs/redis.js";
-import { generateId } from "#utils/generate-ids.js";
+import { DESIGNER_TTL } from '#configs/constants.js';
+import redis from '#configs/redis.js';
+import { generateId } from '#utils/generate-ids.js';
 
 export interface DesignerEntity {
   id: string;
@@ -105,10 +105,7 @@ export const createDesignerCache = <T extends DesignerEntity>({
     return newEntity;
   };
 
-  const createMany = async (
-    designerId: string,
-    entities: T[],
-  ): Promise<T[]> => {
+  const createMany = async (designerId: string, entities: T[]): Promise<T[]> => {
     if (entities.length === 0) {
       return [];
     }
@@ -173,10 +170,7 @@ export const createDesignerCache = <T extends DesignerEntity>({
     return updatedEntity;
   };
 
-  const deleteById = async (
-    designerId: string,
-    id: string,
-  ): Promise<boolean> => {
+  const deleteById = async (designerId: string, id: string): Promise<boolean> => {
     const redisKey = key(designerId);
 
     await redis.hdel(redisKey, id);
@@ -186,10 +180,7 @@ export const createDesignerCache = <T extends DesignerEntity>({
     return true;
   };
 
-  const deleteMany = async (
-    designerId: string,
-    ids: string[],
-  ): Promise<number> => {
+  const deleteMany = async (designerId: string, ids: string[]): Promise<number> => {
     if (ids.length === 0) {
       return 0;
     }
@@ -207,10 +198,7 @@ export const createDesignerCache = <T extends DesignerEntity>({
     await redis.del(key(designerId));
   };
 
-  const invalidateById = async (
-    designerId: string,
-    id: string,
-  ): Promise<void> => {
+  const invalidateById = async (designerId: string, id: string): Promise<void> => {
     await redis.hdel(key(designerId), id);
   };
 

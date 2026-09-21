@@ -1,32 +1,24 @@
-import { memo, useState } from "react";
+import { memo, useState } from 'react';
 
-import { Button } from "@/shared/ui/button";
+import { Button } from '@/shared/ui/button';
 
-import SubjectList from "./SubjectList";
-import AddSubjectForm from "./AddSubjectForm";
-import EditSubjectForm from "./EditSubjectForm";
+import SubjectList from './SubjectList';
+import AddSubjectForm from './AddSubjectForm';
+import EditSubjectForm from './EditSubjectForm';
 
 const Subjects = () => {
-  const [type, setType] = useState<
-    "list" | "add-form" | "edit-form"
-  >("list");
+  const [type, setType] = useState<'list' | 'add-form' | 'edit-form'>('list');
 
-  const [subjectId, setSubjectId] =
-    useState<string | null>(null);
+  const [subjectId, setSubjectId] = useState<string | null>(null);
 
   return (
     <div className="flex h-full min-h-0 flex-col">
-      {type === "list" && (
+      {type === 'list' && (
         <>
           <div className="flex items-center justify-between border-b pb-3">
-            <h2 className="text-sm font-semibold">
-              Subjects
-            </h2>
+            <h2 className="text-sm font-semibold">Subjects</h2>
 
-            <Button
-              size="sm"
-              onClick={() => setType("add-form")}
-            >
+            <Button size="sm" onClick={() => setType('add-form')}>
               Add Subject
             </Button>
           </div>
@@ -34,29 +26,26 @@ const Subjects = () => {
           <SubjectList
             onEdit={(id) => {
               setSubjectId(id);
-              setType("edit-form");
+              setType('edit-form');
             }}
           />
         </>
       )}
 
-      {type === "add-form" && (
-        <AddSubjectForm
-          onCancel={() => setType("list")}
-          onSave={() => setType("list")}
-        />
+      {type === 'add-form' && (
+        <AddSubjectForm onCancel={() => setType('list')} onSave={() => setType('list')} />
       )}
 
-      {type === "edit-form" && subjectId && (
+      {type === 'edit-form' && subjectId && (
         <EditSubjectForm
           subjectId={subjectId}
           onCancel={() => {
             setSubjectId(null);
-            setType("list");
+            setType('list');
           }}
           onSave={() => {
             setSubjectId(null);
-            setType("list");
+            setType('list');
           }}
         />
       )}

@@ -1,7 +1,7 @@
-import redis from "#configs/redis.js";
-import type { Queue } from "bullmq";
+import redis from '#configs/redis.js';
+import type { Queue } from 'bullmq';
 
-import { DEFAULT_TTL } from "#utils/const.js";
+import { DEFAULT_TTL } from '#utils/const.js';
 
 interface CacheOptions {
   ttl?: number;
@@ -40,20 +40,16 @@ const cache = async (
   const data = await callback();
 
   if (data !== null && data !== undefined) {
-    await redis.set(key, serialize(data), "EX", ttl);
+    await redis.set(key, serialize(data), 'EX', ttl);
   }
 
   return data;
 };
 
-const writeThroughCache = async (
-  key: string,
-  data: unknown,
-  options: WriteThroughOptions,
-) => {
+const writeThroughCache = async (key: string, data: unknown, options: WriteThroughOptions) => {
   const { ttl = DEFAULT_TTL, queue, jobName, jobOptions = {} } = options;
 
-  await redis.set(key, serialize(data), "EX", ttl);
+  await redis.set(key, serialize(data), 'EX', ttl);
 
   await queue.add(jobName, data, jobOptions);
 
@@ -76,18 +72,14 @@ const updateCache = async (
     ...updatedData,
   };
 
-  await redis.set(key, serialize(data), "EX", ttl);
+  await redis.set(key, serialize(data), 'EX', ttl);
 
   await queue.add(jobName, data, jobOptions);
 
   return data;
 };
 
-const deleteCache = async (
-  key: string,
-  deleteId: string,
-  options: WriteThroughOptions,
-) => {
+const deleteCache = async (key: string, deleteId: string, options: WriteThroughOptions) => {
   const { queue, jobName, jobOptions = {} } = options;
 
   const cached = await redis.get(key);

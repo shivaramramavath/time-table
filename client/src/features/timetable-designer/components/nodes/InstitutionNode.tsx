@@ -1,8 +1,8 @@
-import { memo } from "react";
+import { memo } from 'react';
 
-import { CalendarDays, Clock3, Coffee, Timer } from "lucide-react";
+import { CalendarDays, Clock3, Coffee, Timer } from 'lucide-react';
 
-import DesignerNode from "./DesignerNode";
+import DesignerNode from './DesignerNode';
 
 interface InstitutionNodeProps {
   data: {
@@ -15,7 +15,7 @@ interface InstitutionNodeProps {
       workingDays?: string[];
 
       breaks?: {
-        type: "lunch" | "short-break";
+        type: 'lunch' | 'short-break';
         startTime: string;
         endTime: string;
       }[];
@@ -26,11 +26,7 @@ interface InstitutionNodeProps {
   selected?: boolean;
 }
 
-const InstitutionNode = ({
-  data,
-  isConnectable,
-  selected,
-}: InstitutionNodeProps) => {
+const InstitutionNode = ({ data, isConnectable, selected }: InstitutionNodeProps) => {
   const time = data.time;
 
   return (
@@ -46,7 +42,7 @@ const InstitutionNode = ({
           <div className="flex items-center gap-1">
             <Clock3 size={13} />
             <span>
-              {time.startTime ?? "--:--"} - {time.endTime ?? "--:--"}
+              {time.startTime ?? '--:--'} - {time.endTime ?? '--:--'}
             </span>
           </div>
 

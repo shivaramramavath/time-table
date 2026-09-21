@@ -1,5 +1,5 @@
-import RecentTimetables from "@/features/timetables/components/RecentTimetables";
-import Timetables from "@/features/timetables/components/Timetables";
+import RecentTimetables from '@/features/timetables/components/RecentTimetables';
+import Timetables from '@/features/timetables/components/Timetables';
 
 const TimetablesPage = () => {
   return (

@@ -1,13 +1,12 @@
+import { memo, useMemo } from 'react';
 
-import { memo, useMemo } from "react";
-
-import TemplateCard from "./TemplateCard";
-import TemplateEmptyState from "./TemplateEmptyState";
-import TemplateSkeleton from "./TemplateSkeleton";
-import { useTemplateQuery } from "../hooks/template.query";
+import TemplateCard from './TemplateCard';
+import TemplateEmptyState from './TemplateEmptyState';
+import TemplateSkeleton from './TemplateSkeleton';
+import { useTemplateQuery } from '../hooks/template.query';
 
 interface Props {
-  tab: "my" | "public";
+  tab: 'my' | 'public';
   search: string;
 }
 
@@ -15,7 +14,7 @@ interface Template {
   id: string;
   name: string;
   description?: string;
-  visibility: "private" | "public";
+  visibility: 'private' | 'public';
   createdAt: string;
   updatedAt: string;
 }
@@ -24,7 +23,7 @@ const TemplateGrid = ({ tab, search }: Props) => {
   const myTemplates = useTemplateQuery.useGetTemplates();
   const publicTemplates = useTemplateQuery.useGetPublicTemplates();
 
-  const query = tab === "my" ? myTemplates : publicTemplates;
+  const query = tab === 'my' ? myTemplates : publicTemplates;
 
   const { data, isLoading, isError } = query;
 
@@ -38,12 +37,9 @@ const TemplateGrid = ({ tab, search }: Props) => {
 
     return items.filter((template) => {
       const name = template.name.toLowerCase();
-      const description = template.description?.toLowerCase() ?? "";
+      const description = template.description?.toLowerCase() ?? '';
 
-      return (
-        name.includes(normalizedSearch) ||
-        description.includes(normalizedSearch)
-      );
+      return name.includes(normalizedSearch) || description.includes(normalizedSearch);
     });
   }, [data, search]);
 
@@ -65,9 +61,7 @@ const TemplateGrid = ({ tab, search }: Props) => {
         <div className="rounded-xl border border-destructive/20 bg-destructive/5 p-8 text-center">
           <p className="text-sm font-medium">Failed to load templates</p>
 
-          <p className="mt-1 text-xs text-muted-foreground">
-            Please try again later.
-          </p>
+          <p className="mt-1 text-xs text-muted-foreground">Please try again later.</p>
         </div>
       </div>
     );

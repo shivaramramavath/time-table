@@ -1,16 +1,16 @@
-import { Queue } from "bullmq";
+import { Queue } from 'bullmq';
 
-import redis from "#configs/redis.js";
-import type { Message } from "./message.model.js";
+import redis from '#configs/redis.js';
+import type { Message } from './message.model.js';
 
-const queue = new Queue("message", {
+const queue = new Queue('message', {
   connection: redis,
 
   defaultJobOptions: {
     attempts: 3,
 
     backoff: {
-      type: "exponential",
+      type: 'exponential',
       delay: 1000,
     },
 
@@ -22,7 +22,7 @@ const queue = new Queue("message", {
 export const messageQueue = {
   add: async (designerId: string, message: Message) => {
     return queue.add(
-      "create",
+      'create',
       {
         designerId,
         message,

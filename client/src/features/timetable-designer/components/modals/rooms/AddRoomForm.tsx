@@ -1,12 +1,12 @@
-import { useForm } from "react-hook-form";
+import { useForm } from 'react-hook-form';
 
-import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
-import { Label } from "@/shared/ui/label";
+import { Button } from '@/shared/ui/button';
+import { Input } from '@/shared/ui/input';
+import { Label } from '@/shared/ui/label';
 
-import type { Room } from "../../../types";
-import { roomService } from "@/features/timetable-designer/services/room.service";
-import { generateRoomId } from "@/features/timetable-designer/utils/generate-ids";
+import type { Room } from '../../../types';
+import { roomService } from '@/features/timetable-designer/services/room.service';
+import { generateRoomId } from '@/features/timetable-designer/utils/generate-ids';
 
 interface Props {
   onSave: () => void;
@@ -18,24 +18,24 @@ type RoomFormData = {
   roomNumber: string;
   capacity: number;
   floor: number;
-  type: Room["type"];
+  type: Room['type'];
 };
 
 const AddRoomForm = ({ onSave, onCancel }: Props) => {
   const { register, handleSubmit } = useForm<RoomFormData>({
     defaultValues: {
-      name: "",
-      roomNumber: "",
+      name: '',
+      roomNumber: '',
       capacity: 60,
       floor: 1,
-      type: "classroom",
+      type: 'classroom',
     },
   });
 
   const onSubmit = (data: RoomFormData) => {
     const room: Room = {
       id: generateRoomId(),
-      name: data.name.trim() || "New Room",
+      name: data.name.trim() || 'New Room',
       roomNumber: data.roomNumber.trim(),
       capacity: data.capacity,
       floor: data.floor,
@@ -63,8 +63,8 @@ const AddRoomForm = ({ onSave, onCancel }: Props) => {
           <Input
             id="name"
             placeholder="e.g. CSE Classroom 1"
-            {...register("name", {
-              required: "Room name is required",
+            {...register('name', {
+              required: 'Room name is required',
             })}
           />
         </div>
@@ -75,8 +75,8 @@ const AddRoomForm = ({ onSave, onCancel }: Props) => {
           <Input
             id="roomNumber"
             placeholder="e.g. CSE-101"
-            {...register("roomNumber", {
-              required: "Room number is required",
+            {...register('roomNumber', {
+              required: 'Room number is required',
             })}
           />
         </div>
@@ -89,7 +89,7 @@ const AddRoomForm = ({ onSave, onCancel }: Props) => {
               id="capacity"
               type="number"
               min={1}
-              {...register("capacity", {
+              {...register('capacity', {
                 valueAsNumber: true,
               })}
             />
@@ -102,7 +102,7 @@ const AddRoomForm = ({ onSave, onCancel }: Props) => {
               id="floor"
               type="number"
               min={0}
-              {...register("floor", {
+              {...register('floor', {
                 valueAsNumber: true,
               })}
             />
@@ -114,7 +114,7 @@ const AddRoomForm = ({ onSave, onCancel }: Props) => {
 
           <select
             id="type"
-            {...register("type")}
+            {...register('type')}
             className="h-9 w-full rounded-md border bg-background px-3 text-sm"
           >
             <option value="classroom">Classroom</option>

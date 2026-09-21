@@ -1,9 +1,9 @@
-import React from "react";
-import { useForm, type SubmitHandler } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
-import { Input } from "@/shared/ui/input";
-import { Button } from "@/shared/ui/button";
+import { Input } from '@/shared/ui/input';
+import { Button } from '@/shared/ui/button';
 import {
   Field,
   FieldError,
@@ -11,10 +11,10 @@ import {
   FieldLabel,
   FieldSeparator,
   FieldSet,
-} from "@/shared/ui/field";
+} from '@/shared/ui/field';
 
-import { authService } from "@/features/auth/services/auth.service";
-import GoogleRegisterBtn from "./GoogleRegisterBtn";
+import { authService } from '@/features/auth/services/auth.service';
+import GoogleRegisterBtn from './GoogleRegisterBtn';
 
 type RegisterFormData = {
   userName: string;
@@ -34,9 +34,9 @@ const RegisterForm = () => {
   const onSubmit: SubmitHandler<RegisterFormData> = async (data) => {
     try {
       await authService.register(data);
-      navigate("/timetables");
+      navigate('/timetables');
     } catch (error) {
-      console.error("Registration failed:", error);
+      console.error('Registration failed:', error);
     }
   };
 
@@ -49,17 +49,15 @@ const RegisterForm = () => {
             <Input
               id="userName"
               placeholder="bob"
-              {...register("userName", {
-                required: "User Name is required",
+              {...register('userName', {
+                required: 'User Name is required',
                 minLength: {
                   value: 3,
-                  message: "User Name must be at least 3 characters",
+                  message: 'User Name must be at least 3 characters',
                 },
               })}
             />
-            {errors.userName && (
-              <FieldError>{errors.userName.message}</FieldError>
-            )}
+            {errors.userName && <FieldError>{errors.userName.message}</FieldError>}
           </Field>
 
           <Field>
@@ -67,11 +65,11 @@ const RegisterForm = () => {
             <Input
               id="email"
               placeholder="abc@example.com"
-              {...register("email", {
-                required: "Email is required",
+              {...register('email', {
+                required: 'Email is required',
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: "Invalid email address",
+                  message: 'Invalid email address',
                 },
               })}
             />
@@ -83,27 +81,23 @@ const RegisterForm = () => {
             <Input
               type="password"
               id="password"
-              {...register("password", {
-                required: "Password is required",
+              {...register('password', {
+                required: 'Password is required',
                 minLength: {
                   value: 6,
-                  message: "Password must be at least 6 characters",
+                  message: 'Password must be at least 6 characters',
                 },
               })}
             />
-            {errors.password && (
-              <FieldError>{errors.password.message}</FieldError>
-            )}
+            {errors.password && <FieldError>{errors.password.message}</FieldError>}
           </Field>
         </FieldGroup>
       </FieldSet>
       <Button type="submit" className="w-full mt-5" disabled={isSubmitting}>
-        {isSubmitting ? "Registering..." : "Register"}
+        {isSubmitting ? 'Registering...' : 'Register'}
       </Button>
 
-      <FieldSeparator className="my-4 col-span-full bg-transparent">
-        OR
-      </FieldSeparator>
+      <FieldSeparator className="my-4 col-span-full bg-transparent">OR</FieldSeparator>
 
       <GoogleRegisterBtn />
     </form>

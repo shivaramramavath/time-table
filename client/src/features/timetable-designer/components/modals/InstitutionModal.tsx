@@ -1,21 +1,16 @@
-import { useEffect } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
-import { useReactFlow } from "@xyflow/react";
+import { useEffect } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
+import { useReactFlow } from '@xyflow/react';
 
-import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
-import { Label } from "@/shared/ui/label";
+import { Button } from '@/shared/ui/button';
+import { Input } from '@/shared/ui/input';
+import { Label } from '@/shared/ui/label';
 
-import {
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/shared/ui/dialog";
+import { DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/shared/ui/dialog';
 
-import { useModalStore } from "../../store/modal.store";
-import { nodeService } from "../../services/node.service";
-import type { Institution } from "../../types/node.types";
+import { useModalStore } from '../../store/modal.store';
+import { nodeService } from '../../services/node.service';
+import type { Institution } from '../../types/node.types';
 
 interface Props {
   data: {
@@ -23,8 +18,8 @@ interface Props {
   } | null;
 }
 
-type BreakType = "lunch" | "short-break";
-type InstitutionData = Institution["data"];
+type BreakType = 'lunch' | 'short-break';
+type InstitutionData = Institution['data'];
 
 type InstitutionFormData = {
   label: string;
@@ -42,20 +37,13 @@ type InstitutionFormData = {
   }[];
 };
 
-const WORKING_DAYS = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
+const WORKING_DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-const DEFAULT_BREAKS: InstitutionFormData["breaks"] = [
+const DEFAULT_BREAKS: InstitutionFormData['breaks'] = [
   {
-    type: "lunch",
-    startTime: "13:00",
-    endTime: "14:00",
+    type: 'lunch',
+    startTime: '13:00',
+    endTime: '14:00',
   },
 ];
 
@@ -65,8 +53,7 @@ const InstitutionModal = ({ data }: Props) => {
   const { getNode, setNodes } = useReactFlow();
 
   const institution = (data?.id ? getNode(data.id)?.data : undefined) as
-    | InstitutionData
-    | undefined;
+    InstitutionData | undefined;
 
   const {
     register,
@@ -76,10 +63,10 @@ const InstitutionModal = ({ data }: Props) => {
     formState: { errors },
   } = useForm<InstitutionFormData>({
     defaultValues: {
-      label: institution?.label ?? "",
+      label: institution?.label ?? '',
 
-      startTime: institution?.time?.startTime ?? "09:00",
-      endTime: institution?.time?.endTime ?? "16:30",
+      startTime: institution?.time?.startTime ?? '09:00',
+      endTime: institution?.time?.endTime ?? '16:30',
       numberOfPeriods: institution?.time?.numberOfPeriods ?? 7,
 
       workingDays: institution?.time?.workingDays ?? WORKING_DAYS,
@@ -90,30 +77,25 @@ const InstitutionModal = ({ data }: Props) => {
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "breaks",
+    name: 'breaks',
   });
 
   useEffect(() => {
     if (!institution) return;
 
     reset({
-      label: institution.label ?? "",
+      label: institution.label ?? '',
 
-      startTime: institution.time?.startTime ?? "09:00",
+      startTime: institution.time?.startTime ?? '09:00',
 
-      endTime: institution.time?.endTime ?? "16:30",
+      endTime: institution.time?.endTime ?? '16:30',
 
       numberOfPeriods: institution.time?.numberOfPeriods ?? 7,
 
       workingDays:
-        institution.time?.workingDays?.length > 0
-          ? institution.time.workingDays
-          : WORKING_DAYS,
+        institution.time?.workingDays?.length > 0 ? institution.time.workingDays : WORKING_DAYS,
 
-      breaks:
-        institution.time?.breaks?.length > 0
-          ? institution.time.breaks
-          : DEFAULT_BREAKS,
+      breaks: institution.time?.breaks?.length > 0 ? institution.time.breaks : DEFAULT_BREAKS,
     });
   }, [institution, reset]);
 
@@ -158,11 +140,9 @@ const InstitutionModal = ({ data }: Props) => {
   return (
     <form onSubmit={handleSubmit(handleUpdate)}>
       <DialogHeader>
-        <DialogTitle>{institution?.label || "Institution"}</DialogTitle>
+        <DialogTitle>{institution?.label || 'Institution'}</DialogTitle>
 
-        <DialogDescription>
-          Configure institution timetable settings.
-        </DialogDescription>
+        <DialogDescription>Configure institution timetable settings.</DialogDescription>
       </DialogHeader>
 
       <div className="space-y-4 py-4">
@@ -173,16 +153,12 @@ const InstitutionModal = ({ data }: Props) => {
           <Input
             id="institution-label"
             placeholder="e.g. PVPSIT"
-            {...register("label", {
-              required: "Institution name is required",
+            {...register('label', {
+              required: 'Institution name is required',
             })}
           />
 
-          {errors.label && (
-            <p className="text-[10px] text-destructive">
-              {errors.label.message}
-            </p>
-          )}
+          {errors.label && <p className="text-[10px] text-destructive">{errors.label.message}</p>}
         </div>
 
         {/* Working Time */}
@@ -191,35 +167,29 @@ const InstitutionModal = ({ data }: Props) => {
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1">
-              <Label
-                htmlFor="institution-start-time"
-                className="text-[10px] text-muted-foreground"
-              >
+              <Label htmlFor="institution-start-time" className="text-[10px] text-muted-foreground">
                 Start Time
               </Label>
 
               <Input
                 id="institution-start-time"
                 type="time"
-                {...register("startTime", {
-                  required: "Start time is required",
+                {...register('startTime', {
+                  required: 'Start time is required',
                 })}
               />
             </div>
 
             <div className="space-y-1">
-              <Label
-                htmlFor="institution-end-time"
-                className="text-[10px] text-muted-foreground"
-              >
+              <Label htmlFor="institution-end-time" className="text-[10px] text-muted-foreground">
                 End Time
               </Label>
 
               <Input
                 id="institution-end-time"
                 type="time"
-                {...register("endTime", {
-                  required: "End time is required",
+                {...register('endTime', {
+                  required: 'End time is required',
                 })}
               />
             </div>
@@ -234,20 +204,18 @@ const InstitutionModal = ({ data }: Props) => {
             id="number-of-periods"
             type="number"
             min={1}
-            {...register("numberOfPeriods", {
+            {...register('numberOfPeriods', {
               valueAsNumber: true,
-              required: "Number of periods is required",
+              required: 'Number of periods is required',
               min: {
                 value: 1,
-                message: "At least one period is required",
+                message: 'At least one period is required',
               },
             })}
           />
 
           {errors.numberOfPeriods && (
-            <p className="text-[10px] text-destructive">
-              {errors.numberOfPeriods.message}
-            </p>
+            <p className="text-[10px] text-destructive">{errors.numberOfPeriods.message}</p>
           )}
         </div>
 
@@ -264,7 +232,7 @@ const InstitutionModal = ({ data }: Props) => {
                 <input
                   type="checkbox"
                   value={day}
-                  {...register("workingDays")}
+                  {...register('workingDays')}
                   className="size-3.5"
                 />
 
@@ -280,9 +248,7 @@ const InstitutionModal = ({ data }: Props) => {
             <div>
               <Label>Breaks</Label>
 
-              <p className="text-[10px] text-muted-foreground">
-                Configure lunch and short breaks.
-              </p>
+              <p className="text-[10px] text-muted-foreground">Configure lunch and short breaks.</p>
             </div>
 
             <Button
@@ -291,9 +257,9 @@ const InstitutionModal = ({ data }: Props) => {
               size="sm"
               onClick={() =>
                 append({
-                  type: "short-break",
-                  startTime: "11:00",
-                  endTime: "11:15",
+                  type: 'short-break',
+                  startTime: '11:00',
+                  endTime: '11:15',
                 })
               }
             >
@@ -307,9 +273,7 @@ const InstitutionModal = ({ data }: Props) => {
                 <div className="grid grid-cols-[1fr_1fr_1fr_auto] items-end gap-2">
                   {/* Type */}
                   <div className="space-y-1">
-                    <Label className="text-[10px] text-muted-foreground">
-                      Type
-                    </Label>
+                    <Label className="text-[10px] text-muted-foreground">Type</Label>
 
                     <select
                       {...register(`breaks.${index}.type`)}
@@ -323,28 +287,24 @@ const InstitutionModal = ({ data }: Props) => {
 
                   {/* Start */}
                   <div className="space-y-1">
-                    <Label className="text-[10px] text-muted-foreground">
-                      Start
-                    </Label>
+                    <Label className="text-[10px] text-muted-foreground">Start</Label>
 
                     <Input
                       type="time"
                       {...register(`breaks.${index}.startTime`, {
-                        required: "Start time is required",
+                        required: 'Start time is required',
                       })}
                     />
                   </div>
 
                   {/* End */}
                   <div className="space-y-1">
-                    <Label className="text-[10px] text-muted-foreground">
-                      End
-                    </Label>
+                    <Label className="text-[10px] text-muted-foreground">End</Label>
 
                     <Input
                       type="time"
                       {...register(`breaks.${index}.endTime`, {
-                        required: "End time is required",
+                        required: 'End time is required',
                       })}
                     />
                   </div>
@@ -365,9 +325,7 @@ const InstitutionModal = ({ data }: Props) => {
 
             {fields.length === 0 && (
               <div className="rounded-md border border-dashed py-5 text-center">
-                <p className="text-xs text-muted-foreground">
-                  No breaks configured
-                </p>
+                <p className="text-xs text-muted-foreground">No breaks configured</p>
               </div>
             )}
           </div>

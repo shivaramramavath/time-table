@@ -1,9 +1,9 @@
-import { Handle, Position } from "@xyflow/react";
-import { cn } from "@/shared/lib/utils";
-import { Card } from "@/shared/ui/card";
-import type { ReactNode } from "react";
+import { Handle, Position } from '@xyflow/react';
+import { cn } from '@/shared/lib/utils';
+import { Card } from '@/shared/ui/card';
+import type { ReactNode } from 'react';
 
-import { designerNodes } from "../../constants";
+import { designerNodes } from '../../constants';
 
 type DesignerNodeType = keyof typeof designerNodes;
 
@@ -50,23 +50,21 @@ const DesignerNode = ({
 
       <Card
         className={cn(
-          "rounded-md border bg-background p-2 shadow-sm transition-all",
-          "hover:shadow-md",
-          selected && "border-blue-500 shadow-md",
+          'rounded-md border bg-background p-2 shadow-sm transition-all',
+          'hover:shadow-md',
+          selected && 'border-blue-500 shadow-md',
         )}
       >
         {/* Header */}
         <div className="flex items-center gap-2">
           {/* Icon */}
           <div className="flex size-6 shrink-0 items-center justify-center rounded-sm border bg-muted/30">
-            <Icon className={cn("size-3.5", config.color)} />
+            <Icon className={cn('size-3.5', config.color)} />
           </div>
 
           {/* Label */}
           <div className="min-w-0 flex-1">
-            <h3 className="truncate text-xs font-semibold leading-tight">
-              {label || "Untitled"}
-            </h3>
+            <h3 className="truncate text-xs font-semibold leading-tight">{label || 'Untitled'}</h3>
 
             <p className="truncate text-[9px] leading-tight text-muted-foreground">
               {subLabel || config.title}

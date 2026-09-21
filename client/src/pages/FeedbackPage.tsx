@@ -1,4 +1,4 @@
-import Feedback from "@/features/feedback/Feedback";
+import Feedback from '@/features/feedback/Feedback';
 
 const FeedbackPage = () => {
   return (

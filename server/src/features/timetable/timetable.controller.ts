@@ -1,5 +1,5 @@
-import expressAsyncHandler from "express-async-handler";
-import { timetableService } from "./timetable.service.js";
+import expressAsyncHandler from 'express-async-handler';
+import { timetableService } from './timetable.service.js';
 
 export const timetableController = {
   create: expressAsyncHandler(async (req, res) => {
@@ -20,7 +20,7 @@ export const timetableController = {
 
     const page = Math.max(Number(req.query.page) || 1, 1);
 
-    const query = typeof req.query.query === "string" ? req.query.query : "";
+    const query = typeof req.query.query === 'string' ? req.query.query : '';
 
     const timetables = await timetableService.getTimetables({
       userId,
@@ -58,11 +58,7 @@ export const timetableController = {
   update: expressAsyncHandler(async (req, res) => {
     const { timetableId } = req.params;
 
-    const timetable = await timetableService.update(
-      timetableId,
-      req.userId,
-      req.body,
-    );
+    const timetable = await timetableService.update(timetableId, req.userId, req.body);
 
     res.status(200).json({
       success: true,
@@ -77,7 +73,7 @@ export const timetableController = {
 
     res.status(200).json({
       success: true,
-      message: "Timetable deleted",
+      message: 'Timetable deleted',
     });
   }),
 };

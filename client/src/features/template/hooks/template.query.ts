@@ -1,6 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 
-import { templateApi } from "../api/template.api";
+import { templateApi } from '../api/template.api';
 
 // -----------------------------------------
 // GET ALL USER TEMPLATES
@@ -8,7 +8,7 @@ import { templateApi } from "../api/template.api";
 
 const useGetTemplates = () => {
   return useQuery({
-    queryKey: ["templates"],
+    queryKey: ['templates'],
     queryFn: templateApi.getAll,
   });
 };
@@ -19,7 +19,7 @@ const useGetTemplates = () => {
 
 const useGetPrivateTemplates = () => {
   return useQuery({
-    queryKey: ["templates", "private"],
+    queryKey: ['templates', 'private'],
     queryFn: templateApi.getPrivate,
   });
 };
@@ -30,7 +30,7 @@ const useGetPrivateTemplates = () => {
 
 const useGetPublicTemplates = () => {
   return useQuery({
-    queryKey: ["templates", "public"],
+    queryKey: ['templates', 'public'],
     queryFn: templateApi.getPublic,
   });
 };
@@ -41,7 +41,7 @@ const useGetPublicTemplates = () => {
 
 const useGetTemplate = (templateId?: string) => {
   return useQuery({
-    queryKey: ["templates", templateId],
+    queryKey: ['templates', templateId],
 
     queryFn: () => templateApi.get(templateId!),
 

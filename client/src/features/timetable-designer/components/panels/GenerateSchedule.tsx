@@ -1,12 +1,12 @@
-import { memo } from "react";
+import { memo } from 'react';
 
-import { Button } from "@/shared/ui/button";
+import { Button } from '@/shared/ui/button';
 
-import useValidateGraph from "../../hooks/useValidateGraph";
-import { toast } from "sonner";
-import { timetableSocket } from "../../socket/timetable.socket";
-import { useDesignerStore } from "../../store/designer.store";
-import { navigationService } from "@/shared/services/navigation.service";
+import useValidateGraph from '../../hooks/useValidateGraph';
+import { toast } from 'sonner';
+import { timetableSocket } from '../../socket/timetable.socket';
+import { useDesignerStore } from '../../store/designer.store';
+import { navigationService } from '@/shared/services/navigation.service';
 
 const GenerateSchedule = () => {
   const { validateGraph } = useValidateGraph();
@@ -22,7 +22,7 @@ const GenerateSchedule = () => {
 
     timetableSocket.generate(timetableId);
 
-    toast.success("Generate schedule");
+    toast.success('Generate schedule');
 
     navigationService.navigate(`/timetables`);
   };

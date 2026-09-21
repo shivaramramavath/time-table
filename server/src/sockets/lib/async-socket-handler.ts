@@ -1,4 +1,4 @@
-import logger from "#configs/logger.js";
+import logger from '#configs/logger.js';
 
 export interface SocketResponse<T = unknown> {
   success: boolean;
@@ -8,9 +8,7 @@ export interface SocketResponse<T = unknown> {
 
 export type SocketCallback<T = unknown> = (response: SocketResponse<T>) => void;
 
-export type SocketHandler<TPayload, TResult> = (
-  payload: TPayload,
-) => Promise<TResult>;
+export type SocketHandler<TPayload, TResult> = (payload: TPayload) => Promise<TResult>;
 
 export const asyncSocketHandler = <TPayload, TResult = unknown>(
   event: string,
@@ -27,16 +25,11 @@ export const asyncSocketHandler = <TPayload, TResult = unknown>(
         data,
       });
     } catch (error) {
-      logger.error(
-        `${event} | error=${
-          error instanceof Error ? error.message : String(error)
-        }`,
-      );
+      logger.error(`${event} | error=${error instanceof Error ? error.message : String(error)}`);
 
       callback?.({
         success: false,
-        message:
-          error instanceof Error ? error.message : "Internal server error",
+        message: error instanceof Error ? error.message : 'Internal server error',
       });
     }
   };

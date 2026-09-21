@@ -1,11 +1,11 @@
-import { NavLink } from "react-router-dom";
+import { NavLink } from 'react-router-dom';
 
-import { cn } from "@/shared/lib/utils";
+import { cn } from '@/shared/lib/utils';
 
 const links = [
-  { name: "Timetables", path: "/timetables" },
-  { name: "Templates", path: "/templates" },
-  { name: "Feedback", path: "/feedback" },
+  { name: 'Timetables', path: '/timetables' },
+  { name: 'Templates', path: '/templates' },
+  { name: 'Feedback', path: '/feedback' },
 ];
 
 const NavbarLinks = () => {
@@ -18,9 +18,9 @@ const NavbarLinks = () => {
               to={link.path}
               className={({ isActive }) =>
                 cn(
-                  "rounded-md px-2 py-1 text-sm font-medium transition-all duration-200",
-                  "text-muted-foreground hover:text-blue-400/50",
-                  isActive && "bg-blue-400/10 text-blue-400/50",
+                  'rounded-md px-2 py-1 text-sm font-medium transition-all duration-200',
+                  'text-muted-foreground hover:text-blue-400/50',
+                  isActive && 'bg-blue-400/10 text-blue-400/50',
                 )
               }
             >

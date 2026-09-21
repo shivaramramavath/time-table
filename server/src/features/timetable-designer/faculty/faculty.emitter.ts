@@ -1,5 +1,5 @@
-import type { Faculty } from "./faculty.model.js";
+import type { Faculty } from './faculty.model.js';
 
-import { createDesignerEmitter } from "../shared/designer.emitter.js";
+import { createDesignerEmitter } from '../shared/designer.emitter.js';
 
-export const facultyEmitter = createDesignerEmitter<Faculty>("faculty");
+export const facultyEmitter = createDesignerEmitter<Faculty>('faculty');

@@ -1,15 +1,15 @@
-import debounce from "lodash.debounce";
-import { memo, useEffect, useMemo, useState } from "react";
+import debounce from 'lodash.debounce';
+import { memo, useEffect, useMemo, useState } from 'react';
 
-import { timetableService } from "../../services/timetable.service";
-import { useDesignerStore } from "../../store/designer.store";
+import { timetableService } from '../../services/timetable.service';
+import { useDesignerStore } from '../../store/designer.store';
 
 const TimetableTitle = () => {
   const timetableId = useDesignerStore((state) => state.timetableId);
 
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState('');
   const [isEditing, setIsEditing] = useState(false);
-  const [originalTitle, setOriginalTitle] = useState("");
+  const [originalTitle, setOriginalTitle] = useState('');
 
   const debouncedUpdate = useMemo(
     () =>
@@ -44,12 +44,12 @@ const TimetableTitle = () => {
 
         if (!active) return;
 
-        const value = timetable.title?.trim() || "Untitled Timetable";
+        const value = timetable.title?.trim() || 'Untitled Timetable';
 
         setTitle(value);
         setOriginalTitle(value);
       } catch (error) {
-        console.error("Failed to load timetable title:", error);
+        console.error('Failed to load timetable title:', error);
       }
     };
 
@@ -88,12 +88,12 @@ const TimetableTitle = () => {
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       event.currentTarget.blur();
       return;
     }
 
-    if (event.key === "Escape") {
+    if (event.key === 'Escape') {
       debouncedUpdate.cancel();
 
       setTitle(originalTitle);
@@ -124,7 +124,7 @@ const TimetableTitle = () => {
         max-w-45 truncate cursor-text px-2 text-left text-xl font-semibold underline underline-offset-4 decoration-muted-foreground/40 transition-colors hover:decoration-foreground
       "
     >
-      {title || "Untitled"}
+      {title || 'Untitled'}
     </button>
   );
 };

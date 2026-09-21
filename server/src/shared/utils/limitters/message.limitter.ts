@@ -1,10 +1,10 @@
-import createRateLimiter from "#middlewares/rateLimiter.js";
+import createRateLimiter from '#middlewares/rateLimiter.js';
 
 const getMessagesLimiter = createRateLimiter({
-  keyPrefix: "getMessages",
+  keyPrefix: 'getMessages',
   points: 120,
   duration: 60,
   blockDuration: 15,
 });
 
-export default {getMessagesLimiter};
+export default { getMessagesLimiter };

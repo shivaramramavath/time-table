@@ -1,19 +1,15 @@
-import { Moon, Settings, UserRound, SlidersHorizontal } from "lucide-react";
+import { Moon, Settings, UserRound, SlidersHorizontal } from 'lucide-react';
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/shared/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/shared/ui/dropdown-menu';
 
-import ProfileAvatar from "./ProfileAvatar";
-import LogoutButton from "./LogoutButton";
-import { useUserStore } from "@/shared/user/user.store";
-import { usePreferencesStore } from "@/shared/preferences/preferences.store";
-import MenuItem from "./MenuItem";
-import MenuSection from "./MenuSection";
-import { navigationService } from "@/shared/services/navigation.service";
-import NotificationMenuItem from "./NotificationsMenuItem";
+import ProfileAvatar from './ProfileAvatar';
+import LogoutButton from './LogoutButton';
+import { useUserStore } from '@/shared/user/user.store';
+import { usePreferencesStore } from '@/shared/preferences/preferences.store';
+import MenuItem from './MenuItem';
+import MenuSection from './MenuSection';
+import { navigationService } from '@/shared/services/navigation.service';
+import NotificationMenuItem from './NotificationsMenuItem';
 
 const Profile = () => {
   const user = useUserStore((state) => state.user);
@@ -36,12 +32,10 @@ const Profile = () => {
           <ProfileAvatar />
 
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-semibold">
-              {user?.userName ?? "Guest User"}
-            </p>
+            <p className="truncate text-sm font-semibold">{user?.userName ?? 'Guest User'}</p>
 
             <p className="truncate text-xs text-muted-foreground">
-              {user?.email ?? "No email available"}
+              {user?.email ?? 'No email available'}
             </p>
           </div>
         </div>
@@ -56,14 +50,14 @@ const Profile = () => {
           <MenuItem
             icon={Moon}
             label="Appearance"
-            value={darkMode ? "Dark" : "Light"}
+            value={darkMode ? 'Dark' : 'Light'}
             onClick={toggleDarkMode}
           />
 
           <MenuItem
             icon={SlidersHorizontal}
             label="Preferences"
-            onClick={() => navigationService.navigate("/preferences")}
+            onClick={() => navigationService.navigate('/preferences')}
           />
         </MenuSection>
 
@@ -72,13 +66,13 @@ const Profile = () => {
           <MenuItem
             icon={UserRound}
             label="Profile"
-            onClick={() => navigationService.navigate("/profile")}
+            onClick={() => navigationService.navigate('/profile')}
           />
 
           <MenuItem
             icon={Settings}
             label="Settings"
-            onClick={() => navigationService.navigate("/settings")}
+            onClick={() => navigationService.navigate('/settings')}
           />
         </MenuSection>
 

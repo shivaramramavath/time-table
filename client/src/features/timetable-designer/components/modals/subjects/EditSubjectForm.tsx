@@ -1,11 +1,11 @@
-import { memo } from "react";
-import { useForm } from "react-hook-form";
+import { memo } from 'react';
+import { useForm } from 'react-hook-form';
 
-import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
-import { Label } from "@/shared/ui/label";
+import { Button } from '@/shared/ui/button';
+import { Input } from '@/shared/ui/input';
+import { Label } from '@/shared/ui/label';
 
-import { subjectService } from "../../../services/subject.service";
+import { subjectService } from '../../../services/subject.service';
 
 interface Props {
   subjectId: string;
@@ -21,7 +21,7 @@ type SubjectFormData = {
   weeklyPeriods: number;
   periodsPerDay: number;
   consecutivePeriods: number;
-  roomType: "classroom" | "laboratory" | "seminar-hall";
+  roomType: 'classroom' | 'laboratory' | 'seminar-hall';
   minimumCapacity: number;
 };
 
@@ -45,7 +45,7 @@ const EditSubjectForm = ({ subjectId, onCancel, onSave }: Props) => {
 
           roomType:
             subject.roomRequirements?.type ??
-            (subject.labDetails.isLab ? "laboratory" : "classroom"),
+            (subject.labDetails.isLab ? 'laboratory' : 'classroom'),
 
           minimumCapacity: subject.roomRequirements?.minimumCapacity ?? 60,
         }
@@ -60,7 +60,7 @@ const EditSubjectForm = ({ subjectId, onCancel, onSave }: Props) => {
     subjectService.update(subjectId, {
       ...subject,
 
-      name: data.name.trim() || "New Subject",
+      name: data.name.trim() || 'New Subject',
 
       code: data.code.trim(),
 
@@ -95,9 +95,7 @@ const EditSubjectForm = ({ subjectId, onCancel, onSave }: Props) => {
         <div>
           <h3 className="text-sm font-semibold">Edit Subject</h3>
 
-          <p className="text-[11px] text-muted-foreground">
-            Update subject configuration.
-          </p>
+          <p className="text-[11px] text-muted-foreground">Update subject configuration.</p>
         </div>
 
         {/* Subject Name */}
@@ -107,7 +105,7 @@ const EditSubjectForm = ({ subjectId, onCancel, onSave }: Props) => {
           <Input
             id="edit-subject-name"
             placeholder="e.g. Database Management Systems"
-            {...register("name", {
+            {...register('name', {
               required: true,
             })}
           />
@@ -120,7 +118,7 @@ const EditSubjectForm = ({ subjectId, onCancel, onSave }: Props) => {
           <Input
             id="edit-subject-code"
             placeholder="e.g. CS301"
-            {...register("code", {
+            {...register('code', {
               required: true,
             })}
           />
@@ -135,7 +133,7 @@ const EditSubjectForm = ({ subjectId, onCancel, onSave }: Props) => {
               id="edit-duration"
               type="number"
               min={1}
-              {...register("duration", {
+              {...register('duration', {
                 valueAsNumber: true,
               })}
             />
@@ -148,7 +146,7 @@ const EditSubjectForm = ({ subjectId, onCancel, onSave }: Props) => {
               id="edit-minimum-capacity"
               type="number"
               min={1}
-              {...register("minimumCapacity", {
+              {...register('minimumCapacity', {
                 valueAsNumber: true,
               })}
             />
@@ -164,7 +162,7 @@ const EditSubjectForm = ({ subjectId, onCancel, onSave }: Props) => {
               id="edit-weekly-periods"
               type="number"
               min={1}
-              {...register("weeklyPeriods", {
+              {...register('weeklyPeriods', {
                 valueAsNumber: true,
               })}
             />
@@ -177,7 +175,7 @@ const EditSubjectForm = ({ subjectId, onCancel, onSave }: Props) => {
               id="edit-periods-per-day"
               type="number"
               min={1}
-              {...register("periodsPerDay", {
+              {...register('periodsPerDay', {
                 valueAsNumber: true,
               })}
             />
@@ -192,7 +190,7 @@ const EditSubjectForm = ({ subjectId, onCancel, onSave }: Props) => {
             id="edit-consecutive-periods"
             type="number"
             min={1}
-            {...register("consecutivePeriods", {
+            {...register('consecutivePeriods', {
               valueAsNumber: true,
             })}
           />
@@ -204,7 +202,7 @@ const EditSubjectForm = ({ subjectId, onCancel, onSave }: Props) => {
 
           <select
             id="edit-room-type"
-            {...register("roomType")}
+            {...register('roomType')}
             className="h-9 w-full rounded-md border bg-background px-3 text-sm"
           >
             <option value="classroom">Classroom</option>
@@ -220,7 +218,7 @@ const EditSubjectForm = ({ subjectId, onCancel, onSave }: Props) => {
           <input
             id="edit-is-lab"
             type="checkbox"
-            {...register("isLab")}
+            {...register('isLab')}
             className="size-4 rounded border"
           />
 

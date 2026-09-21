@@ -1,11 +1,11 @@
-import type { DesignerGraphState } from "../designer.state.js";
-import { GraphStatus } from "../types.js";
+import type { DesignerGraphState } from '../designer.state.js';
+import { GraphStatus } from '../types.js';
 
-import { nodeService } from "#features/timetable-designer/node/node.service.js";
-import { edgeService } from "#features/timetable-designer/edge/edge.service.js";
-import { facultyService } from "#features/timetable-designer/faculty/faculty.service.js";
-import { subjectService } from "#features/timetable-designer/subject/subject.service.js";
-import { roomService } from "#features/timetable-designer/room/room.service.js";
+import { nodeService } from '#features/timetable-designer/node/node.service.js';
+import { edgeService } from '#features/timetable-designer/edge/edge.service.js';
+import { facultyService } from '#features/timetable-designer/faculty/faculty.service.js';
+import { subjectService } from '#features/timetable-designer/subject/subject.service.js';
+import { roomService } from '#features/timetable-designer/room/room.service.js';
 
 export async function retrieveNode(state: DesignerGraphState) {
   const { designerId, intent } = state;
@@ -29,7 +29,7 @@ export async function retrieveNode(state: DesignerGraphState) {
 
   const tasks: Promise<void>[] = [];
 
-  if (entities.includes("node")) {
+  if (entities.includes('node')) {
     tasks.push(
       nodeService.getAll(designerId).then((nodes) => {
         retrieval.nodes = nodes;
@@ -37,7 +37,7 @@ export async function retrieveNode(state: DesignerGraphState) {
     );
   }
 
-  if (entities.includes("edge")) {
+  if (entities.includes('edge')) {
     tasks.push(
       edgeService.getAll(designerId).then((edges) => {
         retrieval.edges = edges;
@@ -45,7 +45,7 @@ export async function retrieveNode(state: DesignerGraphState) {
     );
   }
 
-  if (entities.includes("faculty")) {
+  if (entities.includes('faculty')) {
     tasks.push(
       facultyService.getAll(designerId).then((faculties) => {
         retrieval.faculties = faculties;
@@ -53,7 +53,7 @@ export async function retrieveNode(state: DesignerGraphState) {
     );
   }
 
-  if (entities.includes("subject")) {
+  if (entities.includes('subject')) {
     tasks.push(
       subjectService.getAll(designerId).then((subjects) => {
         retrieval.subjects = subjects;
@@ -61,7 +61,7 @@ export async function retrieveNode(state: DesignerGraphState) {
     );
   }
 
-  if (entities.includes("room")) {
+  if (entities.includes('room')) {
     tasks.push(
       roomService.getAll(designerId).then((rooms) => {
         retrieval.rooms = rooms;

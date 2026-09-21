@@ -1,5 +1,5 @@
-import { subjectCache } from "./subject.cache..js";
-import { Subject } from "./subject.model.js";
+import { subjectCache } from './subject.cache..js';
+import { Subject } from './subject.model.js';
 
 export const subjectService = {
   getById: async (designerId: string, id: string) => {

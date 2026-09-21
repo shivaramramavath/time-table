@@ -1,15 +1,13 @@
-import type { Edge } from "@xyflow/react";
+import type { Edge } from '@xyflow/react';
 
-import { registerDesignerListeners } from "./register-designer-listeners";
+import { registerDesignerListeners } from './register-designer-listeners';
 
 interface RegisterEdgeListenersProps {
   setEdges: React.Dispatch<React.SetStateAction<Edge[]>>;
 }
 
-export const registerEdgeListeners = ({
-  setEdges,
-}: RegisterEdgeListenersProps) => {
-  return registerDesignerListeners<Edge>("edge", {
+export const registerEdgeListeners = ({ setEdges }: RegisterEdgeListenersProps) => {
+  return registerDesignerListeners<Edge>('edge', {
     add: (edge) => {
       setEdges((edges) => {
         if (edges.some((existing) => existing.id === edge.id)) {

@@ -1,4 +1,4 @@
-import { httpClient } from "@/shared/api/httpClient";
+import { httpClient } from '@/shared/api/httpClient';
 
 import type {
   ForgotPasswordRequest,
@@ -6,28 +6,24 @@ import type {
   LoginRequest,
   RegisterRequest,
   ResetPasswordRequest,
-} from "../types/auth.types";
+} from '../types/auth.types';
 
 export const authApi = {
-  login: (data: LoginRequest) => httpClient.post("/auth/login", data),
+  login: (data: LoginRequest) => httpClient.post('/auth/login', data),
 
-  register: (data: RegisterRequest) => httpClient.post("/auth/register", data),
+  register: (data: RegisterRequest) => httpClient.post('/auth/register', data),
 
-  googleLogin: (data: GoogleAuthRequest) =>
-    httpClient.post("/auth/google-login", data),
+  googleLogin: (data: GoogleAuthRequest) => httpClient.post('/auth/google-login', data),
 
-  googleRegister: (data: GoogleAuthRequest) =>
-    httpClient.post("/auth/google-register", data),
+  googleRegister: (data: GoogleAuthRequest) => httpClient.post('/auth/google-register', data),
 
-  logout: () => httpClient.post("/auth/logout"),
+  logout: () => httpClient.post('/auth/logout'),
 
-  checkAuth: () => httpClient.get("/auth/me"),
+  checkAuth: () => httpClient.get('/auth/me'),
 
-  refreshToken: () => httpClient.post("/auth/refresh", null),
+  refreshToken: () => httpClient.post('/auth/refresh', null),
 
-  forgotPassword: (data: ForgotPasswordRequest) =>
-    httpClient.post("/auth/forgot-password", data),
+  forgotPassword: (data: ForgotPasswordRequest) => httpClient.post('/auth/forgot-password', data),
 
-  resetPassword: (data: ResetPasswordRequest) =>
-    httpClient.post("/auth/reset-password", data),
+  resetPassword: (data: ResetPasswordRequest) => httpClient.post('/auth/reset-password', data),
 };

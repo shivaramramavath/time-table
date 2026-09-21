@@ -1,4 +1,4 @@
-import { Schema, model, type InferSchemaType } from "mongoose";
+import { Schema, model, type InferSchemaType } from 'mongoose';
 
 const positionSchema = new Schema(
   {
@@ -31,7 +31,7 @@ const nodeSchema = new Schema(
 
     type: {
       type: String,
-      enum: ["institution", "program", "academic-year", "section"],
+      enum: ['institution', 'program', 'academic-year', 'section'],
       required: true,
     },
 
@@ -68,4 +68,4 @@ nodeSchema.index({
 
 export type Node = InferSchemaType<typeof nodeSchema>;
 
-export const NodeModel = model("Node", nodeSchema);
+export const NodeModel = model('Node', nodeSchema);

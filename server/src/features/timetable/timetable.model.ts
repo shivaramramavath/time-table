@@ -1,15 +1,10 @@
-import {
-  Schema,
-  model,
-  type HydratedDocument,
-  type InferSchemaType,
-} from "mongoose";
+import { Schema, model, type HydratedDocument, type InferSchemaType } from 'mongoose';
 
 const timetableSchema = new Schema(
   {
     userId: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
     },
 
@@ -28,8 +23,8 @@ const timetableSchema = new Schema(
 
     stage: {
       type: String,
-      enum: ["incomplete", "editing", "complete"],
-      default: "incomplete",
+      enum: ['incomplete', 'editing', 'complete'],
+      default: 'incomplete',
     },
   },
   {
@@ -56,4 +51,4 @@ export type Timetable = InferSchemaType<typeof timetableSchema>;
 
 export type TimetableDocument = HydratedDocument<Timetable>;
 
-export const TimetableModel = model<Timetable>("Timetable", timetableSchema);
+export const TimetableModel = model<Timetable>('Timetable', timetableSchema);

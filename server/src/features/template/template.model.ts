@@ -1,10 +1,10 @@
-import { Schema, model, type InferSchemaType } from "mongoose";
+import { Schema, model, type InferSchemaType } from 'mongoose';
 
 const templateSchema = new Schema(
   {
     userId: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
       index: true,
     },
@@ -25,8 +25,8 @@ const templateSchema = new Schema(
 
     visibility: {
       type: String,
-      enum: ["private", "public"],
-      default: "private",
+      enum: ['private', 'public'],
+      default: 'private',
       required: true,
       index: true,
     },
@@ -39,4 +39,4 @@ const templateSchema = new Schema(
 
 export type Template = InferSchemaType<typeof templateSchema>;
 
-export const TemplateModel = model("Template", templateSchema);
+export const TemplateModel = model('Template', templateSchema);

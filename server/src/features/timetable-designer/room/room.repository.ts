@@ -1,4 +1,4 @@
-import { RoomModel, type Room } from "./room.model.js";
+import { RoomModel, type Room } from './room.model.js';
 
 export const roomRepository = {
   findById: async (designerId: string, id: string): Promise<Room | null> => {
@@ -19,10 +19,7 @@ export const roomRepository = {
       .exec();
   },
 
-  findByRoomNumber: async (
-    designerId: string,
-    roomNumber: string,
-  ): Promise<Room | null> => {
+  findByRoomNumber: async (designerId: string, roomNumber: string): Promise<Room | null> => {
     return RoomModel.findOne({
       designerId,
       roomNumber,
@@ -41,11 +38,7 @@ export const roomRepository = {
     return RoomModel.insertMany(rooms);
   },
 
-  update: async (
-    designerId: string,
-    id: string,
-    data: Partial<Room>,
-  ): Promise<Room | null> => {
+  update: async (designerId: string, id: string, data: Partial<Room>): Promise<Room | null> => {
     return RoomModel.findOneAndUpdate(
       {
         designerId,

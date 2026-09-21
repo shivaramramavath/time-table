@@ -1,7 +1,7 @@
-import NavbarLogo from "./NavbarLogo";
-import NavbarLinks from "./NavbarLinks";
-import CreateWorkflowBtn from "./Create";
-import Profile from "./profile/Profile";
+import NavbarLogo from './NavbarLogo';
+import NavbarLinks from './NavbarLinks';
+import CreateWorkflowBtn from './Create';
+import Profile from './profile/Profile';
 
 const Navbar = () => {
   return (

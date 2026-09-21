@@ -1,6 +1,6 @@
-import type { Room } from "./room.model.js";
+import type { Room } from './room.model.js';
 
-import { roomRepository } from "./room.repository.js";
+import { roomRepository } from './room.repository.js';
 
 export const roomProcessor = {
   add: async (room: Room) => {

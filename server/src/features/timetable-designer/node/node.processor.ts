@@ -1,6 +1,6 @@
-import type { Node } from "./node.model.js";
+import type { Node } from './node.model.js';
 
-import { nodeRepository } from "./node.repository.js";
+import { nodeRepository } from './node.repository.js';
 
 export const nodeProcessor = {
   add: async (node: Node) => {

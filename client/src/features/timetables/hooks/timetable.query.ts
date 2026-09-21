@@ -1,11 +1,6 @@
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { timetableApi } from "../api/timetable.api";
+import { timetableApi } from '../api/timetable.api';
 
 const useCreateTimetable = () => {
   const queryClient = useQueryClient();
@@ -15,7 +10,7 @@ const useCreateTimetable = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["timetables"],
+        queryKey: ['timetables'],
       });
     },
   });
@@ -23,7 +18,7 @@ const useCreateTimetable = () => {
 
 const useGetTimetables = (query: string) => {
   return useInfiniteQuery({
-    queryKey: ["timetables", query],
+    queryKey: ['timetables', query],
 
     queryFn: ({ pageParam }) => timetableApi.getTimetables(pageParam, query),
 
@@ -41,7 +36,7 @@ const useGetTimetables = (query: string) => {
 
 const useGetRecentTimetables = () => {
   return useQuery({
-    queryKey: ["recent-timetables"],
+    queryKey: ['recent-timetables'],
     queryFn: () => timetableApi.getRecentTimetables(),
   });
 };
@@ -50,12 +45,11 @@ const useDeleteTimetable = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ timetableId }: { timetableId: string }) =>
-      timetableApi.delete(timetableId),
+    mutationFn: ({ timetableId }: { timetableId: string }) => timetableApi.delete(timetableId),
 
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["timetables"],
+        queryKey: ['timetables'],
       });
     },
   });

@@ -1,5 +1,5 @@
-import { edgeCache } from "./edge.cache.js";
-import { Edge } from "./edge.model.js";
+import { edgeCache } from './edge.cache.js';
+import { Edge } from './edge.model.js';
 
 export const edgeService = {
   getById: (designerId: string, edgeId: string) => {

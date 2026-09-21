@@ -1,24 +1,24 @@
-import type { Node } from "@xyflow/react";
+import type { Node } from '@xyflow/react';
 
-import { emitAsync } from "@/shared/socket/emit-async";
+import { emitAsync } from '@/shared/socket/emit-async';
 
 export const nodeSocket = {
   create: (designerId: string, node: Node) => {
-    return emitAsync<Node>("node:create", {
+    return emitAsync<Node>('node:create', {
       designerId,
       node,
     });
   },
 
   createMany: (designerId: string, nodes: Node[]) => {
-    return emitAsync<Node[]>("node:createMany", {
+    return emitAsync<Node[]>('node:createMany', {
       designerId,
       nodes,
     });
   },
 
   update: (designerId: string, nodeId: string, data: Partial<Node>) => {
-    return emitAsync<Node>("node:update", {
+    return emitAsync<Node>('node:update', {
       designerId,
       nodeId,
       data,
@@ -26,14 +26,14 @@ export const nodeSocket = {
   },
 
   delete: (designerId: string, nodeId: string) => {
-    return emitAsync<{ nodeId: string }>("node:delete", {
+    return emitAsync<{ nodeId: string }>('node:delete', {
       designerId,
       nodeId,
     });
   },
 
   deleteMany: (designerId: string, nodeIds: string[]) => {
-    return emitAsync<{ nodeIds: string[] }>("node:deleteMany", {
+    return emitAsync<{ nodeIds: string[] }>('node:deleteMany', {
       designerId,
       nodeIds,
     });

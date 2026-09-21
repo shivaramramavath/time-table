@@ -8,8 +8,7 @@ const EmptyConversation = () => {
       <h3 className="mt-3 text-sm font-semibold">How can I help?</h3>
 
       <p className="mt-1 max-w-[260px] text-xs leading-5 text-muted-foreground">
-        Ask me about conflicts, resources, scheduling, or optimizing your
-        timetable.
+        Ask me about conflicts, resources, scheduling, or optimizing your timetable.
       </p>
     </div>
   );

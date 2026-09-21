@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo } from 'react';
 import {
   ChevronRight,
   DoorOpen,
@@ -7,12 +7,12 @@ import {
   MoreHorizontal,
   Presentation,
   Users,
-} from "lucide-react";
+} from 'lucide-react';
 
-import { Button } from "@/shared/ui/button";
+import { Button } from '@/shared/ui/button';
 
-import { roomService } from "../../../services/room.service";
-import type { Room } from "../../../types";
+import { roomService } from '../../../services/room.service';
+import type { Room } from '../../../types';
 
 interface Props {
   room: Room;
@@ -26,22 +26,22 @@ const RoomCard = ({ room, onEdit }: Props) => {
 
   const config = {
     classroom: {
-      label: "Classroom",
+      label: 'Classroom',
       icon: DoorOpen,
-      iconClass: "text-blue-500 bg-blue-500/10",
-      badgeClass: "text-blue-500 bg-blue-500/10",
+      iconClass: 'text-blue-500 bg-blue-500/10',
+      badgeClass: 'text-blue-500 bg-blue-500/10',
     },
     laboratory: {
-      label: "Laboratory",
+      label: 'Laboratory',
       icon: FlaskConical,
-      iconClass: "text-violet-500 bg-violet-500/10",
-      badgeClass: "text-violet-500 bg-violet-500/10",
+      iconClass: 'text-violet-500 bg-violet-500/10',
+      badgeClass: 'text-violet-500 bg-violet-500/10',
     },
-    "seminar-hall": {
-      label: "Seminar Hall",
+    'seminar-hall': {
+      label: 'Seminar Hall',
       icon: Presentation,
-      iconClass: "text-orange-500 bg-orange-500/10",
-      badgeClass: "text-orange-500 bg-orange-500/10",
+      iconClass: 'text-orange-500 bg-orange-500/10',
+      badgeClass: 'text-orange-500 bg-orange-500/10',
     },
   }[room.type];
 
@@ -65,18 +65,12 @@ const RoomCard = ({ room, onEdit }: Props) => {
           <span
             className={`shrink-0 rounded-full px-2 py-0.5 text-[9px] font-medium ${config.badgeClass}`}
           >
-            {room.type === "laboratory"
-              ? "LAB"
-              : room.type === "seminar-hall"
-                ? "HALL"
-                : "ROOM"}
+            {room.type === 'laboratory' ? 'LAB' : room.type === 'seminar-hall' ? 'HALL' : 'ROOM'}
           </span>
         </div>
 
         <div className="mt-1.5 flex items-center gap-3 text-[10px] text-muted-foreground">
-          <span className="font-medium text-foreground/70">
-            {room.roomNumber || "No number"}
-          </span>
+          <span className="font-medium text-foreground/70">{room.roomNumber || 'No number'}</span>
 
           <span className="flex items-center gap-1">
             <Users className="size-3" />

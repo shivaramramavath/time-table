@@ -1,16 +1,11 @@
-import { memo } from "react";
+import { memo } from 'react';
 
-import { Card } from "@/shared/ui/card";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/shared/ui/tooltip";
+import { Card } from '@/shared/ui/card';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shared/ui/tooltip';
 
-import { catalogItems, designerNodes } from "../../constants";
-import { useDesignerDnD } from "../../hooks";
-import { useModalStore } from "../../store/modal.store";
+import { catalogItems, designerNodes } from '../../constants';
+import { useDesignerDnD } from '../../hooks';
+import { useModalStore } from '../../store/modal.store';
 
 const DesignerPalette = () => {
   const handleOpenModal = useModalStore((s) => s.open);

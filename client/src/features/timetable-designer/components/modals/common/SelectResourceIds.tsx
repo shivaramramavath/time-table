@@ -1,6 +1,6 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from 'react';
 
-import { Check, X } from "lucide-react";
+import { Check, X } from 'lucide-react';
 
 interface Resource {
   id: string;
@@ -23,10 +23,10 @@ const SelectResourceIds = <T extends Resource>({
   getAll,
   initialSelectedIds = [],
   setSelectedIds,
-  placeholder = "Search...",
+  placeholder = 'Search...',
   renderMeta,
 }: Props<T>) => {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
 
   const [selectedResources, setSelectedResources] = useState<Resource[]>([]);
 
@@ -46,7 +46,7 @@ const SelectResourceIds = <T extends Resource>({
         return;
       }
 
-      const allResources = await getAll("");
+      const allResources = await getAll('');
 
       if (cancelled) return;
 
@@ -65,7 +65,7 @@ const SelectResourceIds = <T extends Resource>({
     return () => {
       cancelled = true;
     };
-  }, [getAll, initialSelectedIds.join("|")]);
+  }, [getAll, initialSelectedIds.join('|')]);
 
   /*
    * Load search results
@@ -132,7 +132,7 @@ const SelectResourceIds = <T extends Resource>({
       return next;
     });
 
-    setQuery("");
+    setQuery('');
     setResources([]);
   };
 
@@ -170,9 +170,7 @@ const SelectResourceIds = <T extends Resource>({
           <input
             type="text"
             value={query}
-            placeholder={
-              selectedResources.length === 0 ? placeholder : "Add..."
-            }
+            placeholder={selectedResources.length === 0 ? placeholder : 'Add...'}
             onChange={(event) => setQuery(event.target.value)}
             className="min-w-32 flex-1 bg-transparent px-1 py-1 text-sm outline-none placeholder:text-muted-foreground"
           />
@@ -196,9 +194,7 @@ const SelectResourceIds = <T extends Resource>({
                     className="flex w-full items-center justify-between rounded-sm px-2.5 py-2 text-left transition-colors hover:bg-muted"
                   >
                     <div className="min-w-0">
-                      <p className="truncate text-xs font-medium">
-                        {resource.name}
-                      </p>
+                      <p className="truncate text-xs font-medium">{resource.name}</p>
 
                       {renderMeta && (
                         <div className="mt-0.5 text-[10px] text-muted-foreground">
@@ -207,9 +203,7 @@ const SelectResourceIds = <T extends Resource>({
                       )}
                     </div>
 
-                    {selected && (
-                      <Check size={14} className="ml-3 shrink-0 text-primary" />
-                    )}
+                    {selected && <Check size={14} className="ml-3 shrink-0 text-primary" />}
                   </button>
                 );
               })

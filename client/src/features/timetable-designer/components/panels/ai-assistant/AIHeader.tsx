@@ -1,4 +1,4 @@
-import { Bot, Sparkles } from "lucide-react";
+import { Bot, Sparkles } from 'lucide-react';
 
 const AIHeader = () => {
   return (

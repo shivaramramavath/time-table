@@ -1,25 +1,20 @@
-import { useForm } from "react-hook-form";
-import { useReactFlow } from "@xyflow/react";
+import { useForm } from 'react-hook-form';
+import { useReactFlow } from '@xyflow/react';
 
-import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
-import { Label } from "@/shared/ui/label";
-import { Textarea } from "@/shared/ui/textarea";
+import { Button } from '@/shared/ui/button';
+import { Input } from '@/shared/ui/input';
+import { Label } from '@/shared/ui/label';
+import { Textarea } from '@/shared/ui/textarea';
 
-import {
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/shared/ui/dialog";
+import { DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/shared/ui/dialog';
 
-import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
+import { RadioGroup, RadioGroupItem } from '@/shared/ui/radio-group';
 
-import { useModalStore } from "../../store/modal.store";
-import { useDesignerStore } from "../../store/designer.store";
+import { useModalStore } from '../../store/modal.store';
+import { useDesignerStore } from '../../store/designer.store';
 
-import type { TemplateFormData, TemplateVisibility } from "../../types";
-import { templateService } from "../../services/template.service";
+import type { TemplateFormData, TemplateVisibility } from '../../types';
+import { templateService } from '../../services/template.service';
 
 const TemplateModal = () => {
   const close = useModalStore((state) => state.close);
@@ -34,13 +29,13 @@ const TemplateModal = () => {
     formState: { errors },
   } = useForm<TemplateFormData>({
     defaultValues: {
-      name: "",
-      description: "",
-      visibility: "private",
+      name: '',
+      description: '',
+      visibility: 'private',
     },
   });
 
-  const visibility = watch("visibility");
+  const visibility = watch('visibility');
 
   const onSubmit = (formData: TemplateFormData) => {
     if (!designerId) return;
@@ -61,9 +56,7 @@ const TemplateModal = () => {
       <DialogHeader>
         <DialogTitle>Save as Template</DialogTitle>
 
-        <DialogDescription>
-          Save the current timetable structure for reuse.
-        </DialogDescription>
+        <DialogDescription>Save the current timetable structure for reuse.</DialogDescription>
       </DialogHeader>
 
       <div className="space-y-5">
@@ -74,29 +67,24 @@ const TemplateModal = () => {
           <Input
             id="template-name"
             placeholder="e.g. CSE 3rd Year"
-            {...register("name", {
-              required: "Template name is required",
+            {...register('name', {
+              required: 'Template name is required',
 
               minLength: {
                 value: 3,
-                message: "Name must contain at least 3 characters",
+                message: 'Name must contain at least 3 characters',
               },
 
               maxLength: {
                 value: 100,
-                message: "Name cannot exceed 100 characters",
+                message: 'Name cannot exceed 100 characters',
               },
 
-              validate: (value) =>
-                value.trim().length > 0 || "Template name is required",
+              validate: (value) => value.trim().length > 0 || 'Template name is required',
             })}
           />
 
-          {errors.name && (
-            <p className="text-[10px] text-destructive">
-              {errors.name.message}
-            </p>
-          )}
+          {errors.name && <p className="text-[10px] text-destructive">{errors.name.message}</p>}
         </div>
 
         {/* Description */}
@@ -107,18 +95,16 @@ const TemplateModal = () => {
             id="template-description"
             placeholder="Describe this timetable template..."
             className="min-h-22.5 resize-none"
-            {...register("description", {
+            {...register('description', {
               maxLength: {
                 value: 500,
-                message: "Description cannot exceed 500 characters",
+                message: 'Description cannot exceed 500 characters',
               },
             })}
           />
 
           {errors.description && (
-            <p className="text-[10px] text-destructive">
-              {errors.description.message}
-            </p>
+            <p className="text-[10px] text-destructive">{errors.description.message}</p>
           )}
         </div>
 
@@ -128,9 +114,7 @@ const TemplateModal = () => {
 
           <RadioGroup
             value={visibility}
-            onValueChange={(value) =>
-              setValue("visibility", value as TemplateVisibility)
-            }
+            onValueChange={(value) => setValue('visibility', value as TemplateVisibility)}
           >
             {/* Private */}
             <label

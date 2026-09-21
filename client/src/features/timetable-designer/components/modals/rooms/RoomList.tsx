@@ -1,12 +1,12 @@
-import { memo, useMemo, useState } from "react";
-import { Plus } from "lucide-react";
+import { memo, useMemo, useState } from 'react';
+import { Plus } from 'lucide-react';
 
-import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
+import { Button } from '@/shared/ui/button';
+import { Input } from '@/shared/ui/input';
 
-import { useDesignerStore } from "../../../store/designer.store";
+import { useDesignerStore } from '../../../store/designer.store';
 
-import RoomCard from "./RoomCard";
+import RoomCard from './RoomCard';
 
 interface Props {
   onAdd: () => void;
@@ -14,7 +14,7 @@ interface Props {
 }
 
 const RoomList = ({ onAdd, onEdit }: Props) => {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   const rooms = useDesignerStore((state) => state.rooms);
 
@@ -78,23 +78,16 @@ const RoomList = ({ onAdd, onEdit }: Props) => {
         {/* Empty state */}
         {!filteredRooms.length && (
           <div className="flex min-h-48 flex-col items-center justify-center px-6 text-center">
-            <p className="text-xs font-medium">
-              {search ? "No rooms found" : "No rooms yet"}
-            </p>
+            <p className="text-xs font-medium">{search ? 'No rooms found' : 'No rooms yet'}</p>
 
             <p className="mt-1 max-w-52 text-[10px] leading-relaxed text-muted-foreground">
               {search
-                ? "Try searching with another room name, number or type."
-                : "Add classrooms, laboratories or seminar halls to your timetable."}
+                ? 'Try searching with another room name, number or type.'
+                : 'Add classrooms, laboratories or seminar halls to your timetable.'}
             </p>
 
             {!search && (
-              <Button
-                size="sm"
-                variant="outline"
-                className="mt-3 h-7 text-[11px]"
-                onClick={onAdd}
-              >
+              <Button size="sm" variant="outline" className="mt-3 h-7 text-[11px]" onClick={onAdd}>
                 <Plus size={13} />
                 Add Room
               </Button>

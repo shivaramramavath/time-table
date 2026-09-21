@@ -1,10 +1,6 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
-export type SocketStatus =
-  | "connecting"
-  | "connected"
-  | "disconnected"
-  | "reconnecting";
+export type SocketStatus = 'connecting' | 'connected' | 'disconnected' | 'reconnecting';
 
 interface SocketState {
   status: SocketStatus;
@@ -14,12 +10,12 @@ interface SocketState {
 }
 
 export const useSocketStore = create<SocketState>((set) => ({
-  status: "connecting",
+  status: 'connecting',
   hasConnectedOnce: false,
 
   setStatus: (status) =>
     set({
       status,
-      ...(status === "connected" ? { hasConnectedOnce: true } : {}),
+      ...(status === 'connected' ? { hasConnectedOnce: true } : {}),
     }),
 }));

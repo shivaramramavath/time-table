@@ -1,4 +1,4 @@
-import { NodeModel, type Node } from "./node.model.js";
+import { NodeModel, type Node } from './node.model.js';
 
 export const nodeRepository = {
   findById: async (designerId: string, id: string): Promise<Node | null> => {
@@ -26,11 +26,7 @@ export const nodeRepository = {
     return NodeModel.insertMany(nodes);
   },
 
-  update: async (
-    designerId: string,
-    id: string,
-    data: Partial<Node>,
-  ): Promise<Node | null> => {
+  update: async (designerId: string, id: string, data: Partial<Node>): Promise<Node | null> => {
     return NodeModel.findOneAndUpdate(
       {
         designerId,

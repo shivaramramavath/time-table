@@ -1,14 +1,12 @@
-import { ArrowLeft } from "lucide-react";
-import { Link } from "react-router-dom";
+import { ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-import { Button } from "@/shared/ui/button";
+import { Button } from '@/shared/ui/button';
 
 const NotFoundPage = () => {
   return (
     <main className="flex min-h-[70vh] flex-col items-center justify-center px-6 text-center">
-      <span className="text-8xl font-bold tracking-tight text-muted-foreground/20">
-        404
-      </span>
+      <span className="text-8xl font-bold tracking-tight text-muted-foreground/20">404</span>
 
       <h1 className="mt-4 text-2xl font-semibold">Page not found</h1>
 

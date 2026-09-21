@@ -1,10 +1,10 @@
-import { timetableDesignerService } from "#features/timetable-designer/timetable-designer.service.js";
-import { errors } from "#utils/errors.js";
-import { timetableRepository } from "./timetable.repository.js";
+import { timetableDesignerService } from '#features/timetable-designer/timetable-designer.service.js';
+import { errors } from '#utils/errors.js';
+import { timetableRepository } from './timetable.repository.js';
 
 export const timetableService = {
   create: async ({ userId }: { userId: string }) => {
-    const title = "Untitled Timetable";
+    const title = 'Untitled Timetable';
 
     const timetable = await timetableRepository.create({
       title,
@@ -44,26 +44,16 @@ export const timetableService = {
     return timetableRepository.getById(timetableId, userId);
   },
 
-  generate: async ({
-    timetableId,
-    userId,
-  }: {
-    timetableId: string;
-    userId: string;
-  }) => {
+  generate: async ({ timetableId, userId }: { timetableId: string; userId: string }) => {
     const timetable = await timetableRepository.getById(timetableId, userId);
 
     if (!timetable) {
-      throw errors.notFound("Timetable not found");
+      throw errors.notFound('Timetable not found');
     }
 
-    const updatedTimetable = await timetableRepository.update(
-      timetableId,
-      userId,
-      {
-        stage: "complete",
-      },
-    );
+    const updatedTimetable = await timetableRepository.update(timetableId, userId, {
+      stage: 'complete',
+    });
 
     return updatedTimetable;
   },
@@ -74,7 +64,7 @@ export const timetableService = {
     data: {
       title?: string;
       description?: string;
-      stage?: "incomplete" | "editing" | "complete";
+      stage?: 'incomplete' | 'editing' | 'complete';
     },
   ) => {
     return timetableRepository.update(timetableId, userId, data);

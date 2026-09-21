@@ -12,20 +12,20 @@ import {
   type SetStateAction,
   type Node as ReactFlowNode,
   type Edge as ReactFlowEdge,
-} from "@xyflow/react";
+} from '@xyflow/react';
 
-import { useCallback } from "react";
+import { useCallback } from 'react';
 
-import { useModalStore } from "../store/modal.store";
+import { useModalStore } from '../store/modal.store';
 
-import { nodeService } from "../services/node.service";
-import { edgeService } from "../services/edge.service";
+import { nodeService } from '../services/node.service';
+import { edgeService } from '../services/edge.service';
 
-import { generateEdgeId, generateNodeId } from "../utils/generate-ids";
+import { generateEdgeId, generateNodeId } from '../utils/generate-ids';
 
-import { designerNodes, NODE_HEIGHT, NODE_WIDTH } from "../constants";
+import { designerNodes, NODE_HEIGHT, NODE_WIDTH } from '../constants';
 
-import type { Node, Edge } from "../types";
+import type { Node, Edge } from '../types';
 
 interface Props {
   setNodes: Dispatch<SetStateAction<ReactFlowNode[]>>;
@@ -33,8 +33,7 @@ interface Props {
 }
 
 export const useDesignerInteractions = ({ setNodes, setEdges }: Props) => {
-  const { getEdges, getNode, addNodes, addEdges, screenToFlowPosition } =
-    useReactFlow();
+  const { getEdges, getNode, addNodes, addEdges, screenToFlowPosition } = useReactFlow();
 
   const openModal = useModalStore((state) => state.open);
 
@@ -44,7 +43,7 @@ export const useDesignerInteractions = ({ setNodes, setEdges }: Props) => {
 
       for (const change of changes) {
         switch (change.type) {
-          case "position": {
+          case 'position': {
             if (!change.position) break;
 
             if (!change.dragging) {
@@ -56,12 +55,12 @@ export const useDesignerInteractions = ({ setNodes, setEdges }: Props) => {
             break;
           }
 
-          case "remove": {
+          case 'remove': {
             nodeService.remove(change.id);
             break;
           }
 
-          case "select":
+          case 'select':
             break;
 
           default:
@@ -77,7 +76,7 @@ export const useDesignerInteractions = ({ setNodes, setEdges }: Props) => {
       setEdges((edges: Edge[]) => applyEdgeChanges(changes, edges));
 
       for (const change of changes) {
-        if (change.type === "remove") {
+        if (change.type === 'remove') {
           edgeService.remove(change.id);
         }
       }
@@ -101,9 +100,7 @@ export const useDesignerInteractions = ({ setNodes, setEdges }: Props) => {
 
         visited.add(nodeId);
 
-        return edges
-          .filter((edge) => edge.source === nodeId)
-          .some((edge) => dfs(edge.target));
+        return edges.filter((edge) => edge.source === nodeId).some((edge) => dfs(edge.target));
       };
 
       return dfs(targetId);
@@ -130,11 +127,9 @@ export const useDesignerInteractions = ({ setNodes, setEdges }: Props) => {
         return false;
       }
 
-      const sourceConfig =
-        designerNodes[sourceNode.type as keyof typeof designerNodes];
+      const sourceConfig = designerNodes[sourceNode.type as keyof typeof designerNodes];
 
-      const targetConfig =
-        designerNodes[targetNode.type as keyof typeof designerNodes];
+      const targetConfig = designerNodes[targetNode.type as keyof typeof designerNodes];
 
       if (!sourceConfig || !targetConfig) {
         return false;
@@ -144,9 +139,7 @@ export const useDesignerInteractions = ({ setNodes, setEdges }: Props) => {
         return false;
       }
 
-      const alreadyHasParent = getEdges().some(
-        (edge) => edge.target === target,
-      );
+      const alreadyHasParent = getEdges().some((edge) => edge.target === target);
 
       if (alreadyHasParent) {
         return false;
@@ -174,7 +167,7 @@ export const useDesignerInteractions = ({ setNodes, setEdges }: Props) => {
       const edge = {
         id: generateEdgeId(),
         ...connection,
-        type: "bezier",
+        type: 'bezier',
       };
 
       addEdges(edge);
@@ -187,7 +180,7 @@ export const useDesignerInteractions = ({ setNodes, setEdges }: Props) => {
     (event, node) => {
       event.stopPropagation();
 
-      if (node.type === "start") {
+      if (node.type === 'start') {
         return;
       }
 
@@ -211,8 +204,7 @@ export const useDesignerInteractions = ({ setNodes, setEdges }: Props) => {
         return;
       }
 
-      const sourceConfig =
-        designerNodes[sourceNode.type as keyof typeof designerNodes];
+      const sourceConfig = designerNodes[sourceNode.type as keyof typeof designerNodes];
 
       if (!sourceConfig?.allowedChildren?.length) {
         return;
@@ -244,7 +236,7 @@ export const useDesignerInteractions = ({ setNodes, setEdges }: Props) => {
         id: generateEdgeId(),
         source: sourceNode.id,
         target: node.id,
-        type: "bezier",
+        type: 'bezier',
       };
 
       addNodes(node);

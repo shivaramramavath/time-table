@@ -1,14 +1,14 @@
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter } from 'react-router-dom';
 
-import { Toaster } from "@/shared/ui/sonner";
+import { Toaster } from '@/shared/ui/sonner';
 
-import { QueryProvider } from "./providers/QueryProvider";
-import { GoogleProvider } from "./providers/GoogleProvider";
-import ThemeProvider from "./providers/ThemeProvider";
+import { QueryProvider } from './providers/QueryProvider';
+import { GoogleProvider } from './providers/GoogleProvider';
+import ThemeProvider from './providers/ThemeProvider';
 
-import AppRouter from "./router/AppRouter";
-import AuthProvider from "./providers/AuthProvider";
-import NavigationProvider from "./providers/NavigationProvider";
+import AppRouter from './router/AppRouter';
+import AuthProvider from './providers/AuthProvider';
+import NavigationProvider from './providers/NavigationProvider';
 
 const App = () => {
   return (

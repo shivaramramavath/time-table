@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams } from 'react-router-dom';
 
 const TimetableViewPage = () => {
   const { timetableId, sectionId } = useParams<{

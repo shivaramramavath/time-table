@@ -1,10 +1,10 @@
-import TimetableDesigner from "@/features/timetable-designer/components/editor/TimetableDesigner";
-import { useSearchParams } from "react-router-dom";
+import TimetableDesigner from '@/features/timetable-designer/components/editor/TimetableDesigner';
+import { useSearchParams } from 'react-router-dom';
 
 const TimetableDesignerPage = () => {
   const [searchParams] = useSearchParams();
 
-  const timetableId = searchParams.get("timetableId");
+  const timetableId = searchParams.get('timetableId');
 
   return (
     <div>

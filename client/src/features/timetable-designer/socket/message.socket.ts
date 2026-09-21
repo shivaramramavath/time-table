@@ -1,5 +1,5 @@
-import { emitAsync } from "@/shared/socket/emit-async";
-import type { Message } from "../types";
+import { emitAsync } from '@/shared/socket/emit-async';
+import type { Message } from '../types';
 
 type GetProps = {
   designerId: string;
@@ -15,13 +15,13 @@ type GetResult = {
 
 export const messageSocket = {
   send: (message: Message) => {
-    return emitAsync<Message>("message:send", {
+    return emitAsync<Message>('message:send', {
       message,
     });
   },
 
   get: ({ designerId, page = 1 }: GetProps): Promise<GetResult> => {
-    return emitAsync("message:get", {
+    return emitAsync('message:get', {
       designerId,
       page,
     });

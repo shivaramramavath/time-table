@@ -1,11 +1,11 @@
-import { Panel } from "@xyflow/react";
-import React, { memo } from "react";
-import GenerateSchedule from "./GenerateSchedule";
-import DesignerControls from "./DesignerControls";
-import TimetableTitle from "./TimetableTitle";
-import DesignerPalette from "./DesignerPalette";
-import TemplatePanel from "./TemplatePanel";
-import AIAssistant from "./ai-assistant/AIAssistant";
+import { Panel } from '@xyflow/react';
+import React, { memo } from 'react';
+import GenerateSchedule from './GenerateSchedule';
+import DesignerControls from './DesignerControls';
+import TimetableTitle from './TimetableTitle';
+import DesignerPalette from './DesignerPalette';
+import TemplatePanel from './TemplatePanel';
+import AIAssistant from './ai-assistant/AIAssistant';
 
 const DesignerPanels = () => {
   return (

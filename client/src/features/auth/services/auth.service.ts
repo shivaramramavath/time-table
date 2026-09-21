@@ -1,8 +1,8 @@
-import { authApi } from "../api/auth.api";
-import { useAuthStore } from "../store/auth.store";
-import { Token } from "./token.service";
+import { authApi } from '../api/auth.api';
+import { useAuthStore } from '../store/auth.store';
+import { Token } from './token.service';
 
-import { useUserStore } from "@/shared/user/user.store";
+import { useUserStore } from '@/shared/user/user.store';
 
 import type {
   ForgotPasswordRequest,
@@ -10,8 +10,8 @@ import type {
   LoginRequest,
   RegisterRequest,
   ResetPasswordRequest,
-} from "../types/auth.types";
-import type { User } from "@/shared/user/user.types";
+} from '../types/auth.types';
+import type { User } from '@/shared/user/user.types';
 
 const setAuthenticatedUser = (user: User) => {
   useUserStore.getState().setUser(user);

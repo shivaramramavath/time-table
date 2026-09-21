@@ -1,17 +1,12 @@
-import { useReactFlow } from "@xyflow/react";
-import { useCallback } from "react";
+import { useReactFlow } from '@xyflow/react';
+import { useCallback } from 'react';
 
-const REQUIRED_NODE_TYPES = [
-  "institution",
-  "program",
-  "academic-year",
-  "section",
-] as const;
+const REQUIRED_NODE_TYPES = ['institution', 'program', 'academic-year', 'section'] as const;
 
 const REQUIRED_CONNECTIONS = [
-  ["institution", "program"],
-  ["program", "academic-year"],
-  ["academic-year", "section"],
+  ['institution', 'program'],
+  ['program', 'academic-year'],
+  ['academic-year', 'section'],
 ] as const;
 
 type ValidationResult = {
@@ -46,10 +41,7 @@ const useValidateGraph = () => {
     // -----------------------------------------
 
     const invalidNode = nodes.find(
-      (node) =>
-        !node.data ||
-        typeof node.data !== "object" ||
-        Object.keys(node.data).length === 0,
+      (node) => !node.data || typeof node.data !== 'object' || Object.keys(node.data).length === 0,
     );
 
     if (invalidNode) {
@@ -106,9 +98,7 @@ const useValidateGraph = () => {
       connectedNodeIds.add(edge.target);
     }
 
-    const disconnectedNode = nodes.find(
-      (node) => !connectedNodeIds.has(node.id),
-    );
+    const disconnectedNode = nodes.find((node) => !connectedNodeIds.has(node.id));
 
     if (disconnectedNode) {
       return {
@@ -185,7 +175,7 @@ const useValidateGraph = () => {
 
     return {
       valid: true,
-      message: "Graph is valid.",
+      message: 'Graph is valid.',
     };
   }, [getNodes, getEdges]);
 

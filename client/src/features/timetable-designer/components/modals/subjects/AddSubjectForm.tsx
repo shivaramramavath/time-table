@@ -1,12 +1,12 @@
-import { useForm } from "react-hook-form";
+import { useForm } from 'react-hook-form';
 
-import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
-import { Label } from "@/shared/ui/label";
+import { Button } from '@/shared/ui/button';
+import { Input } from '@/shared/ui/input';
+import { Label } from '@/shared/ui/label';
 
-import type { Subject } from "../../../types";
-import { subjectService } from "../../../services/subject.service";
-import { generateSubjectId } from "@/features/timetable-designer/utils/generate-ids";
+import type { Subject } from '../../../types';
+import { subjectService } from '../../../services/subject.service';
+import { generateSubjectId } from '@/features/timetable-designer/utils/generate-ids';
 
 interface Props {
   onSave: () => void;
@@ -21,21 +21,21 @@ type SubjectFormData = {
   weeklyPeriods: number;
   periodsPerDay: number;
   consecutivePeriods: number;
-  roomType: "classroom" | "laboratory" | "seminar-hall";
+  roomType: 'classroom' | 'laboratory' | 'seminar-hall';
   minimumCapacity: number;
 };
 
 const AddSubjectForm = ({ onSave, onCancel }: Props) => {
   const { register, handleSubmit } = useForm<SubjectFormData>({
     defaultValues: {
-      name: "",
-      code: "",
+      name: '',
+      code: '',
       duration: 60,
       isLab: false,
       weeklyPeriods: 4,
       periodsPerDay: 1,
       consecutivePeriods: 1,
-      roomType: "classroom",
+      roomType: 'classroom',
       minimumCapacity: 60,
     },
   });
@@ -44,7 +44,7 @@ const AddSubjectForm = ({ onSave, onCancel }: Props) => {
     const subject: Subject = {
       id: generateSubjectId(),
 
-      name: data.name.trim() || "New Subject",
+      name: data.name.trim() || 'New Subject',
 
       code: data.code.trim(),
 
@@ -79,9 +79,7 @@ const AddSubjectForm = ({ onSave, onCancel }: Props) => {
       <div className="pb-2">
         <h3 className="font-semibold">Add Subject</h3>
 
-        <p className="text-sm text-muted-foreground">
-          Create a theory subject or laboratory.
-        </p>
+        <p className="text-sm text-muted-foreground">Create a theory subject or laboratory.</p>
       </div>
       <div className="space-y-4 overflow-y-auto scrollbar h-full">
         <div className="space-y-1.5">
@@ -90,8 +88,8 @@ const AddSubjectForm = ({ onSave, onCancel }: Props) => {
           <Input
             id="subject-name"
             placeholder="e.g. Database Management Systems"
-            {...register("name", {
-              required: "Subject name is required",
+            {...register('name', {
+              required: 'Subject name is required',
             })}
           />
         </div>
@@ -102,8 +100,8 @@ const AddSubjectForm = ({ onSave, onCancel }: Props) => {
           <Input
             id="subject-code"
             placeholder="e.g. CS301"
-            {...register("code", {
-              required: "Subject code is required",
+            {...register('code', {
+              required: 'Subject code is required',
             })}
           />
         </div>
@@ -116,7 +114,7 @@ const AddSubjectForm = ({ onSave, onCancel }: Props) => {
               id="subject-duration"
               type="number"
               min={1}
-              {...register("duration", {
+              {...register('duration', {
                 valueAsNumber: true,
               })}
             />
@@ -129,7 +127,7 @@ const AddSubjectForm = ({ onSave, onCancel }: Props) => {
               id="minimum-capacity"
               type="number"
               min={1}
-              {...register("minimumCapacity", {
+              {...register('minimumCapacity', {
                 valueAsNumber: true,
               })}
             />
@@ -144,7 +142,7 @@ const AddSubjectForm = ({ onSave, onCancel }: Props) => {
               id="weekly-periods"
               type="number"
               min={1}
-              {...register("weeklyPeriods", {
+              {...register('weeklyPeriods', {
                 valueAsNumber: true,
               })}
             />
@@ -157,7 +155,7 @@ const AddSubjectForm = ({ onSave, onCancel }: Props) => {
               id="periods-per-day"
               type="number"
               min={1}
-              {...register("periodsPerDay", {
+              {...register('periodsPerDay', {
                 valueAsNumber: true,
               })}
             />
@@ -171,7 +169,7 @@ const AddSubjectForm = ({ onSave, onCancel }: Props) => {
             id="consecutive-periods"
             type="number"
             min={1}
-            {...register("consecutivePeriods", {
+            {...register('consecutivePeriods', {
               valueAsNumber: true,
             })}
           />
@@ -182,7 +180,7 @@ const AddSubjectForm = ({ onSave, onCancel }: Props) => {
 
           <select
             id="room-type"
-            {...register("roomType")}
+            {...register('roomType')}
             className="h-9 w-full rounded-md border bg-background px-3 text-sm"
           >
             <option value="classroom">Classroom</option>
@@ -195,7 +193,7 @@ const AddSubjectForm = ({ onSave, onCancel }: Props) => {
           <input
             id="subject-is-lab"
             type="checkbox"
-            {...register("isLab")}
+            {...register('isLab')}
             className="size-4 rounded border"
           />
 

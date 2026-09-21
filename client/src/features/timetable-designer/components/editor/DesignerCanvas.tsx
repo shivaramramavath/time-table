@@ -1,26 +1,16 @@
-import "@xyflow/react/dist/style.css";
+import '@xyflow/react/dist/style.css';
 
-import {
-  Background,
-  ReactFlow,
-  useEdgesState,
-  useNodesState,
-} from "@xyflow/react";
+import { Background, ReactFlow, useEdgesState, useNodesState } from '@xyflow/react';
 
-import { usePreferencesStore } from "@/shared/preferences/preferences.store";
+import { usePreferencesStore } from '@/shared/preferences/preferences.store';
 
-import DesignerPanels from "../panels/DesignerPanels";
+import DesignerPanels from '../panels/DesignerPanels';
 
-import {
-  useDesignerDnD,
-  useDesignerInteractions,
-  useEdgeTypes,
-  useNodeTypes,
-} from "../../hooks";
+import { useDesignerDnD, useDesignerInteractions, useEdgeTypes, useNodeTypes } from '../../hooks';
 
-import { useDesignerSocketListeners } from "../../hooks/useDesignerSocketListeners";
+import { useDesignerSocketListeners } from '../../hooks/useDesignerSocketListeners';
 
-import type { Edge, Node } from "../../types";
+import type { Edge, Node } from '../../types';
 
 interface Props {
   timetableId: string;
@@ -66,10 +56,10 @@ const DesignerCanvas = ({ timetableId, initialNodes, initialEdges }: Props) => {
         onConnectEnd={interactions.onConnectEnd}
         onDragOver={onDragOver}
         onDrop={onDrop}
-        colorMode={darkMode ? "dark" : "light"}
-        deleteKeyCode={["Delete", "Backspace"]}
-        selectionKeyCode={["Shift", "Meta"]}
-        multiSelectionKeyCode={["Shift", "Control"]}
+        colorMode={darkMode ? 'dark' : 'light'}
+        deleteKeyCode={['Delete', 'Backspace']}
+        selectionKeyCode={['Shift', 'Meta']}
+        multiSelectionKeyCode={['Shift', 'Control']}
         proOptions={{
           hideAttribution: true,
         }}

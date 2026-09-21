@@ -1,23 +1,23 @@
-import { httpClient } from "@/shared/api/httpClient";
+import { httpClient } from '@/shared/api/httpClient';
 
 export const templateApi = {
   // Get all templates owned by current user
   getAll: async () => {
-    const { data } = await httpClient.get("/templates");
+    const { data } = await httpClient.get('/templates');
 
     return data;
   },
 
   // Get private templates owned by current user
   getPrivate: async () => {
-    const { data } = await httpClient.get("/templates/private");
+    const { data } = await httpClient.get('/templates/private');
 
     return data;
   },
 
   // Get public templates
   getPublic: async () => {
-    const { data } = await httpClient.get("/templates/public");
+    const { data } = await httpClient.get('/templates/public');
 
     return data;
   },

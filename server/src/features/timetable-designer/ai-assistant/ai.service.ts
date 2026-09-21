@@ -1,14 +1,14 @@
-import { HumanMessage } from "@langchain/core/messages";
+import { HumanMessage } from '@langchain/core/messages';
 
-import { generateMessageId } from "#utils/generate-ids.js";
+import { generateMessageId } from '#utils/generate-ids.js';
 
-import { messageEmitter } from "../message/message.emiter.js";
-import { Message } from "../message/message.model.js";
-import { messageService } from "../message/message.service.js";
+import { messageEmitter } from '../message/message.emiter.js';
+import { Message } from '../message/message.model.js';
+import { messageService } from '../message/message.service.js';
 
-import { designerGraph } from "./graph.js";
-import type { DesignerGraphState } from "./designer.state.js";
-import { GraphUpdate, MessageChunkMetadata } from "./types.js";
+import { designerGraph } from './graph.js';
+import type { DesignerGraphState } from './designer.state.js';
+import { GraphUpdate, MessageChunkMetadata } from './types.js';
 
 export const aiService = {
   async generate(userId: string, designerId: string, message: Message) {
@@ -18,12 +18,12 @@ export const aiService = {
       ...message,
       id: message.id,
       designerId,
-      role: "user",
+      role: 'user',
     });
 
     try {
       let seq = 0;
-      let content = "";
+      let content = '';
 
       await messageEmitter.start(userId, {
         messageId,
@@ -31,7 +31,7 @@ export const aiService = {
 
       await messageEmitter.status(userId, {
         messageId,
-        status: "thinking",
+        status: 'thinking',
       });
 
       const input: Partial<DesignerGraphState> = {
@@ -42,7 +42,7 @@ export const aiService = {
       };
 
       const stream = await designerGraph.stream(input, {
-        streamMode: ["updates", "messages"],
+        streamMode: ['updates', 'messages'],
         configurable: {
           thread_id: designerId,
         },
@@ -51,7 +51,7 @@ export const aiService = {
       for await (const chunk of stream) {
         const [mode, data] = chunk;
 
-        if (mode === "messages") {
+        if (mode === 'messages') {
           const [messageChunk, metadata] = data as [
             {
               content: unknown;
@@ -59,21 +59,15 @@ export const aiService = {
             MessageChunkMetadata,
           ];
 
-          await this.handleTokenChunk(
-            userId,
-            messageId,
-            messageChunk,
-            metadata,
-            (token) => {
-              content += token;
-              return seq++;
-            },
-          );
+          await this.handleTokenChunk(userId, messageId, messageChunk, metadata, (token) => {
+            content += token;
+            return seq++;
+          });
 
           continue;
         }
 
-        if (mode === "updates") {
+        if (mode === 'updates') {
           await this.handleGraphUpdate(userId, messageId, data as GraphUpdate);
 
           continue;
@@ -84,7 +78,7 @@ export const aiService = {
         id: messageId,
         designerId,
         content,
-        role: "assistant",
+        role: 'assistant',
         createdAt: new Date(),
         updatedAt: new Date(),
       });
@@ -93,9 +87,9 @@ export const aiService = {
         messageId,
       });
     } catch (error) {
-      console.error("catch", error);
+      console.error('catch', error);
       await messageEmitter.error(userId, {
-        message: error instanceof Error ? error.message : "AI execution failed",
+        message: error instanceof Error ? error.message : 'AI execution failed',
       });
 
       throw error;
@@ -111,13 +105,13 @@ export const aiService = {
     metadata: MessageChunkMetadata,
     getSequence: (token: string) => number,
   ) {
-    if (metadata.langgraph_node !== "ai-response") {
+    if (metadata.langgraph_node !== 'ai-response') {
       return;
     }
 
     const token = messageChunk.content;
 
-    if (typeof token !== "string" || token.length === 0) {
+    if (typeof token !== 'string' || token.length === 0) {
       return;
     }
 
@@ -132,12 +126,8 @@ export const aiService = {
     });
   },
 
-  async handleGraphUpdate(
-    userId: string,
-    messageId: string,
-    update: GraphUpdate,
-  ) {
-    console.log("Graph update:", update);
+  async handleGraphUpdate(userId: string, messageId: string, update: GraphUpdate) {
+    console.log('Graph update:', update);
 
     for (const [nodeName, nodeUpdate] of Object.entries(update)) {
       const status = nodeUpdate?.status;

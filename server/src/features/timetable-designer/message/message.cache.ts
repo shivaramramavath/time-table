@@ -1,10 +1,10 @@
-import { DESIGNER_TTL, PAGE_SIZE } from "#configs/constants.js";
+import { DESIGNER_TTL, PAGE_SIZE } from '#configs/constants.js';
 
-import redis from "#configs/redis.js";
+import redis from '#configs/redis.js';
 
-import type { Message } from "./message.model.js";
-import { messageQueue } from "./message.queue.js";
-import { messageRepository } from "./message.repository.js";
+import type { Message } from './message.model.js';
+import { messageQueue } from './message.queue.js';
+import { messageRepository } from './message.repository.js';
 
 const getKey = (designerId: string) => `designer:${designerId}:messages`;
 
@@ -12,11 +12,7 @@ export const messageCache = {
   async push(message: Message) {
     const key = getKey(message.designerId);
 
-    await redis
-      .multi()
-      .rpush(key, JSON.stringify(message))
-      .expire(key, DESIGNER_TTL)
-      .exec();
+    await redis.multi().rpush(key, JSON.stringify(message)).expire(key, DESIGNER_TTL).exec();
 
     await messageQueue.add(message.designerId, message);
 

@@ -1,10 +1,5 @@
-import type {
-  Connection,
-  EdgeChange,
-  NodeChange,
-  OnConnectEnd,
-} from "@xyflow/react";
-import type { IsValidConnection } from "@xyflow/system";
+import type { Connection, EdgeChange, NodeChange, OnConnectEnd } from '@xyflow/react';
+import type { IsValidConnection } from '@xyflow/system';
 
 export type Node = {
   id: string;
@@ -52,7 +47,7 @@ export interface Subject {
   consecutivePeriods?: number;
 
   roomRequirements?: {
-    type: "classroom" | "laboratory" | "seminar-hall";
+    type: 'classroom' | 'laboratory' | 'seminar-hall';
     minimumCapacity?: number;
   };
 }
@@ -65,12 +60,12 @@ export interface Room {
   capacity: number;
   floor: number;
 
-  type: "classroom" | "laboratory" | "seminar-hall";
+  type: 'classroom' | 'laboratory' | 'seminar-hall';
 }
 
 export interface Message {
   id: string;
-  role: "system" | "user" | "assistant";
+  role: 'system' | 'user' | 'assistant';
   content: string;
   createdAt: string;
   timestamp?: number;

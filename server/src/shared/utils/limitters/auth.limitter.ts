@@ -1,56 +1,56 @@
-import createRateLimiter from "#middlewares/rateLimiter.js";
+import createRateLimiter from '#middlewares/rateLimiter.js';
 
 const registerLimiter = createRateLimiter({
-  keyPrefix: "register",
+  keyPrefix: 'register',
   points: 5,
   duration: 60 * 15,
   blockDuration: 60 * 30,
 });
 
 const loginLimiter = createRateLimiter({
-  keyPrefix: "login",
+  keyPrefix: 'login',
   points: 10,
   duration: 60 * 10,
   blockDuration: 60 * 20,
 });
 
 const forgotLimiter = createRateLimiter({
-  keyPrefix: "forgotPassword",
+  keyPrefix: 'forgotPassword',
   points: 5,
   duration: 60 * 15,
   blockDuration: 60 * 30,
 });
 
 const verifyOtpLimiter = createRateLimiter({
-  keyPrefix: "verifyOTP",
+  keyPrefix: 'verifyOTP',
   points: 10,
   duration: 60 * 10,
   blockDuration: 60 * 20,
 });
 
 const resetPasswordLimiter = createRateLimiter({
-  keyPrefix: "resetPassword",
+  keyPrefix: 'resetPassword',
   points: 5,
   duration: 60 * 15,
   blockDuration: 60 * 30,
 });
 
 const authCheckLimiter = createRateLimiter({
-  keyPrefix: "authCheck",
+  keyPrefix: 'authCheck',
   points: 60,
   duration: 60,
   blockDuration: 30,
 });
 
 const refreshLimiter = createRateLimiter({
-  keyPrefix: "refresh",
+  keyPrefix: 'refresh',
   points: 15,
   duration: 60,
   blockDuration: 120,
 });
 
 const logoutLimiter = createRateLimiter({
-  keyPrefix: "logout",
+  keyPrefix: 'logout',
   points: 20,
   duration: 60,
   blockDuration: 30,

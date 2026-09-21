@@ -1,4 +1,4 @@
-import redis from "#configs/redis.js";
+import redis from '#configs/redis.js';
 
 const SOCKET_TTL = 24 * 60 * 60;
 
@@ -18,7 +18,7 @@ export const socketRegistry = {
   },
 
   setSocketId: async (userId: string, socketId: string) => {
-    return redis.set(getSocketKey(userId), socketId, "EX", SOCKET_TTL);
+    return redis.set(getSocketKey(userId), socketId, 'EX', SOCKET_TTL);
   },
 
   removeSocketId: async (userId: string) => {

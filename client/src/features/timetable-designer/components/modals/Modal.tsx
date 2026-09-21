@@ -1,22 +1,22 @@
-import { memo } from "react";
+import { memo } from 'react';
 
-import { Dialog, DialogContent } from "@/shared/ui/dialog";
+import { Dialog, DialogContent } from '@/shared/ui/dialog';
 
-import { useModalStore } from "../../store/modal.store";
+import { useModalStore } from '../../store/modal.store';
 
-import InstitutionModal from "./InstitutionModal";
-import ProgramModal from "./ProgramModal";
-import AcademicYearModal from "./AcademicYearModal";
-import SectionModal from "./SectionModal";
-import Faculties from "./faculties/Faculties";
-import Subjects from "./subjects/Subjects";
-import Rooms from "./rooms/Rooms";
-import TemplateModal from "./TemplateModal";
+import InstitutionModal from './InstitutionModal';
+import ProgramModal from './ProgramModal';
+import AcademicYearModal from './AcademicYearModal';
+import SectionModal from './SectionModal';
+import Faculties from './faculties/Faculties';
+import Subjects from './subjects/Subjects';
+import Rooms from './rooms/Rooms';
+import TemplateModal from './TemplateModal';
 
 const modalComponents = {
   institution: InstitutionModal,
   program: ProgramModal,
-  "academic-year": AcademicYearModal,
+  'academic-year': AcademicYearModal,
   section: SectionModal,
   faculties: Faculties,
   subjects: Subjects,

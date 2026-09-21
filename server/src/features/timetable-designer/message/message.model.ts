@@ -1,4 +1,4 @@
-import { Schema, model, type InferSchemaType } from "mongoose";
+import { Schema, model, type InferSchemaType } from 'mongoose';
 
 const messageSchema = new Schema(
   {
@@ -23,8 +23,8 @@ const messageSchema = new Schema(
 
     role: {
       type: String,
-      enum: ["system", "user", "assistant"],
-      default: "user",
+      enum: ['system', 'user', 'assistant'],
+      default: 'user',
       required: true,
     },
   },
@@ -41,4 +41,4 @@ messageSchema.index({
 
 export type Message = InferSchemaType<typeof messageSchema>;
 
-export const MessageModel = model("Message", messageSchema);
+export const MessageModel = model('Message', messageSchema);

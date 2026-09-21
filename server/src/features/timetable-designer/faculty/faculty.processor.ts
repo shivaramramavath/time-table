@@ -1,6 +1,6 @@
-import type { Faculty } from "./faculty.model.js";
+import type { Faculty } from './faculty.model.js';
 
-import { facultyRepository } from "./faculty.repository.js";
+import { facultyRepository } from './faculty.repository.js';
 
 export const facultyProcessor = {
   add: async (faculty: Faculty) => {

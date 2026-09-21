@@ -1,8 +1,8 @@
-import { SystemMessage } from "@langchain/core/messages";
+import { SystemMessage } from '@langchain/core/messages';
 
-import { llmModels } from "../services/groq.config.js";
-import type { DesignerGraphState } from "../designer.state.js";
-import { GraphStatus } from "../types.js";
+import { llmModels } from '../services/groq.config.js';
+import type { DesignerGraphState } from '../designer.state.js';
+import { GraphStatus } from '../types.js';
 
 export async function responseNode(state: DesignerGraphState) {
   const prompt = `
@@ -40,9 +40,7 @@ ${JSON.stringify(state.verification ?? null, null, 2)}
   const response = await llmModels.small.invoke([new SystemMessage(prompt)]);
 
   const content =
-    typeof response.content === "string"
-      ? response.content
-      : JSON.stringify(response.content);
+    typeof response.content === 'string' ? response.content : JSON.stringify(response.content);
 
   return {
     response: content,

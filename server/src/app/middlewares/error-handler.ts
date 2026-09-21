@@ -1,19 +1,14 @@
-import type { Request, Response, NextFunction } from "express";
-import logger from "#configs/logger.js";
-import { env } from "#configs/env.js";
+import type { Request, Response, NextFunction } from 'express';
+import logger from '#configs/logger.js';
+import { env } from '#configs/env.js';
 
 interface CustomError extends Error {
   statusCode?: number;
 }
 
-export const errorHandler = (
-  err: CustomError,
-  req: Request,
-  res: Response,
-  nxt: NextFunction,
-) => {
+export const errorHandler = (err: CustomError, req: Request, res: Response, nxt: NextFunction) => {
   const status = err.statusCode || 500;
-  const message = err.message || "Something went wrong";
+  const message = err.message || 'Something went wrong';
 
   logger.error({
     status,

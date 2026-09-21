@@ -1,28 +1,23 @@
-import { useEffect, useState } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
-import { useReactFlow } from "@xyflow/react";
+import { useEffect, useState } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
+import { useReactFlow } from '@xyflow/react';
 
-import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
-import { Label } from "@/shared/ui/label";
+import { Button } from '@/shared/ui/button';
+import { Input } from '@/shared/ui/input';
+import { Label } from '@/shared/ui/label';
 
-import {
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/shared/ui/dialog";
+import { DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/shared/ui/dialog';
 
-import { useModalStore } from "../../store/modal.store";
-import { nodeService } from "../../services/node.service";
+import { useModalStore } from '../../store/modal.store';
+import { nodeService } from '../../services/node.service';
 
-import { facultyService } from "../../services/faculty.service";
-import { subjectService } from "../../services/subject.service";
-import { roomService } from "../../services/room.service";
+import { facultyService } from '../../services/faculty.service';
+import { subjectService } from '../../services/subject.service';
+import { roomService } from '../../services/room.service';
 
-import SelectResourceIds from "./common/SelectResourceIds";
+import SelectResourceIds from './common/SelectResourceIds';
 
-import type { AcademicYear } from "../../types/node.types";
+import type { AcademicYear } from '../../types/node.types';
 
 interface Props {
   data: {
@@ -30,7 +25,7 @@ interface Props {
   } | null;
 }
 
-type BreakType = "lunch" | "short-break";
+type BreakType = 'lunch' | 'short-break';
 
 type AcademicYearFormData = {
   label: string;
@@ -50,20 +45,13 @@ type AcademicYearFormData = {
   }[];
 };
 
-const WORKING_DAYS = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
+const WORKING_DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-const DEFAULT_BREAKS: AcademicYearFormData["breaks"] = [
+const DEFAULT_BREAKS: AcademicYearFormData['breaks'] = [
   {
-    type: "lunch",
-    startTime: "13:00",
-    endTime: "14:00",
+    type: 'lunch',
+    startTime: '13:00',
+    endTime: '14:00',
   },
 ];
 
@@ -73,8 +61,7 @@ const AcademicYearModal = ({ data }: Props) => {
   const { getNode, setNodes } = useReactFlow();
 
   const academicYear = (data?.id ? getNode(data.id)?.data : undefined) as
-    | AcademicYear["data"]
-    | undefined;
+    AcademicYear['data'] | undefined;
 
   /*
    * Resources
@@ -102,13 +89,13 @@ const AcademicYearModal = ({ data }: Props) => {
     formState: { errors },
   } = useForm<AcademicYearFormData>({
     defaultValues: {
-      label: academicYear?.label ?? "",
+      label: academicYear?.label ?? '',
 
       year: academicYear?.year ?? new Date().getFullYear(),
 
-      startTime: academicYear?.time?.startTime ?? "09:00",
+      startTime: academicYear?.time?.startTime ?? '09:00',
 
-      endTime: academicYear?.time?.endTime ?? "17:00",
+      endTime: academicYear?.time?.endTime ?? '17:00',
 
       numberOfPeriods: academicYear?.time?.numberOfPeriods ?? 7,
 
@@ -116,9 +103,7 @@ const AcademicYearModal = ({ data }: Props) => {
         ? academicYear.time.workingDays
         : WORKING_DAYS,
 
-      breaks: academicYear?.time?.breaks?.length
-        ? academicYear.time.breaks
-        : DEFAULT_BREAKS,
+      breaks: academicYear?.time?.breaks?.length ? academicYear.time.breaks : DEFAULT_BREAKS,
     },
   });
 
@@ -127,7 +112,7 @@ const AcademicYearModal = ({ data }: Props) => {
    */
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "breaks",
+    name: 'breaks',
   });
 
   /*
@@ -137,13 +122,13 @@ const AcademicYearModal = ({ data }: Props) => {
     if (!academicYear) return;
 
     reset({
-      label: academicYear.label ?? "",
+      label: academicYear.label ?? '',
 
       year: academicYear.year ?? new Date().getFullYear(),
 
-      startTime: academicYear.time?.startTime ?? "09:00",
+      startTime: academicYear.time?.startTime ?? '09:00',
 
-      endTime: academicYear.time?.endTime ?? "17:00",
+      endTime: academicYear.time?.endTime ?? '17:00',
 
       numberOfPeriods: academicYear.time?.numberOfPeriods ?? 7,
 
@@ -151,9 +136,7 @@ const AcademicYearModal = ({ data }: Props) => {
         ? academicYear.time.workingDays
         : WORKING_DAYS,
 
-      breaks: academicYear.time?.breaks?.length
-        ? academicYear.time.breaks
-        : DEFAULT_BREAKS,
+      breaks: academicYear.time?.breaks?.length ? academicYear.time.breaks : DEFAULT_BREAKS,
     });
 
     setSelectedFacultyIds(academicYear.resources?.facultyIds ?? []);
@@ -219,11 +202,9 @@ const AcademicYearModal = ({ data }: Props) => {
     <form onSubmit={handleSubmit(handleUpdate)}>
       {/* Header */}
       <DialogHeader>
-        <DialogTitle>{academicYear?.label || "Academic Year"}</DialogTitle>
+        <DialogTitle>{academicYear?.label || 'Academic Year'}</DialogTitle>
 
-        <DialogDescription>
-          Configure academic year timetable settings.
-        </DialogDescription>
+        <DialogDescription>Configure academic year timetable settings.</DialogDescription>
       </DialogHeader>
 
       <div className="max-h-[70vh] space-y-4 overflow-y-auto py-4 scrollbar">
@@ -237,16 +218,12 @@ const AcademicYearModal = ({ data }: Props) => {
           <Input
             id="academic-year-label"
             placeholder="3rd Year"
-            {...register("label", {
-              required: "Academic year is required",
+            {...register('label', {
+              required: 'Academic year is required',
             })}
           />
 
-          {errors.label && (
-            <p className="text-[10px] text-destructive">
-              {errors.label.message}
-            </p>
-          )}
+          {errors.label && <p className="text-[10px] text-destructive">{errors.label.message}</p>}
         </div>
 
         {/* ================================================= */}
@@ -260,23 +237,19 @@ const AcademicYearModal = ({ data }: Props) => {
             id="academic-year"
             type="number"
             min={1}
-            {...register("year", {
+            {...register('year', {
               valueAsNumber: true,
 
-              required: "Academic year is required",
+              required: 'Academic year is required',
 
               min: {
                 value: 1,
-                message: "Year must be greater than 0",
+                message: 'Year must be greater than 0',
               },
             })}
           />
 
-          {errors.year && (
-            <p className="text-[10px] text-destructive">
-              {errors.year.message}
-            </p>
-          )}
+          {errors.year && <p className="text-[10px] text-destructive">{errors.year.message}</p>}
         </div>
 
         {/* ================================================= */}
@@ -299,39 +272,32 @@ const AcademicYearModal = ({ data }: Props) => {
               <Input
                 id="academic-year-start-time"
                 type="time"
-                {...register("startTime", {
-                  required: "Start time is required",
+                {...register('startTime', {
+                  required: 'Start time is required',
                 })}
               />
 
               {errors.startTime && (
-                <p className="text-[10px] text-destructive">
-                  {errors.startTime.message}
-                </p>
+                <p className="text-[10px] text-destructive">{errors.startTime.message}</p>
               )}
             </div>
 
             {/* End */}
             <div className="space-y-1">
-              <Label
-                htmlFor="academic-year-end-time"
-                className="text-[10px] text-muted-foreground"
-              >
+              <Label htmlFor="academic-year-end-time" className="text-[10px] text-muted-foreground">
                 End Time
               </Label>
 
               <Input
                 id="academic-year-end-time"
                 type="time"
-                {...register("endTime", {
-                  required: "End time is required",
+                {...register('endTime', {
+                  required: 'End time is required',
                 })}
               />
 
               {errors.endTime && (
-                <p className="text-[10px] text-destructive">
-                  {errors.endTime.message}
-                </p>
+                <p className="text-[10px] text-destructive">{errors.endTime.message}</p>
               )}
             </div>
           </div>
@@ -348,22 +314,20 @@ const AcademicYearModal = ({ data }: Props) => {
             id="academic-year-periods"
             type="number"
             min={1}
-            {...register("numberOfPeriods", {
+            {...register('numberOfPeriods', {
               valueAsNumber: true,
 
-              required: "Number of periods is required",
+              required: 'Number of periods is required',
 
               min: {
                 value: 1,
-                message: "At least one period is required",
+                message: 'At least one period is required',
               },
             })}
           />
 
           {errors.numberOfPeriods && (
-            <p className="text-[10px] text-destructive">
-              {errors.numberOfPeriods.message}
-            </p>
+            <p className="text-[10px] text-destructive">{errors.numberOfPeriods.message}</p>
           )}
         </div>
 
@@ -383,8 +347,8 @@ const AcademicYearModal = ({ data }: Props) => {
                 <input
                   type="checkbox"
                   value={day}
-                  {...register("workingDays", {
-                    required: "Select at least one working day",
+                  {...register('workingDays', {
+                    required: 'Select at least one working day',
                   })}
                   className="size-3.5"
                 />
@@ -395,9 +359,7 @@ const AcademicYearModal = ({ data }: Props) => {
           </div>
 
           {errors.workingDays && (
-            <p className="text-[10px] text-destructive">
-              {errors.workingDays.message}
-            </p>
+            <p className="text-[10px] text-destructive">{errors.workingDays.message}</p>
           )}
         </div>
 
@@ -439,9 +401,9 @@ const AcademicYearModal = ({ data }: Props) => {
               <>
                 {subject.code}
 
-                {" • "}
+                {' • '}
 
-                {subject.labDetails?.isLab ? "Laboratory" : "Theory"}
+                {subject.labDetails?.isLab ? 'Laboratory' : 'Theory'}
               </>
             )}
           />
@@ -478,9 +440,7 @@ const AcademicYearModal = ({ data }: Props) => {
             <div>
               <Label>Breaks</Label>
 
-              <p className="text-[10px] text-muted-foreground">
-                Configure lunch and short breaks.
-              </p>
+              <p className="text-[10px] text-muted-foreground">Configure lunch and short breaks.</p>
             </div>
 
             <Button
@@ -489,9 +449,9 @@ const AcademicYearModal = ({ data }: Props) => {
               size="sm"
               onClick={() =>
                 append({
-                  type: "short-break",
-                  startTime: "11:00",
-                  endTime: "11:15",
+                  type: 'short-break',
+                  startTime: '11:00',
+                  endTime: '11:15',
                 })
               }
             >
@@ -505,9 +465,7 @@ const AcademicYearModal = ({ data }: Props) => {
                 <div className="grid grid-cols-[1fr_1fr_1fr_auto] items-end gap-2">
                   {/* Type */}
                   <div className="space-y-1">
-                    <Label className="text-[10px] text-muted-foreground">
-                      Type
-                    </Label>
+                    <Label className="text-[10px] text-muted-foreground">Type</Label>
 
                     <select
                       {...register(`breaks.${index}.type`)}
@@ -521,28 +479,24 @@ const AcademicYearModal = ({ data }: Props) => {
 
                   {/* Start */}
                   <div className="space-y-1">
-                    <Label className="text-[10px] text-muted-foreground">
-                      Start
-                    </Label>
+                    <Label className="text-[10px] text-muted-foreground">Start</Label>
 
                     <Input
                       type="time"
                       {...register(`breaks.${index}.startTime`, {
-                        required: "Start time is required",
+                        required: 'Start time is required',
                       })}
                     />
                   </div>
 
                   {/* End */}
                   <div className="space-y-1">
-                    <Label className="text-[10px] text-muted-foreground">
-                      End
-                    </Label>
+                    <Label className="text-[10px] text-muted-foreground">End</Label>
 
                     <Input
                       type="time"
                       {...register(`breaks.${index}.endTime`, {
-                        required: "End time is required",
+                        required: 'End time is required',
                       })}
                     />
                   </div>
@@ -563,9 +517,7 @@ const AcademicYearModal = ({ data }: Props) => {
 
             {fields.length === 0 && (
               <div className="rounded-md border border-dashed py-5 text-center">
-                <p className="text-xs text-muted-foreground">
-                  No breaks configured
-                </p>
+                <p className="text-xs text-muted-foreground">No breaks configured</p>
               </div>
             )}
           </div>

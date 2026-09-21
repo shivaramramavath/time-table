@@ -1,5 +1,5 @@
-import { memo } from "react";
-import { AlertTriangle, CalendarCheck, Search, Sparkles } from "lucide-react";
+import { memo } from 'react';
+import { AlertTriangle, CalendarCheck, Search, Sparkles } from 'lucide-react';
 
 interface Props {
   onSelect?: (prompt: string) => void;
@@ -7,24 +7,24 @@ interface Props {
 
 const suggestions = [
   {
-    label: "Find conflicts",
+    label: 'Find conflicts',
     icon: AlertTriangle,
-    prompt: "Find all faculty, room, and section conflicts.",
+    prompt: 'Find all faculty, room, and section conflicts.',
   },
   {
-    label: "Optimize timetable",
+    label: 'Optimize timetable',
     icon: Sparkles,
-    prompt: "Analyze the timetable and suggest optimizations.",
+    prompt: 'Analyze the timetable and suggest optimizations.',
   },
   {
-    label: "Check resources",
+    label: 'Check resources',
     icon: Search,
-    prompt: "Check whether all required resources are available.",
+    prompt: 'Check whether all required resources are available.',
   },
   {
-    label: "Validate schedule",
+    label: 'Validate schedule',
     icon: CalendarCheck,
-    prompt: "Validate the current timetable configuration.",
+    prompt: 'Validate the current timetable configuration.',
   },
 ];
 

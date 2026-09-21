@@ -1,7 +1,7 @@
-import type { Edge } from "@xyflow/react";
+import type { Edge } from '@xyflow/react';
 
-import { edgeSocket } from "../socket/edge.socket";
-import { useDesignerStore } from "../store/designer.store";
+import { edgeSocket } from '../socket/edge.socket';
+import { useDesignerStore } from '../store/designer.store';
 
 export const edgeService = {
   add: async (edge: Edge) => {
@@ -17,9 +17,6 @@ export const edgeService = {
   },
 
   removeMany: async (edgeIds: string[]) => {
-    return edgeSocket.deleteMany(
-      useDesignerStore.getState().designerId,
-      edgeIds,
-    );
+    return edgeSocket.deleteMany(useDesignerStore.getState().designerId, edgeIds);
   },
 };

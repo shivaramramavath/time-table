@@ -1,90 +1,82 @@
-import {
-  School,
-  GitBranch,
-  Calendar,
-  Layers,
-  BookOpen,
-  DoorOpen,
-  Users,
-} from "lucide-react";
+import { School, GitBranch, Calendar, Layers, BookOpen, DoorOpen, Users } from 'lucide-react';
 
 export const designerNodes = {
   institution: {
-    title: "Institution",
+    title: 'Institution',
     icon: School,
-    description: "Configure institution details",
+    description: 'Configure institution details',
 
-    color: "text-blue-500",
-    bg: "bg-blue-100",
+    color: 'text-blue-500',
+    bg: 'bg-blue-100',
 
     allowedParent: null,
-    allowedChildren: ["program"],
+    allowedChildren: ['program'],
 
-    modal: "institution",
+    modal: 'institution',
 
     defaultData: {
-      label: "",
-      timings: "",
-      lunch: "",
+      label: '',
+      timings: '',
+      lunch: '',
       programs: 0,
     },
   },
 
   program: {
-    title: "Program",
+    title: 'Program',
     icon: GitBranch,
-    description: "Configure academic program",
+    description: 'Configure academic program',
 
-    color: "text-purple-500",
-    bg: "bg-purple-100",
+    color: 'text-purple-500',
+    bg: 'bg-purple-100',
 
-    allowedParent: "institution",
-    allowedChildren: ["academic-year"],
+    allowedParent: 'institution',
+    allowedChildren: ['academic-year'],
 
-    modal: "program",
+    modal: 'program',
 
     defaultData: {
-      label: "",
-      timings: "",
+      label: '',
+      timings: '',
       faculty: 0,
       subjects: 0,
     },
   },
 
-  "academic-year": {
-    title: "Academic Year",
+  'academic-year': {
+    title: 'Academic Year',
     icon: Calendar,
-    description: "Configure academic year",
+    description: 'Configure academic year',
 
-    color: "text-orange-500",
-    bg: "bg-orange-100",
+    color: 'text-orange-500',
+    bg: 'bg-orange-100',
 
-    allowedParent: "program",
-    allowedChildren: ["section"],
+    allowedParent: 'program',
+    allowedChildren: ['section'],
 
-    modal: "academic-year",
+    modal: 'academic-year',
 
     defaultData: {
-      label: "",
+      label: '',
       semesters: 2,
     },
   },
 
   section: {
-    title: "Section",
+    title: 'Section',
     icon: Layers,
-    description: "Configure class section",
+    description: 'Configure class section',
 
-    color: "text-pink-500",
-    bg: "bg-pink-100",
+    color: 'text-pink-500',
+    bg: 'bg-pink-100',
 
-    allowedParent: "academic-year",
+    allowedParent: 'academic-year',
     allowedChildren: [],
 
-    modal: "section",
+    modal: 'section',
 
     defaultData: {
-      label: "",
+      label: '',
       strength: 60,
     },
   },
@@ -92,21 +84,21 @@ export const designerNodes = {
 
 export const catalogItems = [
   {
-    type: "faculties",
-    title: "Faculties",
+    type: 'faculties',
+    title: 'Faculties',
     icon: Users,
-    color: "text-blue-500",
+    color: 'text-blue-500',
   },
   {
-    type: "subjects",
-    title: "Subjects",
+    type: 'subjects',
+    title: 'Subjects',
     icon: BookOpen,
-    color: "text-purple-500",
+    color: 'text-purple-500',
   },
   {
-    type: "rooms",
-    title: "Rooms",
+    type: 'rooms',
+    title: 'Rooms',
     icon: DoorOpen,
-    color: "text-orange-500",
+    color: 'text-orange-500',
   },
 ];

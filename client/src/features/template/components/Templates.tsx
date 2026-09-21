@@ -1,17 +1,16 @@
+import { memo, useState } from 'react';
+import { FileStack, Globe2, Lock, Search } from 'lucide-react';
 
-import { memo, useState } from "react";
-import { FileStack, Globe2, Lock, Search } from "lucide-react";
+import { Input } from '@/shared/ui/input';
+import { Tabs, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 
-import { Input } from "@/shared/ui/input";
-import { Tabs, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import TemplateGrid from './TemplateGrid';
 
-import TemplateGrid from "./TemplateGrid";
-
-type TemplateTab = "my" | "public";
+type TemplateTab = 'my' | 'public';
 
 const Templates = () => {
-  const [tab, setTab] = useState<TemplateTab>("my");
-  const [search, setSearch] = useState("");
+  const [tab, setTab] = useState<TemplateTab>('my');
+  const [search, setSearch] = useState('');
 
   return (
     <div className="flex h-full min-h-0 flex-col gap-3 pt-2">
@@ -22,22 +21,15 @@ const Templates = () => {
           </div>
 
           <div>
-            <h1 className="text-xl font-semibold tracking-tight">
-              Templates
-            </h1>
+            <h1 className="text-xl font-semibold tracking-tight">Templates</h1>
 
-            <p className="text-sm text-muted-foreground">
-              Reusable timetable configurations.
-            </p>
+            <p className="text-sm text-muted-foreground">Reusable timetable configurations.</p>
           </div>
         </div>
       </div>
 
       <div className="flex shrink-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <Tabs
-          value={tab}
-          onValueChange={(value) => setTab(value as TemplateTab)}
-        >
+        <Tabs value={tab} onValueChange={(value) => setTab(value as TemplateTab)}>
           <TabsList>
             <TabsTrigger value="my" className="gap-2">
               <Lock className="size-3.5" />

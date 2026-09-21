@@ -1,9 +1,9 @@
-import type { Server } from "socket.io";
+import type { Server } from 'socket.io';
 
-import logger from "#configs/logger.js";
-import { socketAuth } from "#middlewares/socketAuth.middleware.js";
+import logger from '#configs/logger.js';
+import { socketAuth } from '#middlewares/socketAuth.middleware.js';
 
-import { socketRegistry } from "./socket-registry.js";
+import { socketRegistry } from './socket-registry.js';
 
 import {
   registerFacultyListeners,
@@ -14,13 +14,13 @@ import {
   registerEdgeListeners,
   registerTimetableListeners,
   registerMessageListeners,
-} from "./listeners/index.js";
-import { registerTemplateListeners } from "./listeners/template.listener.js";
+} from './listeners/index.js';
+import { registerTemplateListeners } from './listeners/template.listener.js';
 
 export const registerSocket = (io: Server) => {
   io.use(socketAuth);
 
-  io.on("connection", (socket) => {
+  io.on('connection', (socket) => {
     const userId = socket.data.user.userId;
 
     logger.info(`Socket connected: ${socket.id}`);
@@ -37,7 +37,7 @@ export const registerSocket = (io: Server) => {
     registerTimetableListeners(io, socket);
     registerMessageListeners(io, socket);
 
-    socket.on("disconnect", (reason) => {
+    socket.on('disconnect', (reason) => {
       logger.info(`Socket disconnected: ${socket.id} | reason=${reason}`);
 
       socketRegistry.removeSocketId(userId);

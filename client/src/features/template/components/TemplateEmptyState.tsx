@@ -1,6 +1,6 @@
-import { FileStack, Plus } from "lucide-react";
+import { FileStack, Plus } from 'lucide-react';
 
-import { Button } from "@/shared/ui/button";
+import { Button } from '@/shared/ui/button';
 
 const TemplateEmptyState = () => {
   return (
@@ -26,8 +26,8 @@ const TemplateEmptyState = () => {
       <h3 className="mt-4 text-sm font-semibold">No templates yet</h3>
 
       <p className="mt-1 max-w-sm text-center text-xs text-muted-foreground">
-        Save your timetable configurations as templates and reuse them whenever
-        you create a new designer.
+        Save your timetable configurations as templates and reuse them whenever you create a new
+        designer.
       </p>
 
       <Button size="sm" className="mt-4 gap-2">

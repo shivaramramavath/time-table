@@ -1,4 +1,4 @@
-import { timetableSocket } from "../socket/timetable.socket";
+import { timetableSocket } from '../socket/timetable.socket';
 
 export const timetableService = {
   update: (timetableId: string, data) => {

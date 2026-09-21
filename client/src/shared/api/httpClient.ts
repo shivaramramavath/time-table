@@ -1,10 +1,10 @@
-import axios from "axios";
+import axios from 'axios';
 
-import { env } from "@/app/config/env";
-import { errorInterceptor, requestInterceptor } from "./interceptor";
+import { env } from '@/app/config/env';
+import { errorInterceptor, requestInterceptor } from './interceptor';
 
 export const httpClient = axios.create({
-  baseURL: env.backendUrl + "/api",
+  baseURL: env.backendUrl + '/api',
   timeout: 10000,
   withCredentials: true,
 });

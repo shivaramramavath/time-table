@@ -1,5 +1,5 @@
-import { usePreferencesStore } from "../preferences/preferences.store";
-import { useUserStore } from "./user.store";
+import { usePreferencesStore } from '../preferences/preferences.store';
+import { useUserStore } from './user.store';
 
 export const userService = {
   setUser: async (user) => {

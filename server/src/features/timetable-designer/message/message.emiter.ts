@@ -1,19 +1,18 @@
-import { emitToUser } from "../../../sockets/emit-to-user.js";
+import { emitToUser } from '../../../sockets/emit-to-user.js';
 
 export type MessageStatus =
-  | "thinking"
-  | "analyzing"
-  | "understanding"
-  | "retrieving"
-  | "planning"
-  | "validating"
-  | "executing"
-  | "verifying"
-  | "responding";
+  | 'thinking'
+  | 'analyzing'
+  | 'understanding'
+  | 'retrieving'
+  | 'planning'
+  | 'validating'
+  | 'executing'
+  | 'verifying'
+  | 'responding';
 
 export const messageEmitter = {
-  start: (userId: string, data: { messageId: string }) =>
-    emitToUser(userId, "message:start", data),
+  start: (userId: string, data: { messageId: string }) => emitToUser(userId, 'message:start', data),
 
   token: (
     userId: string,
@@ -23,7 +22,7 @@ export const messageEmitter = {
       seq: number;
       timestamp: number;
     },
-  ) => emitToUser(userId, "message:token", data),
+  ) => emitToUser(userId, 'message:token', data),
 
   status: (
     userId: string,
@@ -31,11 +30,10 @@ export const messageEmitter = {
       messageId: string;
       status: MessageStatus;
     },
-  ) => emitToUser(userId, "message:status", data),
+  ) => emitToUser(userId, 'message:status', data),
 
   finish: (userId: string, data: { messageId: string }) =>
-    emitToUser(userId, "message:finish", data),
+    emitToUser(userId, 'message:finish', data),
 
-  error: (userId: string, data: { message: string }) =>
-    emitToUser(userId, "message:error", data),
+  error: (userId: string, data: { message: string }) => emitToUser(userId, 'message:error', data),
 };

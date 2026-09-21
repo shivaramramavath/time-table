@@ -1,7 +1,7 @@
-import type { Node } from "@xyflow/react";
+import type { Node } from '@xyflow/react';
 
-import { nodeSocket } from "../socket/node.socket";
-import { useDesignerStore } from "../store/designer.store";
+import { nodeSocket } from '../socket/node.socket';
+import { useDesignerStore } from '../store/designer.store';
 
 export const nodeService = {
   add: (node: Node) => {
@@ -13,11 +13,7 @@ export const nodeService = {
   },
 
   update: (nodeId: string, data: Partial<Node>) => {
-    return nodeSocket.update(
-      useDesignerStore.getState().designerId,
-      nodeId,
-      data,
-    );
+    return nodeSocket.update(useDesignerStore.getState().designerId, nodeId, data);
   },
 
   remove: (nodeId: string) => {
@@ -25,9 +21,6 @@ export const nodeService = {
   },
 
   removeMany: (nodeIds: string[]) => {
-    return nodeSocket.deleteMany(
-      useDesignerStore.getState().designerId,
-      nodeIds,
-    );
+    return nodeSocket.deleteMany(useDesignerStore.getState().designerId, nodeIds);
   },
 };

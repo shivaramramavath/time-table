@@ -1,17 +1,17 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
-import type { Message } from "../types";
+import type { Message } from '../types';
 
 export type AIStatus =
-  | "thinking"
-  | "analyzing"
-  | "understanding"
-  | "retrieving"
-  | "planning"
-  | "validating"
-  | "executing"
-  | "verifying"
-  | "responding";
+  | 'thinking'
+  | 'analyzing'
+  | 'understanding'
+  | 'retrieving'
+  | 'planning'
+  | 'validating'
+  | 'executing'
+  | 'verifying'
+  | 'responding';
 
 export interface MessageStatusEvent {
   messageId: string;
@@ -20,7 +20,7 @@ export interface MessageStatusEvent {
 
 interface StreamingMessage {
   id: string;
-  role: "assistant";
+  role: 'assistant';
   content: string;
   seq?: number;
   createdAt: string;
@@ -87,13 +87,13 @@ export const useMessageStore = create<MessageState>((set) => ({
       streamingMessage: {
         id: messageId,
 
-        role: "assistant",
+        role: 'assistant',
 
-        content: "",
+        content: '',
 
         createdAt: new Date().toISOString(),
 
-        status: "thinking",
+        status: 'thinking',
       },
 
       isLoading: true,
@@ -171,7 +171,7 @@ export const useMessageStore = create<MessageState>((set) => ({
       const message: Message = {
         id: streamingMessage.id,
 
-        role: "assistant",
+        role: 'assistant',
 
         content: streamingMessage.content,
 
@@ -189,7 +189,7 @@ export const useMessageStore = create<MessageState>((set) => ({
 
   // AI ERROR
 
-  error: (messageId, message = "Something went wrong.") =>
+  error: (messageId, message = 'Something went wrong.') =>
     set((state) => {
       const streamingMessage = state.streamingMessage;
 

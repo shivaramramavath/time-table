@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 
-import { useAuthStore } from "@/features/auth/store/auth.store";
-import { authService } from "@/features/auth/services/auth.service";
+import { useAuthStore } from '@/features/auth/store/auth.store';
+import { authService } from '@/features/auth/services/auth.service';
 
-import LoadingHeader from "../../shared/components/LoadingHeader";
+import LoadingHeader from '../../shared/components/LoadingHeader';
 
 type Props = {
   children: React.ReactNode;

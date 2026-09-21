@@ -1,7 +1,7 @@
-import { memo } from "react";
+import { memo } from 'react';
 
-import DesignerNode from "./DesignerNode";
-import { BookOpen, DoorOpen, User } from "lucide-react";
+import DesignerNode from './DesignerNode';
+import { BookOpen, DoorOpen, User } from 'lucide-react';
 
 interface ProgramNodeProps {
   data: {
@@ -30,7 +30,7 @@ const ProgramNode = ({ data, isConnectable, selected }: ProgramNodeProps) => {
     <DesignerNode
       type="program"
       label={data?.label}
-      subLabel={"Program"}
+      subLabel={'Program'}
       selected={selected}
       showTarget
       showSource

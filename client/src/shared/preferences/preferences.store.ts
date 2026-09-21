@@ -1,5 +1,5 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 interface PreferencesState {
   darkMode: boolean;
@@ -7,14 +7,12 @@ interface PreferencesState {
   setDarkMode: (value: boolean) => void;
   toggleDarkMode: () => void;
 
-  setPreferences: (
-    preferences: Partial<Pick<PreferencesState, "darkMode">>,
-  ) => void;
+  setPreferences: (preferences: Partial<Pick<PreferencesState, 'darkMode'>>) => void;
 
   resetPreferences: () => void;
 }
 
-const initialState: Pick<PreferencesState, "darkMode"> = {
+const initialState: Pick<PreferencesState, 'darkMode'> = {
   darkMode: false,
 };
 
@@ -45,7 +43,7 @@ export const usePreferencesStore = create<PreferencesState>()(
         }),
     }),
     {
-      name: "preferences",
+      name: 'preferences',
     },
   ),
 );

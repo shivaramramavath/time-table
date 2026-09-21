@@ -1,5 +1,5 @@
-import Templates from "@/features/template/components/Templates";
-import React from "react";
+import Templates from '@/features/template/components/Templates';
+import React from 'react';
 
 const TemplatesPage = () => {
   return (

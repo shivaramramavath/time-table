@@ -1,6 +1,6 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation } from '@tanstack/react-query';
 
-import { feedbackApi } from "../api/feedback.api";
+import { feedbackApi } from '../api/feedback.api';
 
 const useCreateFeedback = () => {
   return useMutation({

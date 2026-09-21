@@ -1,15 +1,15 @@
-import { memo, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { memo, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 
-import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
-import { Label } from "@/shared/ui/label";
+import { Button } from '@/shared/ui/button';
+import { Input } from '@/shared/ui/input';
+import { Label } from '@/shared/ui/label';
 
-import { useDesignerStore } from "../../../store/designer.store";
-import { facultyService } from "../../../services/faculty.service";
+import { useDesignerStore } from '../../../store/designer.store';
+import { facultyService } from '../../../services/faculty.service';
 
-import { subjectService } from "@/features/timetable-designer/services/subject.service";
-import SelectResourceIds from "../common/SelectResourceIds";
+import { subjectService } from '@/features/timetable-designer/services/subject.service';
+import SelectResourceIds from '../common/SelectResourceIds';
 
 interface Props {
   facultyId: string;
@@ -67,9 +67,7 @@ const EditFacultyForm = ({ facultyId, onSave, onCancel }: Props) => {
         <div>
           <h3 className="text-sm font-semibold">Edit Faculty</h3>
 
-          <p className="text-[11px] text-muted-foreground">
-            Update faculty information.
-          </p>
+          <p className="text-[11px] text-muted-foreground">Update faculty information.</p>
         </div>
 
         {/* Name */}
@@ -79,16 +77,12 @@ const EditFacultyForm = ({ facultyId, onSave, onCancel }: Props) => {
           <Input
             id="edit-faculty-name"
             placeholder="e.g. Dr. Rajesh Kumar"
-            {...register("name", {
-              required: "Name is required",
+            {...register('name', {
+              required: 'Name is required',
             })}
           />
 
-          {errors.name && (
-            <p className="text-[10px] text-destructive">
-              {errors.name.message}
-            </p>
-          )}
+          {errors.name && <p className="text-[10px] text-destructive">{errors.name.message}</p>}
         </div>
 
         {/* Email */}
@@ -99,16 +93,12 @@ const EditFacultyForm = ({ facultyId, onSave, onCancel }: Props) => {
             id="edit-faculty-email"
             type="email"
             placeholder="e.g. rajesh@pvpsit.ac.in"
-            {...register("email", {
-              required: "Email is required",
+            {...register('email', {
+              required: 'Email is required',
             })}
           />
 
-          {errors.email && (
-            <p className="text-[10px] text-destructive">
-              {errors.email.message}
-            </p>
-          )}
+          {errors.email && <p className="text-[10px] text-destructive">{errors.email.message}</p>}
         </div>
 
         {/* Department */}
@@ -118,7 +108,7 @@ const EditFacultyForm = ({ facultyId, onSave, onCancel }: Props) => {
           <Input
             id="edit-faculty-department"
             placeholder="e.g. Computer Science & Engineering"
-            {...register("department")}
+            {...register('department')}
           />
         </div>
 
@@ -135,9 +125,9 @@ const EditFacultyForm = ({ facultyId, onSave, onCancel }: Props) => {
               <>
                 {subject.code}
 
-                {" • "}
+                {' • '}
 
-                {subject.labDetails?.isLab ? "Laboratory" : "Theory"}
+                {subject.labDetails?.isLab ? 'Laboratory' : 'Theory'}
               </>
             )}
           />
@@ -152,19 +142,17 @@ const EditFacultyForm = ({ facultyId, onSave, onCancel }: Props) => {
             type="number"
             min={0}
             placeholder="e.g. 2"
-            {...register("unavailablePeriods", {
+            {...register('unavailablePeriods', {
               valueAsNumber: true,
               min: {
                 value: 0,
-                message: "Unavailable periods cannot be negative",
+                message: 'Unavailable periods cannot be negative',
               },
             })}
           />
 
           {errors.unavailablePeriods && (
-            <p className="text-[10px] text-destructive">
-              {errors.unavailablePeriods.message}
-            </p>
+            <p className="text-[10px] text-destructive">{errors.unavailablePeriods.message}</p>
           )}
 
           <p className="text-[10px] text-muted-foreground">

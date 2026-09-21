@@ -1,6 +1,6 @@
-import { PAGE_SIZE } from "#configs/constants.js";
+import { PAGE_SIZE } from '#configs/constants.js';
 
-import { MessageModel, type Message } from "./message.model.js";
+import { MessageModel, type Message } from './message.model.js';
 
 export const messageRepository = {
   async create(message: Message) {

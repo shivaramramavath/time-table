@@ -1,12 +1,12 @@
-import { RateLimiterMemory, RateLimiterRedis } from "rate-limiter-flexible";
+import { RateLimiterMemory, RateLimiterRedis } from 'rate-limiter-flexible';
 
-import asyncHandler from "express-async-handler";
+import asyncHandler from 'express-async-handler';
 
-import type { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, Response } from 'express';
 
-import redis from "#configs/redis.js";
+import redis from '#configs/redis.js';
 
-import ApiError from "#utils/ApiError.js";
+import ApiError from '#utils/ApiError.js';
 
 interface LimitOptions {
   keyPrefix: string;
@@ -33,10 +33,10 @@ const getClientKey = (req: Request) => {
     return `user:${req.authId}`;
   }
 
-  const forwardedFor = req.headers["x-forwarded-for"];
+  const forwardedFor = req.headers['x-forwarded-for'];
 
-  if (typeof forwardedFor === "string") {
-    return `ip:${forwardedFor.split(",")[0].trim()}`;
+  if (typeof forwardedFor === 'string') {
+    return `ip:${forwardedFor.split(',')[0].trim()}`;
   }
 
   return `ip:${req.ip}`;
@@ -51,11 +51,10 @@ export const rateLimiterMiddleware = (limiter: RateLimiterRedis) =>
 
       next();
     } catch {
-      next(new ApiError(429, "Too many requests. Please try again later."));
+      next(new ApiError(429, 'Too many requests. Please try again later.'));
     }
   });
 
-const createRateLimiter = (options: LimitOptions) =>
-  rateLimiterMiddleware(createLimiter(options));
+const createRateLimiter = (options: LimitOptions) => rateLimiterMiddleware(createLimiter(options));
 
 export default createRateLimiter;

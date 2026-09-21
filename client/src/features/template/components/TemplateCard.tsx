@@ -1,27 +1,22 @@
-import {
-  ArrowUpRight,
-  Globe2,
-  Lock,
-  MoreHorizontal,
-} from "lucide-react";
+import { ArrowUpRight, Globe2, Lock, MoreHorizontal } from 'lucide-react';
 
-import { Badge } from "@/shared/ui/badge";
-import { Button } from "@/shared/ui/button";
-import { Card } from "@/shared/ui/card";
+import { Badge } from '@/shared/ui/badge';
+import { Button } from '@/shared/ui/button';
+import { Card } from '@/shared/ui/card';
 
 interface Props {
   template: {
     id: string;
     name: string;
     description?: string;
-    visibility: "private" | "public";
+    visibility: 'private' | 'public';
     createdAt: string;
     updatedAt: string;
   };
 }
 
 const TemplateCard = ({ template }: Props) => {
-  const isPublic = template.visibility === "public";
+  const isPublic = template.visibility === 'public';
 
   return (
     <Card className="group overflow-hidden rounded-xl border-border/70 bg-card transition-all duration-200 hover:-translate-y-0.5 hover:border-border hover:shadow-md">
@@ -36,15 +31,9 @@ const TemplateCard = ({ template }: Props) => {
           className="absolute inset-0 opacity-50 [background-image:linear-gradient(to_right,hsl(var(--border)/0.3)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border)/0.3)_1px,transparent_1px)] [background-size:20px_20px]"
         />
 
-        <div
-          aria-hidden="true"
-          className="absolute inset-x-0 top-1/2 h-px bg-border/50"
-        />
+        <div aria-hidden="true" className="absolute inset-x-0 top-1/2 h-px bg-border/50" />
 
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 flex items-center justify-center"
-        >
+        <div aria-hidden="true" className="absolute inset-0 flex items-center justify-center">
           <div className="flex items-center">
             <div className="h-7 w-12 rounded-md border bg-background shadow-sm transition-transform duration-200 group-hover:-translate-y-0.5" />
 
@@ -67,13 +56,9 @@ const TemplateCard = ({ template }: Props) => {
             variant="secondary"
             className="h-5 gap-1 rounded-md border bg-background/90 px-1.5 text-[9px] font-medium shadow-sm backdrop-blur"
           >
-            {isPublic ? (
-              <Globe2 className="size-2.5" />
-            ) : (
-              <Lock className="size-2.5" />
-            )}
+            {isPublic ? <Globe2 className="size-2.5" /> : <Lock className="size-2.5" />}
 
-            <span>{isPublic ? "Public" : "Private"}</span>
+            <span>{isPublic ? 'Public' : 'Private'}</span>
           </Badge>
         </div>
 
@@ -92,19 +77,17 @@ const TemplateCard = ({ template }: Props) => {
       <div className="p-3">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <h3 className="truncate text-sm font-semibold tracking-tight">
-              {template.name}
-            </h3>
+            <h3 className="truncate text-sm font-semibold tracking-tight">{template.name}</h3>
 
             <p className="mt-0.5 line-clamp-2 min-h-8 text-xs leading-4 text-muted-foreground">
-              {template.description || "No description provided."}
+              {template.description || 'No description provided.'}
             </p>
           </div>
 
           <span className="shrink-0 pt-0.5 text-[10px] text-muted-foreground">
             {new Date(template.updatedAt).toLocaleDateString(undefined, {
-              month: "short",
-              day: "numeric",
+              month: 'short',
+              day: 'numeric',
             })}
           </span>
         </div>

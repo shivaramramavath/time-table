@@ -1,7 +1,7 @@
-import { memo } from "react";
+import { memo } from 'react';
 
-import DesignerNode from "./DesignerNode";
-import { BookOpen, DoorOpen, User } from "lucide-react";
+import DesignerNode from './DesignerNode';
+import { BookOpen, DoorOpen, User } from 'lucide-react';
 
 interface AcademicYearNodeProps {
   data: {
@@ -27,16 +27,12 @@ interface AcademicYearNodeProps {
   selected?: boolean;
 }
 
-const AcademicYearNode = ({
-  data,
-  isConnectable,
-  selected,
-}: AcademicYearNodeProps) => {
+const AcademicYearNode = ({ data, isConnectable, selected }: AcademicYearNodeProps) => {
   return (
     <DesignerNode
       type="academic-year"
       label={data?.label}
-      subLabel={data?.year ? `Year ${data.year}` : "Academic Year"}
+      subLabel={data?.year ? `Year ${data.year}` : 'Academic Year'}
       selected={selected}
       showTarget
       showSource

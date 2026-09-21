@@ -1,16 +1,16 @@
-import express from "express";
-import { timetableController } from "./timetable.controller.js";
+import express from 'express';
+import { timetableController } from './timetable.controller.js';
 
 export const timetableRouter = express.Router();
 
-timetableRouter.post("/", timetableController.create);
+timetableRouter.post('/', timetableController.create);
 
-timetableRouter.get("/", timetableController.getTimetables);
+timetableRouter.get('/', timetableController.getTimetables);
 
-timetableRouter.get("/recent", timetableController.getRecentTimetables);
+timetableRouter.get('/recent', timetableController.getRecentTimetables);
 
-timetableRouter.get("/:timetableId", timetableController.get);
+timetableRouter.get('/:timetableId', timetableController.get);
 
-timetableRouter.patch("/:timetableId", timetableController.update);
+timetableRouter.patch('/:timetableId', timetableController.update);
 
-timetableRouter.delete("/:timetableId", timetableController.delete);
+timetableRouter.delete('/:timetableId', timetableController.delete);

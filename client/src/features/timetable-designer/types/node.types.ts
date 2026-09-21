@@ -6,7 +6,7 @@ interface Time {
   workingDays?: string[];
 
   breaks?: {
-    type: "lunch" | "short-break";
+    type: 'lunch' | 'short-break';
     startTime: string;
     endTime: string;
   }[];

@@ -24,6 +24,5 @@ const feedbackProcessor = new FeedbackProcessor(feedbackRepository, queueService
 // Worker
 export const feedbackWorker = new FeedbackWorker(feedbackProcessor, redis);
 
-
 // Controller
 export const feedbackController = new FeedbackController(feedbackService);

@@ -1,15 +1,9 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-import RegisterForm from "@/features/auth/components/RegisterForm";
+import RegisterForm from '@/features/auth/components/RegisterForm';
 
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/shared/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/shared/ui/card';
 
 const RegisterPage = () => {
   return (

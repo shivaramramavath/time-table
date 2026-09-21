@@ -1,24 +1,20 @@
-import type { Server, Socket } from "socket.io";
+import type { Server, Socket } from 'socket.io';
 
-import { timetableDesignerService } from "#features/timetable-designer/timetable-designer.service.js";
-import { asyncSocketHandler } from "../lib/async-socket-handler.js";
-import { errors } from "#utils/errors.js";
+import { timetableDesignerService } from '#features/timetable-designer/timetable-designer.service.js';
+import { asyncSocketHandler } from '../lib/async-socket-handler.js';
+import { errors } from '#utils/errors.js';
 
-export const registerTimetableDesignerListeners = (
-  io: Server,
-  socket: Socket,
-) => {
+export const registerTimetableDesignerListeners = (io: Server, socket: Socket) => {
   socket.on(
-    "timetable-designer:get",
-    asyncSocketHandler("timetable-designer:get", async (payload) => {
+    'timetable-designer:get',
+    asyncSocketHandler('timetable-designer:get', async (payload) => {
       const { timetableId } = payload;
 
       if (!timetableId) {
-        throw errors.badRequest("Missing timetableId");
+        throw errors.badRequest('Missing timetableId');
       }
 
-      const timetableDesigner =
-        await timetableDesignerService.getOrCreate(timetableId);
+      const timetableDesigner = await timetableDesignerService.getOrCreate(timetableId);
 
       return timetableDesigner;
     }),

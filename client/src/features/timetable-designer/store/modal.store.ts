@@ -1,15 +1,15 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
 export type ModalType =
-  | "institution"
-  | "program"
-  | "academic-year"
-  | "section"
-  | "catalog"
-  | "faculties"
-  | "subjects"
-  | "rooms"
-  | "template";
+  | 'institution'
+  | 'program'
+  | 'academic-year'
+  | 'section'
+  | 'catalog'
+  | 'faculties'
+  | 'subjects'
+  | 'rooms'
+  | 'template';
 
 export type ModalData = {
   id?: string;

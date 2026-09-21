@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react";
-import { ReactFlowProvider } from "@xyflow/react";
+import { useEffect, useState } from 'react';
+import { ReactFlowProvider } from '@xyflow/react';
 
-import DesignerCanvas from "./DesignerCanvas";
-import Modal from "../modals/Modal";
+import DesignerCanvas from './DesignerCanvas';
+import Modal from '../modals/Modal';
 
-import { useDesignerStore } from "../../store/designer.store";
-import { timetableDesignerSocket } from "../../socket/timetable-designer.socket";
+import { useDesignerStore } from '../../store/designer.store';
+import { timetableDesignerSocket } from '../../socket/timetable-designer.socket';
 
-import type { Node, Edge, Faculty, Subject, Room } from "../../types";
-import { useMessageStore } from "../../store/message.store";
+import type { Node, Edge, Faculty, Subject, Room } from '../../types';
+import { useMessageStore } from '../../store/message.store';
 
 interface Props {
   timetableId: string;
@@ -24,8 +24,7 @@ interface TimetableDesignerData {
 }
 
 const TimetableDesigner = ({ timetableId }: Props) => {
-  const [timetableData, setTimetableData] =
-    useState<TimetableDesignerData | null>(null);
+  const [timetableData, setTimetableData] = useState<TimetableDesignerData | null>(null);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -41,8 +40,7 @@ const TimetableDesigner = ({ timetableId }: Props) => {
         setLoading(true);
         setError(null);
 
-        const data =
-          await timetableDesignerSocket.get<TimetableDesignerData>(timetableId);
+        const data = await timetableDesignerSocket.get<TimetableDesignerData>(timetableId);
 
         if (cancelled) return;
 
@@ -58,11 +56,7 @@ const TimetableDesigner = ({ timetableId }: Props) => {
       } catch (error) {
         if (cancelled) return;
 
-        setError(
-          error instanceof Error
-            ? error.message
-            : "Failed to load timetable designer.",
-        );
+        setError(error instanceof Error ? error.message : 'Failed to load timetable designer.');
       } finally {
         if (!cancelled) {
           setLoading(false);
@@ -81,9 +75,7 @@ const TimetableDesigner = ({ timetableId }: Props) => {
   if (loading) {
     return (
       <div className="flex h-screen w-screen items-center justify-center">
-        <p className="text-sm text-muted-foreground">
-          Loading timetable designer...
-        </p>
+        <p className="text-sm text-muted-foreground">Loading timetable designer...</p>
       </div>
     );
   }
@@ -92,9 +84,7 @@ const TimetableDesigner = ({ timetableId }: Props) => {
     return (
       <div className="flex h-screen w-screen items-center justify-center">
         <div className="text-center">
-          <p className="text-sm font-medium text-destructive">
-            Failed to load timetable
-          </p>
+          <p className="text-sm font-medium text-destructive">Failed to load timetable</p>
 
           <p className="mt-1 text-xs text-muted-foreground">{error}</p>
         </div>

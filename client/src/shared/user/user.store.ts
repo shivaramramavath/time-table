@@ -1,6 +1,6 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
-import type { User } from "./user.types";
+import type { User } from './user.types';
 
 interface UserState {
   user: User | null;

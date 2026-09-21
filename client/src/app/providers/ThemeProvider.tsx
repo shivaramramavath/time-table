@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 
-import { usePreferencesStore } from "@/shared/preferences/preferences.store";
+import { usePreferencesStore } from '@/shared/preferences/preferences.store';
 
 interface ThemeProviderProps {
   children: React.ReactNode;
@@ -12,7 +12,7 @@ const ThemeProvider = ({ children }: ThemeProviderProps) => {
   useEffect(() => {
     const root = document.documentElement;
 
-    root.classList.toggle("dark", darkMode);
+    root.classList.toggle('dark', darkMode);
   }, [darkMode]);
 
   return <>{children}</>;

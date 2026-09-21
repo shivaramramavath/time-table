@@ -1,5 +1,5 @@
-import { create } from "zustand";
-import type { Designer, Faculty, Room, Subject } from "../types";
+import { create } from 'zustand';
+import type { Designer, Faculty, Room, Subject } from '../types';
 
 type DesignerState = {
   timetableId: string;
@@ -37,8 +37,8 @@ type DesignerState = {
 };
 
 export const useDesignerStore = create<DesignerState>((set, get) => ({
-  timetableId: "",
-  designerId: "",
+  timetableId: '',
+  designerId: '',
   faculties: [],
   subjects: [],
   rooms: [],
@@ -62,44 +62,35 @@ export const useDesignerStore = create<DesignerState>((set, get) => ({
   getRooms: () => get().rooms,
   getRoom: (roomId) => get().rooms.find((r) => r.id === roomId),
   addRoom: (room) => set((state) => ({ rooms: [...state.rooms, room] })),
-  removeRoom: (roomId) =>
-    set((state) => ({ rooms: state.rooms.filter((r) => r.id !== roomId) })),
+  removeRoom: (roomId) => set((state) => ({ rooms: state.rooms.filter((r) => r.id !== roomId) })),
   updateRoom: (roomId, roomData) =>
     set((state) => ({
-      rooms: state.rooms.map((r) =>
-        r.id === roomId ? { ...r, ...roomData } : r,
-      ),
+      rooms: state.rooms.map((r) => (r.id === roomId ? { ...r, ...roomData } : r)),
     })),
 
   // SUBJECTS
   getSubjects: () => get().subjects,
   getSubject: (subjectId) => get().subjects.find((s) => s.id === subjectId),
-  addSubject: (subject) =>
-    set((state) => ({ subjects: [...state.subjects, subject] })),
+  addSubject: (subject) => set((state) => ({ subjects: [...state.subjects, subject] })),
   removeSubject: (subjectId) =>
     set((state) => ({
       subjects: state.subjects.filter((s) => s.id !== subjectId),
     })),
   updateSubject: (subjectId, subjectData) =>
     set((state) => ({
-      subjects: state.subjects.map((s) =>
-        s.id === subjectId ? { ...s, ...subjectData } : s,
-      ),
+      subjects: state.subjects.map((s) => (s.id === subjectId ? { ...s, ...subjectData } : s)),
     })),
 
   // FACULTIES
   getFaculties: () => get().faculties,
   getFaculty: (facultyId) => get().faculties.find((f) => f.id === facultyId),
-  addFaculty: (faculty) =>
-    set((state) => ({ faculties: [...state.faculties, faculty] })),
+  addFaculty: (faculty) => set((state) => ({ faculties: [...state.faculties, faculty] })),
   removeFaculty: (facultyId) =>
     set((state) => ({
       faculties: state.faculties.filter((f) => f.id !== facultyId),
     })),
   updateFaculty: (facultyId, facultyData) =>
     set((state) => ({
-      faculties: state.faculties.map((f) =>
-        f.id === facultyId ? { ...f, ...facultyData } : f,
-      ),
+      faculties: state.faculties.map((f) => (f.id === facultyId ? { ...f, ...facultyData } : f)),
     })),
 }));

@@ -1,4 +1,4 @@
-import { httpClient } from "@/shared/api/httpClient";
+import { httpClient } from '@/shared/api/httpClient';
 
 export interface CreateFeedbackPayload {
   text: string;
@@ -6,7 +6,7 @@ export interface CreateFeedbackPayload {
 }
 
 const create = async (payload: CreateFeedbackPayload) => {
-  const { data } = await httpClient.post("/feedback/create", payload);
+  const { data } = await httpClient.post('/feedback/create', payload);
 
   return data;
 };

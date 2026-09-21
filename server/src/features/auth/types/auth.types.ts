@@ -1,6 +1,6 @@
-import type { z } from "zod";
+import type { z } from 'zod';
 
-import { authSchema } from "../schemas/auth.schema.js";
+import { authSchema } from '../schemas/auth.schema.js';
 
 export type RegisterDto = z.infer<typeof authSchema.register>;
 export type LoginDto = z.infer<typeof authSchema.login>;
@@ -17,7 +17,7 @@ export type RefreshToken = string;
 export type Session = {
   userId: string;
   refreshTokenHash: string;
-  status: "active" | "expired";
+  status: 'active' | 'expired';
   createdAt: Date;
   updatedAt: Date;
 };

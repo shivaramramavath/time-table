@@ -1,7 +1,7 @@
-import type { Job } from "bullmq";
+import type { Job } from 'bullmq';
 
-import { messageRepository } from "./message.repository.js";
-import type { Message } from "./message.model.js";
+import { messageRepository } from './message.repository.js';
+import type { Message } from './message.model.js';
 
 export interface MessageJobData {
   designerId: string;

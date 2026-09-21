@@ -1,11 +1,11 @@
-import React from "react";
-import { useGoogleLogin } from "@react-oauth/google";
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import { useGoogleLogin } from '@react-oauth/google';
+import { useNavigate } from 'react-router-dom';
 
-import { Button } from "@/shared/ui/button";
-import googleLogo from "@/assets/google.png";
+import { Button } from '@/shared/ui/button';
+import googleLogo from '@/assets/google.png';
 
-import { authService } from "@/features/auth/services/auth.service";
+import { authService } from '@/features/auth/services/auth.service';
 
 const GoogleRegisterBtn = () => {
   const navigate = useNavigate();
@@ -17,14 +17,14 @@ const GoogleRegisterBtn = () => {
           googleToken: tokenResponse.access_token,
         });
 
-        navigate("/timetables");
+        navigate('/timetables');
       } catch (error) {
-        console.error("Google registration failed:", error);
+        console.error('Google registration failed:', error);
       }
     },
 
     onError: (error) => {
-      console.error("Google registration failed:", error);
+      console.error('Google registration failed:', error);
     },
   });
 

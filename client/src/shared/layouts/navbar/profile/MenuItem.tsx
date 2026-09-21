@@ -1,6 +1,6 @@
-import { Button } from "@/shared/ui/button";
-import type { LucideIcon } from "lucide-react";
-import { ChevronRight } from "lucide-react";
+import { Button } from '@/shared/ui/button';
+import type { LucideIcon } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 
 interface MenuItemProps {
   icon: LucideIcon;
@@ -10,13 +10,7 @@ interface MenuItemProps {
   onClick?: () => void;
 }
 
-const MenuItem = ({
-  icon: Icon,
-  label,
-  value,
-  badge,
-  onClick = () => {},
-}: MenuItemProps) => {
+const MenuItem = ({ icon: Icon, label, value, badge, onClick = () => {} }: MenuItemProps) => {
   return (
     <Button
       variant="ghost"

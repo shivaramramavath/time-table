@@ -1,6 +1,6 @@
-import { Room } from "./room.model.js";
-import { roomCache } from "./room.cache.js";
-import { roomRepository } from "./room.repository.js";
+import { Room } from './room.model.js';
+import { roomCache } from './room.cache.js';
+import { roomRepository } from './room.repository.js';
 
 export const roomService = {
   getById: async (designerId: string, id: string) => {
@@ -12,13 +12,10 @@ export const roomService = {
   },
 
   create: async (designerId: string, data: Room) => {
-    const existing = await roomRepository.findByRoomNumber(
-      designerId,
-      data.roomNumber,
-    );
+    const existing = await roomRepository.findByRoomNumber(designerId, data.roomNumber);
 
     if (existing) {
-      throw new Error("Room number already exists");
+      throw new Error('Room number already exists');
     }
 
     const room: Room = {
@@ -32,13 +29,10 @@ export const roomService = {
 
   update: async (designerId: string, id: string, data: Partial<Room>) => {
     if (data.roomNumber) {
-      const existing = await roomRepository.findByRoomNumber(
-        designerId,
-        data.roomNumber,
-      );
+      const existing = await roomRepository.findByRoomNumber(designerId, data.roomNumber);
 
       if (existing && existing.id !== id) {
-        throw new Error("Room number already exists");
+        throw new Error('Room number already exists');
       }
     }
 

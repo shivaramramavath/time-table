@@ -1,9 +1,9 @@
-import { ArrowRight, CalendarDays, Trash2 } from "lucide-react";
-import { formatDistanceToNow } from "date-fns";
-import { useNavigate } from "react-router-dom";
+import { ArrowRight, CalendarDays, Trash2 } from 'lucide-react';
+import { formatDistanceToNow } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 
-import type { Timetable } from "../types/timetable.types";
-import { useTimetableMutation } from "../hooks/timetable.query";
+import type { Timetable } from '../types/timetable.types';
+import { useTimetableMutation } from '../hooks/timetable.query';
 
 interface TimetableCardProps {
   timetable: Timetable;
@@ -20,10 +20,10 @@ const TimetableCard = ({ timetable }: TimetableCardProps) => {
 
   const handleOpen = () => {
     switch (timetable.stage) {
-      case "incomplete":
+      case 'incomplete':
         navigate(`/timetables/designer?timetableId=${timetable._id}`);
         break;
-      case "complete":
+      case 'complete':
         navigate(`/timetables/${timetable._id}/view`);
         break;
       default:
@@ -55,9 +55,7 @@ const TimetableCard = ({ timetable }: TimetableCardProps) => {
             <CalendarDays size={18} />
           </div>
 
-          <h2 className="truncate text-base font-semibold">
-            {timetable.title}
-          </h2>
+          <h2 className="truncate text-base font-semibold">{timetable.title}</h2>
         </div>
 
         {/* Delete */}
@@ -73,20 +71,17 @@ const TimetableCard = ({ timetable }: TimetableCardProps) => {
 
       {/* Description */}
       <p className="mt-2 text-sm text-muted-foreground">
-        {timetable.description || "No description provided."}
+        {timetable.description || 'No description provided.'}
       </p>
 
       {/* Footer */}
       <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
-        <span>{createdAgo.replace("about ", "")}</span>
+        <span>{createdAgo.replace('about ', '')}</span>
 
         <span className="flex items-center gap-1 transition-all group-hover:gap-2">
-          {timetable.stage === "incomplete" ? "Continue" : "Open"}
+          {timetable.stage === 'incomplete' ? 'Continue' : 'Open'}
 
-          <ArrowRight
-            size={14}
-            className="transition-transform group-hover:translate-x-1"
-          />
+          <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
         </span>
       </div>
     </article>

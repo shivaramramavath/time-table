@@ -1,14 +1,14 @@
-import { memo } from "react";
-import { motion } from "framer-motion";
-import { X } from "lucide-react";
+import { memo } from 'react';
+import { motion } from 'framer-motion';
+import { X } from 'lucide-react';
 
-import { Button } from "@/shared/ui/button";
+import { Button } from '@/shared/ui/button';
 
-import AIHeader from "./AIHeader";
-import AIConversation from "./AIConversation";
-import AIPrompt from "./AIPrompt";
-import AISuggestions from "./AISuggestions";
-import { useMessageListeners } from "@/features/timetable-designer/hooks/useMessageListeners";
+import AIHeader from './AIHeader';
+import AIConversation from './AIConversation';
+import AIPrompt from './AIPrompt';
+import AISuggestions from './AISuggestions';
+import { useMessageListeners } from '@/features/timetable-designer/hooks/useMessageListeners';
 
 interface Props {
   onClose: () => void;

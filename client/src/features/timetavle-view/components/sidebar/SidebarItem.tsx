@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { ChevronRight } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { useState } from 'react';
+import { ChevronRight } from 'lucide-react';
+import { NavLink } from 'react-router-dom';
 
 interface SidebarItemData {
   label: string;
@@ -15,12 +15,7 @@ interface SidebarItemProps {
   timetableId: string;
 }
 
-export const SidebarItem = ({
-  item,
-  basePath,
-  level = 0,
-  timetableId,
-}: SidebarItemProps) => {
+export const SidebarItem = ({ item, basePath, level = 0, timetableId }: SidebarItemProps) => {
   const [open, setOpen] = useState(false);
 
   const hasChildren = item.children.length > 0;
@@ -36,8 +31,8 @@ export const SidebarItem = ({
           transition-colors
           ${
             isActive
-              ? "bg-primary/10 text-primary"
-              : "text-muted-foreground hover:bg-muted hover:text-foreground"
+              ? 'bg-primary/10 text-primary'
+              : 'text-muted-foreground hover:bg-muted hover:text-foreground'
           }
           `
         }
@@ -62,9 +57,7 @@ export const SidebarItem = ({
         }}
       >
         <ChevronRight
-          className={`size-4 shrink-0 transition-transform ${
-            open ? "rotate-90" : ""
-          }`}
+          className={`size-4 shrink-0 transition-transform ${open ? 'rotate-90' : ''}`}
         />
 
         <span className="truncate">{item.label}</span>
@@ -73,12 +66,7 @@ export const SidebarItem = ({
       {open && (
         <div>
           {item.children.map((child) => (
-            <SidebarItem
-              key={child.value}
-              item={child}
-              basePath={basePath}
-              level={level + 1}
-            />
+            <SidebarItem key={child.value} item={child} basePath={basePath} level={level + 1} />
           ))}
         </div>
       )}

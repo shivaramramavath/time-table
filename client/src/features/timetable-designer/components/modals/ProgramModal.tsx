@@ -1,28 +1,23 @@
-import { useEffect, useState } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
-import { useReactFlow } from "@xyflow/react";
+import { useEffect, useState } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
+import { useReactFlow } from '@xyflow/react';
 
-import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
-import { Label } from "@/shared/ui/label";
+import { Button } from '@/shared/ui/button';
+import { Input } from '@/shared/ui/input';
+import { Label } from '@/shared/ui/label';
 
-import {
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/shared/ui/dialog";
+import { DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/shared/ui/dialog';
 
-import { useModalStore } from "../../store/modal.store";
-import { nodeService } from "../../services/node.service";
+import { useModalStore } from '../../store/modal.store';
+import { nodeService } from '../../services/node.service';
 
-import { facultyService } from "../../services/faculty.service";
-import { subjectService } from "../../services/subject.service";
-import { roomService } from "../../services/room.service";
+import { facultyService } from '../../services/faculty.service';
+import { subjectService } from '../../services/subject.service';
+import { roomService } from '../../services/room.service';
 
-import SelectResourceIds from "./common/SelectResourceIds";
+import SelectResourceIds from './common/SelectResourceIds';
 
-import type { Program } from "../../types/node.types";
+import type { Program } from '../../types/node.types';
 
 interface Props {
   data: {
@@ -30,7 +25,7 @@ interface Props {
   } | null;
 }
 
-type BreakType = "lunch" | "short-break";
+type BreakType = 'lunch' | 'short-break';
 
 type ProgramFormData = {
   label: string;
@@ -48,20 +43,13 @@ type ProgramFormData = {
   }[];
 };
 
-const WORKING_DAYS = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
+const WORKING_DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-const DEFAULT_BREAKS: ProgramFormData["breaks"] = [
+const DEFAULT_BREAKS: ProgramFormData['breaks'] = [
   {
-    type: "lunch",
-    startTime: "13:00",
-    endTime: "14:00",
+    type: 'lunch',
+    startTime: '13:00',
+    endTime: '14:00',
   },
 ];
 
@@ -70,9 +58,7 @@ const ProgramModal = ({ data }: Props) => {
 
   const { getNode, setNodes } = useReactFlow();
 
-  const program = (data?.id ? getNode(data.id)?.data : undefined) as
-    | Program["data"]
-    | undefined;
+  const program = (data?.id ? getNode(data.id)?.data : undefined) as Program['data'] | undefined;
 
   /*
    * Resource selections
@@ -100,21 +86,17 @@ const ProgramModal = ({ data }: Props) => {
     formState: { errors },
   } = useForm<ProgramFormData>({
     defaultValues: {
-      label: program?.label ?? "",
+      label: program?.label ?? '',
 
-      startTime: program?.time?.startTime ?? "09:00",
+      startTime: program?.time?.startTime ?? '09:00',
 
-      endTime: program?.time?.endTime ?? "17:00",
+      endTime: program?.time?.endTime ?? '17:00',
 
       numberOfPeriods: program?.time?.numberOfPeriods ?? 7,
 
-      workingDays: program?.time?.workingDays?.length
-        ? program.time.workingDays
-        : WORKING_DAYS,
+      workingDays: program?.time?.workingDays?.length ? program.time.workingDays : WORKING_DAYS,
 
-      breaks: program?.time?.breaks?.length
-        ? program.time.breaks
-        : DEFAULT_BREAKS,
+      breaks: program?.time?.breaks?.length ? program.time.breaks : DEFAULT_BREAKS,
     },
   });
 
@@ -123,7 +105,7 @@ const ProgramModal = ({ data }: Props) => {
    */
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "breaks",
+    name: 'breaks',
   });
 
   /*
@@ -133,21 +115,17 @@ const ProgramModal = ({ data }: Props) => {
     if (!program) return;
 
     reset({
-      label: program.label ?? "",
+      label: program.label ?? '',
 
-      startTime: program.time?.startTime ?? "09:00",
+      startTime: program.time?.startTime ?? '09:00',
 
-      endTime: program.time?.endTime ?? "17:00",
+      endTime: program.time?.endTime ?? '17:00',
 
       numberOfPeriods: program.time?.numberOfPeriods ?? 7,
 
-      workingDays: program.time?.workingDays?.length
-        ? program.time.workingDays
-        : WORKING_DAYS,
+      workingDays: program.time?.workingDays?.length ? program.time.workingDays : WORKING_DAYS,
 
-      breaks: program.time?.breaks?.length
-        ? program.time.breaks
-        : DEFAULT_BREAKS,
+      breaks: program.time?.breaks?.length ? program.time.breaks : DEFAULT_BREAKS,
     });
 
     setSelectedFacultyIds(program.resources?.facultyIds ?? []);
@@ -211,11 +189,9 @@ const ProgramModal = ({ data }: Props) => {
     <form onSubmit={handleSubmit(handleUpdate)}>
       {/* Header */}
       <DialogHeader>
-        <DialogTitle>{program?.label || "Program"}</DialogTitle>
+        <DialogTitle>{program?.label || 'Program'}</DialogTitle>
 
-        <DialogDescription>
-          Configure program timetable settings.
-        </DialogDescription>
+        <DialogDescription>Configure program timetable settings.</DialogDescription>
       </DialogHeader>
 
       <div className="space-y-4 py-4 overflow-y-auto max-h-[70vh] scrollbar">
@@ -229,16 +205,12 @@ const ProgramModal = ({ data }: Props) => {
           <Input
             id="program-label"
             placeholder="e.g. Computer Science & Engineering"
-            {...register("label", {
-              required: "Program name is required",
+            {...register('label', {
+              required: 'Program name is required',
             })}
           />
 
-          {errors.label && (
-            <p className="text-[10px] text-destructive">
-              {errors.label.message}
-            </p>
-          )}
+          {errors.label && <p className="text-[10px] text-destructive">{errors.label.message}</p>}
         </div>
 
         {/* ========================================================= */}
@@ -251,49 +223,39 @@ const ProgramModal = ({ data }: Props) => {
           <div className="grid grid-cols-2 gap-3">
             {/* Start */}
             <div className="space-y-1">
-              <Label
-                htmlFor="program-start-time"
-                className="text-[10px] text-muted-foreground"
-              >
+              <Label htmlFor="program-start-time" className="text-[10px] text-muted-foreground">
                 Start Time
               </Label>
 
               <Input
                 id="program-start-time"
                 type="time"
-                {...register("startTime", {
-                  required: "Start time is required",
+                {...register('startTime', {
+                  required: 'Start time is required',
                 })}
               />
 
               {errors.startTime && (
-                <p className="text-[10px] text-destructive">
-                  {errors.startTime.message}
-                </p>
+                <p className="text-[10px] text-destructive">{errors.startTime.message}</p>
               )}
             </div>
 
             {/* End */}
             <div className="space-y-1">
-              <Label
-                htmlFor="program-end-time"
-                className="text-[10px] text-muted-foreground"
-              >
+              <Label htmlFor="program-end-time" className="text-[10px] text-muted-foreground">
                 End Time
               </Label>
 
               <Input
                 id="program-end-time"
                 type="time"
-                {...register("endTime", {
-                  required: "End time is required",
+                {...register('endTime', {
+                  required: 'End time is required',
                 })}
               />
 
               {errors.endTime && (
-                <p className="text-[10px] text-destructive">
-                  {errors.endTime.message}
-                </p>
+                <p className="text-[10px] text-destructive">{errors.endTime.message}</p>
               )}
             </div>
           </div>
@@ -310,22 +272,20 @@ const ProgramModal = ({ data }: Props) => {
             id="program-number-of-periods"
             type="number"
             min={1}
-            {...register("numberOfPeriods", {
+            {...register('numberOfPeriods', {
               valueAsNumber: true,
 
-              required: "Number of periods is required",
+              required: 'Number of periods is required',
 
               min: {
                 value: 1,
-                message: "At least one period is required",
+                message: 'At least one period is required',
               },
             })}
           />
 
           {errors.numberOfPeriods && (
-            <p className="text-[10px] text-destructive">
-              {errors.numberOfPeriods.message}
-            </p>
+            <p className="text-[10px] text-destructive">{errors.numberOfPeriods.message}</p>
           )}
         </div>
 
@@ -345,8 +305,8 @@ const ProgramModal = ({ data }: Props) => {
                 <input
                   type="checkbox"
                   value={day}
-                  {...register("workingDays", {
-                    required: "Select at least one working day",
+                  {...register('workingDays', {
+                    required: 'Select at least one working day',
                   })}
                   className="size-3.5"
                 />
@@ -357,9 +317,7 @@ const ProgramModal = ({ data }: Props) => {
           </div>
 
           {errors.workingDays && (
-            <p className="text-[10px] text-destructive">
-              {errors.workingDays.message}
-            </p>
+            <p className="text-[10px] text-destructive">{errors.workingDays.message}</p>
           )}
         </div>
 
@@ -400,9 +358,9 @@ const ProgramModal = ({ data }: Props) => {
               <>
                 {subject.code}
 
-                {" • "}
+                {' • '}
 
-                {subject.labDetails?.isLab ? "Laboratory" : "Theory"}
+                {subject.labDetails?.isLab ? 'Laboratory' : 'Theory'}
               </>
             )}
           />
@@ -439,9 +397,7 @@ const ProgramModal = ({ data }: Props) => {
             <div>
               <Label>Breaks</Label>
 
-              <p className="text-[10px] text-muted-foreground">
-                Configure lunch and short breaks.
-              </p>
+              <p className="text-[10px] text-muted-foreground">Configure lunch and short breaks.</p>
             </div>
 
             <Button
@@ -450,9 +406,9 @@ const ProgramModal = ({ data }: Props) => {
               size="sm"
               onClick={() =>
                 append({
-                  type: "short-break",
-                  startTime: "11:00",
-                  endTime: "11:15",
+                  type: 'short-break',
+                  startTime: '11:00',
+                  endTime: '11:15',
                 })
               }
             >
@@ -466,9 +422,7 @@ const ProgramModal = ({ data }: Props) => {
                 <div className="grid grid-cols-[1fr_1fr_1fr_auto] items-end gap-2">
                   {/* Type */}
                   <div className="space-y-1">
-                    <Label className="text-[10px] text-muted-foreground">
-                      Type
-                    </Label>
+                    <Label className="text-[10px] text-muted-foreground">Type</Label>
 
                     <select
                       {...register(`breaks.${index}.type`)}
@@ -482,28 +436,24 @@ const ProgramModal = ({ data }: Props) => {
 
                   {/* Start */}
                   <div className="space-y-1">
-                    <Label className="text-[10px] text-muted-foreground">
-                      Start
-                    </Label>
+                    <Label className="text-[10px] text-muted-foreground">Start</Label>
 
                     <Input
                       type="time"
                       {...register(`breaks.${index}.startTime`, {
-                        required: "Start time is required",
+                        required: 'Start time is required',
                       })}
                     />
                   </div>
 
                   {/* End */}
                   <div className="space-y-1">
-                    <Label className="text-[10px] text-muted-foreground">
-                      End
-                    </Label>
+                    <Label className="text-[10px] text-muted-foreground">End</Label>
 
                     <Input
                       type="time"
                       {...register(`breaks.${index}.endTime`, {
-                        required: "End time is required",
+                        required: 'End time is required',
                       })}
                     />
                   </div>
@@ -524,9 +474,7 @@ const ProgramModal = ({ data }: Props) => {
 
             {fields.length === 0 && (
               <div className="rounded-md border border-dashed py-5 text-center">
-                <p className="text-xs text-muted-foreground">
-                  No breaks configured
-                </p>
+                <p className="text-xs text-muted-foreground">No breaks configured</p>
               </div>
             )}
           </div>

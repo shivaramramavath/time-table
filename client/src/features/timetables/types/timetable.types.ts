@@ -3,7 +3,7 @@ export type Timetable = {
   title: string;
   description: string;
   userId: string;
-  stage: "incomplete" | "complete";
+  stage: 'incomplete' | 'complete';
   blueprintId: string;
   createdAt: string;
   updatedAt: string;

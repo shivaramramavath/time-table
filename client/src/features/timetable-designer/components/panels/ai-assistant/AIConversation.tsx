@@ -1,14 +1,14 @@
-import { memo, useCallback, useEffect, useRef } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { memo, useCallback, useEffect, useRef } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 
-import AIMessage from "./AIMessage";
-import AITopRef from "./AITopRef";
+import AIMessage from './AIMessage';
+import AITopRef from './AITopRef';
 
-import { messageService } from "@/features/timetable-designer/services/message.service";
-import { useMessageStore } from "@/features/timetable-designer/store/message.store";
-import type { Message } from "@/features/timetable-designer/types";
-import EmptyConversation from "./EmptyConversation";
-import StreamingMessage from "./StreamingMessage";
+import { messageService } from '@/features/timetable-designer/services/message.service';
+import { useMessageStore } from '@/features/timetable-designer/store/message.store';
+import type { Message } from '@/features/timetable-designer/types';
+import EmptyConversation from './EmptyConversation';
+import StreamingMessage from './StreamingMessage';
 
 const AIConversation = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -76,7 +76,7 @@ const AIConversation = () => {
 
     const lastMessage = messages[messages.length - 1];
 
-    if (lastMessage?.role === "user") {
+    if (lastMessage?.role === 'user') {
       requestAnimationFrame(() => {
         const container = scrollRef.current;
 
@@ -116,7 +116,7 @@ const AIConversation = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
             >
-              <AIMessage role={message.role} content={message.content}  />
+              <AIMessage role={message.role} content={message.content} />
             </motion.div>
           ))}
 

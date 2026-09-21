@@ -1,9 +1,9 @@
-import type { Faculty } from "../types";
-import { useDesignerStore } from "../store/designer.store";
-import { facultySocket } from "../socket/faculty.socket";
+import type { Faculty } from '../types';
+import { useDesignerStore } from '../store/designer.store';
+import { facultySocket } from '../socket/faculty.socket';
 
 export const facultyService = {
-  getAll: (query = ""): Faculty[] => {
+  getAll: (query = ''): Faculty[] => {
     const faculties = useDesignerStore.getState().getFaculties();
 
     const search = query.trim().toLowerCase();
@@ -35,11 +35,7 @@ export const facultyService = {
   update: async (facultyId: string, data: Partial<Faculty>) => {
     useDesignerStore.getState().updateFaculty(facultyId, data);
 
-    facultySocket.update(
-      useDesignerStore.getState().designerId,
-      facultyId,
-      data,
-    );
+    facultySocket.update(useDesignerStore.getState().designerId, facultyId, data);
 
     return data;
   },

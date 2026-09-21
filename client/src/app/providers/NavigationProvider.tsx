@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { navigationService } from "@/shared/services/navigation.service";
+import { navigationService } from '@/shared/services/navigation.service';
 
 type props = {
   children: React.ReactNode;

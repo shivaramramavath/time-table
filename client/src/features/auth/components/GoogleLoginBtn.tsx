@@ -1,10 +1,10 @@
-import React from "react";
-import { useGoogleLogin } from "@react-oauth/google";
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import { useGoogleLogin } from '@react-oauth/google';
+import { useNavigate } from 'react-router-dom';
 
-import { Button } from "@/shared/ui/button";
+import { Button } from '@/shared/ui/button';
 
-import { authService } from "@/features/auth/services/auth.service";
+import { authService } from '@/features/auth/services/auth.service';
 
 const GoogleLoginBtn = () => {
   const navigate = useNavigate();
@@ -16,14 +16,14 @@ const GoogleLoginBtn = () => {
           googleToken: tokenResponse.access_token,
         });
 
-        navigate("/timetables");
+        navigate('/timetables');
       } catch (error) {
-        console.error("Google login failed:", error);
+        console.error('Google login failed:', error);
       }
     },
 
     onError: (error) => {
-      console.error("Google login failed:", error);
+      console.error('Google login failed:', error);
     },
   });
 

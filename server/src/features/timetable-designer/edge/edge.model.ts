@@ -1,4 +1,4 @@
-import { Schema, model, type InferSchemaType } from "mongoose";
+import { Schema, model, type InferSchemaType } from 'mongoose';
 
 const edgeSchema = new Schema(
   {
@@ -65,4 +65,4 @@ edgeSchema.index({
 
 export type Edge = InferSchemaType<typeof edgeSchema>;
 
-export const EdgeModel = model("Edge", edgeSchema);
+export const EdgeModel = model('Edge', edgeSchema);

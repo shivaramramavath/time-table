@@ -1,12 +1,12 @@
-import { memo, useMemo, useState } from "react";
-import { Plus } from "lucide-react";
+import { memo, useMemo, useState } from 'react';
+import { Plus } from 'lucide-react';
 
-import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
+import { Button } from '@/shared/ui/button';
+import { Input } from '@/shared/ui/input';
 
-import { useDesignerStore } from "../../../store/designer.store";
+import { useDesignerStore } from '../../../store/designer.store';
 
-import FacultyCard from "./FacultyCard";
+import FacultyCard from './FacultyCard';
 
 interface Props {
   onAdd: () => void;
@@ -14,7 +14,7 @@ interface Props {
 }
 
 const FacultyList = ({ onAdd, onEdit }: Props) => {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   const faculties = useDesignerStore((state) => state.faculties);
 
@@ -39,18 +39,14 @@ const FacultyList = ({ onAdd, onEdit }: Props) => {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-semibold tracking-tight">
-                Faculties
-              </h3>
+              <h3 className="text-sm font-semibold tracking-tight">Faculties</h3>
 
               <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
                 {faculties.length}
               </span>
             </div>
 
-            <p className="mt-0.5 text-[11px] text-muted-foreground">
-              Manage faculty members
-            </p>
+            <p className="mt-0.5 text-[11px] text-muted-foreground">Manage faculty members</p>
           </div>
 
           <Button size="sm" onClick={onAdd} className="h-8 gap-1.5 rounded-md">
@@ -77,22 +73,17 @@ const FacultyList = ({ onAdd, onEdit }: Props) => {
         {!filteredFaculties.length && (
           <div className="flex min-h-48 flex-col items-center justify-center px-6 text-center">
             <p className="text-xs font-medium">
-              {search ? "No faculties found" : "No faculties yet"}
+              {search ? 'No faculties found' : 'No faculties yet'}
             </p>
 
             <p className="mt-1 max-w-52 text-[10px] leading-relaxed text-muted-foreground">
               {search
-                ? "Try searching with another faculty name or department."
-                : "Add faculty members to assign them to subjects."}
+                ? 'Try searching with another faculty name or department.'
+                : 'Add faculty members to assign them to subjects.'}
             </p>
 
             {!search && (
-              <Button
-                size="sm"
-                variant="outline"
-                className="mt-3 h-7 text-[11px]"
-                onClick={onAdd}
-              >
+              <Button size="sm" variant="outline" className="mt-3 h-7 text-[11px]" onClick={onAdd}>
                 <Plus size={13} />
                 Add Faculty
               </Button>

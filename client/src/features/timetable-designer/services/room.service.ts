@@ -1,9 +1,9 @@
-import type { Room } from "../types";
-import { useDesignerStore } from "../store/designer.store";
-import { roomSocket } from "../socket/room.socket";
+import type { Room } from '../types';
+import { useDesignerStore } from '../store/designer.store';
+import { roomSocket } from '../socket/room.socket';
 
 export const roomService = {
-  getAll: (query = ""): Room[] => {
+  getAll: (query = ''): Room[] => {
     const rooms = useDesignerStore.getState().getRooms();
 
     const search = query.trim().toLowerCase();
@@ -14,8 +14,7 @@ export const roomService = {
 
     return rooms.filter(
       (room) =>
-        room.name.toLowerCase().includes(search) ||
-        room.roomNumber.toLowerCase().includes(search),
+        room.name.toLowerCase().includes(search) || room.roomNumber.toLowerCase().includes(search),
     );
   },
 

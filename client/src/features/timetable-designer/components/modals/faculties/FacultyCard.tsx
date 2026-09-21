@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo } from 'react';
 import {
   BookOpen,
   Building2,
@@ -7,11 +7,11 @@ import {
   Mail,
   MoreHorizontal,
   UserRound,
-} from "lucide-react";
+} from 'lucide-react';
 
-import { Button } from "@/shared/ui/button";
+import { Button } from '@/shared/ui/button';
 
-import type { Faculty } from "../../../types";
+import type { Faculty } from '../../../types';
 
 interface Props {
   faculty: Faculty;

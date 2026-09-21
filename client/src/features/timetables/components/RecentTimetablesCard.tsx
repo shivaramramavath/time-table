@@ -1,8 +1,8 @@
-import { ArrowRight, CalendarDays } from "lucide-react";
-import { formatDistanceToNow } from "date-fns";
-import { useNavigate } from "react-router-dom";
+import { ArrowRight, CalendarDays } from 'lucide-react';
+import { formatDistanceToNow } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 
-import type { Timetable } from "../types/timetable.types";
+import type { Timetable } from '../types/timetable.types';
 
 interface RecentTimetableCardProps {
   timetable: Timetable;
@@ -16,7 +16,7 @@ const RecentTimetableCard = ({ timetable }: RecentTimetableCardProps) => {
   });
 
   const handleOpen = () => {
-    if (timetable.stage === "incomplete") {
+    if (timetable.stage === 'incomplete') {
       navigate(`/timetables/designer?timetableId=${timetable._id}`);
       return;
     }
@@ -39,22 +39,19 @@ const RecentTimetableCard = ({ timetable }: RecentTimetableCardProps) => {
           <h2 className="truncate text-sm font-semibold">{timetable.title}</h2>
 
           <p className="mt-1 line-clamp-1 min-h-8 text-xs leading-4 text-muted-foreground">
-            {timetable.description || "No description"}
+            {timetable.description || 'No description'}
           </p>
         </div>
       </div>
 
       {/* Footer */}
       <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
-        <span>{updatedAgo.replace("about ", "")}</span>
+        <span>{updatedAgo.replace('about ', '')}</span>
 
         <span className="flex items-center gap-1 transition-all group-hover:gap-2">
-          {timetable.stage === "incomplete" ? "Continue" : "Open"}
+          {timetable.stage === 'incomplete' ? 'Continue' : 'Open'}
 
-          <ArrowRight
-            size={13}
-            className="transition-transform group-hover:translate-x-1"
-          />
+          <ArrowRight size={13} className="transition-transform group-hover:translate-x-1" />
         </span>
       </div>
     </article>

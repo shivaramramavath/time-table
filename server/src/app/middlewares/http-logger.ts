@@ -1,15 +1,15 @@
-import type { Request, Response } from "express";
+import type { Request, Response } from 'express';
 
-import morgan from "morgan";
-import logger from "#configs/logger.js";
+import morgan from 'morgan';
+import logger from '#configs/logger.js';
 
 export const httpLogger = morgan((tokens: any, req: Request, res: Response) => {
   const status = Number(tokens.status(req, res));
-  const responseTime = Number(tokens["response-time"](req, res));
-  const method = tokens.method(req, res) || "";
+  const responseTime = Number(tokens['response-time'](req, res));
+  const method = tokens.method(req, res) || '';
   const route = req.route?.path || req.path;
-  const url = tokens.url(req, res) || "";
-  const contentLength = tokens.res(req, res, "content-length") || "0";
+  const url = tokens.url(req, res) || '';
+  const contentLength = tokens.res(req, res, 'content-length') || '0';
 
   const logMessage = `${method} ${url} ${status} ${responseTime} ms - ${contentLength}`;
 
@@ -21,7 +21,7 @@ export const httpLogger = morgan((tokens: any, req: Request, res: Response) => {
     responseTime,
     contentLength,
     ip: req.ip,
-    userAgent: req.headers["user-agent"],
+    userAgent: req.headers['user-agent'],
   };
 
   if (status >= 500) {

@@ -1,14 +1,14 @@
-import { LogOut } from "lucide-react";
+import { LogOut } from 'lucide-react';
 
-import { Button } from "@/shared/ui/button";
-import { authService } from "@/features/auth/services/auth.service";
+import { Button } from '@/shared/ui/button';
+import { authService } from '@/features/auth/services/auth.service';
 
 const LogoutButton = () => {
   const handleLogout = async () => {
     try {
       await authService.logout();
     } catch (error) {
-      console.error("Logout failed:", error);
+      console.error('Logout failed:', error);
     }
   };
 
@@ -22,9 +22,7 @@ const LogoutButton = () => {
 
       <span className="flex-1 text-left text-sm">Log out</span>
 
-      <span className="text-xs opacity-50 transition-opacity group-hover:opacity-100">
-        →
-      </span>
+      <span className="text-xs opacity-50 transition-opacity group-hover:opacity-100">→</span>
     </Button>
   );
 };

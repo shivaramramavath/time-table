@@ -1,4 +1,4 @@
-import { Schema, model, type InferSchemaType } from "mongoose";
+import { Schema, model, type InferSchemaType } from 'mongoose';
 
 const facultySchema = new Schema(
   {
@@ -74,4 +74,4 @@ facultySchema.index({
 
 export type Faculty = InferSchemaType<typeof facultySchema>;
 
-export const FacultyModel = model("Faculty", facultySchema);
+export const FacultyModel = model('Faculty', facultySchema);

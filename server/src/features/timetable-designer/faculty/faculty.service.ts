@@ -1,5 +1,5 @@
-import { Faculty } from "./faculty.model.js";
-import { facultyCache } from "./faculty.cache.js";
+import { Faculty } from './faculty.model.js';
+import { facultyCache } from './faculty.cache.js';
 
 export const facultyService = {
   getById: async (designerId: string, id: string) => {

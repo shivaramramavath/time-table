@@ -1,18 +1,12 @@
-import React from "react";
-import { useForm, type SubmitHandler } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import React from 'react';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
-import { Input } from "@/shared/ui/input";
-import { Button } from "@/shared/ui/button";
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-  FieldSet,
-} from "@/shared/ui/field";
+import { Input } from '@/shared/ui/input';
+import { Button } from '@/shared/ui/button';
+import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from '@/shared/ui/field';
 
-import { authService } from "@/features/auth/services/auth.service";
+import { authService } from '@/features/auth/services/auth.service';
 
 interface ForgotPasswordFormData {
   email: string;
@@ -30,9 +24,9 @@ const ForgotPasswordForm = () => {
   const onSubmit: SubmitHandler<ForgotPasswordFormData> = async (data) => {
     try {
       await authService.forgotPassword(data);
-      navigate("/login");
+      navigate('/login');
     } catch (error) {
-      console.error("ForgotPassword failed:", error);
+      console.error('ForgotPassword failed:', error);
     }
   };
 
@@ -49,11 +43,11 @@ const ForgotPasswordForm = () => {
               type="email"
               placeholder="abc@example.com"
               autoComplete="email"
-              {...register("email", {
-                required: "Email is required",
+              {...register('email', {
+                required: 'Email is required',
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: "Invalid email address",
+                  message: 'Invalid email address',
                 },
               })}
             />
@@ -64,7 +58,7 @@ const ForgotPasswordForm = () => {
       </FieldSet>
 
       <Button type="submit" className="mt-5 w-full" disabled={isSubmitting}>
-        {isSubmitting ? "Logging in..." : "ForgotPassword"}
+        {isSubmitting ? 'Logging in...' : 'ForgotPassword'}
       </Button>
     </form>
   );

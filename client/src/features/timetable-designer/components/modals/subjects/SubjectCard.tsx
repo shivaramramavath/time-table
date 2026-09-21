@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo } from 'react';
 import {
   BookOpen,
   Clock3,
@@ -8,12 +8,12 @@ import {
   MoreHorizontal,
   ChevronRight,
   Building2,
-} from "lucide-react";
+} from 'lucide-react';
 
-import { Button } from "@/shared/ui/button";
+import { Button } from '@/shared/ui/button';
 
-import type { Subject } from "../../../types";
-import { subjectService } from "../../../services/subject.service";
+import type { Subject } from '../../../types';
+import { subjectService } from '../../../services/subject.service';
 
 interface Props {
   subject: Subject;
@@ -36,16 +36,10 @@ const SubjectCard = ({ subject, onEdit }: Props) => {
     >
       <div
         className={`flex size-9 shrink-0 items-center justify-center rounded-lg ${
-          isLab
-            ? "bg-violet-500/10 text-violet-500"
-            : "bg-blue-500/10 text-blue-500"
+          isLab ? 'bg-violet-500/10 text-violet-500' : 'bg-blue-500/10 text-blue-500'
         }`}
       >
-        {isLab ? (
-          <FlaskConical className="size-4" />
-        ) : (
-          <BookOpen className="size-4" />
-        )}
+        {isLab ? <FlaskConical className="size-4" /> : <BookOpen className="size-4" />}
       </div>
 
       <div className="min-w-0 flex-1">
@@ -54,19 +48,15 @@ const SubjectCard = ({ subject, onEdit }: Props) => {
 
           <span
             className={`shrink-0 rounded-full px-2 py-0.5 text-[9px] font-medium ${
-              isLab
-                ? "bg-violet-500/10 text-violet-500"
-                : "bg-blue-500/10 text-blue-500"
+              isLab ? 'bg-violet-500/10 text-violet-500' : 'bg-blue-500/10 text-blue-500'
             }`}
           >
-            {isLab ? "LAB" : "THEORY"}
+            {isLab ? 'LAB' : 'THEORY'}
           </span>
         </div>
 
         <div className="mt-1.5 flex items-center gap-3 text-[10px] text-muted-foreground">
-          <span className="font-medium text-foreground/70">
-            {subject.code || "No code"}
-          </span>
+          <span className="font-medium text-foreground/70">{subject.code || 'No code'}</span>
 
           <span className="flex items-center gap-1">
             <Clock3 className="size-3" />
@@ -80,9 +70,7 @@ const SubjectCard = ({ subject, onEdit }: Props) => {
         </div>
 
         <div className="mt-1.5 flex items-center gap-3 text-[9px] text-muted-foreground">
-          {subject.periodsPerDay !== undefined && (
-            <span>{subject.periodsPerDay}/day</span>
-          )}
+          {subject.periodsPerDay !== undefined && <span>{subject.periodsPerDay}/day</span>}
 
           {subject.consecutivePeriods !== undefined && (
             <span>{subject.consecutivePeriods} consecutive</span>
@@ -91,11 +79,11 @@ const SubjectCard = ({ subject, onEdit }: Props) => {
           {roomType && (
             <span className="flex items-center gap-1">
               <Building2 className="size-3" />
-              {roomType === "seminar-hall"
-                ? "Seminar Hall"
-                : roomType === "laboratory"
-                  ? "Laboratory"
-                  : "Classroom"}
+              {roomType === 'seminar-hall'
+                ? 'Seminar Hall'
+                : roomType === 'laboratory'
+                  ? 'Laboratory'
+                  : 'Classroom'}
             </span>
           )}
 

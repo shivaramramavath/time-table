@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
-import debounce from "lodash.debounce";
+import { useEffect, useState } from 'react';
+import debounce from 'lodash.debounce';
 
-import SearchBar from "./SearchBar";
-import TimetableList from "./TimetableList";
+import SearchBar from './SearchBar';
+import TimetableList from './TimetableList';
 
 const Timetables = () => {
-  const [query, setQuery] = useState("");
-  const [debouncedQuery, setDebouncedQuery] = useState("");
+  const [query, setQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
 
   useEffect(() => {
     const handler = debounce((value: string) => {

@@ -1,16 +1,16 @@
-import type { Faculty } from "../types";
-import { emitAsync } from "@/shared/socket/emit-async";
+import type { Faculty } from '../types';
+import { emitAsync } from '@/shared/socket/emit-async';
 
 export const facultySocket = {
-  create: (designerId: string, faculty: Omit<Faculty, "id">) => {
-    emitAsync("faculty:create", {
+  create: (designerId: string, faculty: Omit<Faculty, 'id'>) => {
+    emitAsync('faculty:create', {
       designerId,
       faculty,
     });
   },
 
   update: (designerId: string, facultyId: string, data: Partial<Faculty>) => {
-    emitAsync("faculty:update", {
+    emitAsync('faculty:update', {
       designerId,
       facultyId,
       data,
@@ -18,7 +18,7 @@ export const facultySocket = {
   },
 
   delete: (designerId: string, facultyId: string) => {
-    emitAsync("faculty:delete", {
+    emitAsync('faculty:delete', {
       designerId,
       facultyId,
     });
