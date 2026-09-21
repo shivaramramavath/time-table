@@ -1,59 +1,45 @@
-import type { Request, Response } from "express";
+import type { Request, Response } from 'express';
 
-import { templateService } from "./template.service.js";
+import { TemplateService } from './template.service.js';
 
-export const templateController = {
-  // -----------------------------------------
-  // GET BY ID
-  // -----------------------------------------
+export class TemplateController {
+  constructor(private readonly templateService: TemplateService) {}
 
-  async get(req: Request, res: Response) {
+  get = async (req: Request, res: Response) => {
     const { id } = req.params;
 
-    const template = await templateService.get(id, req.userId);
+    const template = await this.templateService.get(id, req.userId);
 
     res.status(200).json({
       success: true,
       data: template,
     });
-  },
+  };
 
-  // -----------------------------------------
-  // GET ALL - USER TEMPLATES
-  // -----------------------------------------
-
-  async getAll(req: Request, res: Response) {
-    const templates = await templateService.getAll(req.userId);
+  getAll = async (req: Request, res: Response) => {
+    const templates = await this.templateService.getAll(req.userId);
 
     res.status(200).json({
       success: true,
       data: templates,
     });
-  },
+  };
 
-  // -----------------------------------------
-  // GET PRIVATE
-  // -----------------------------------------
-
-  async getPrivate(req: Request, res: Response) {
-    const templates = await templateService.getPrivate(req.userId);
+  getPrivate = async (req: Request, res: Response) => {
+    const templates = await this.templateService.getPrivate(req.userId);
 
     res.status(200).json({
       success: true,
       data: templates,
     });
-  },
+  };
 
-  // -----------------------------------------
-  // GET PUBLIC
-  // -----------------------------------------
-
-  async getPublic(req: Request, res: Response) {
-    const templates = await templateService.getPublic();
+  getPublic = async (req: Request, res: Response) => {
+    const templates = await this.templateService.getPublic();
 
     res.status(200).json({
       success: true,
       data: templates,
     });
-  },
-};
+  };
+}

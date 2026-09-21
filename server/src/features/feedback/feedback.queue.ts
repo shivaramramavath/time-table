@@ -1,22 +1,15 @@
-import { Queue } from "bullmq";
-import redis from "#configs/redis.js";
+import type { Queue } from 'bullmq';
 
-const queue = new Queue("feedback", {
-  connection: redis,
+export interface CreateFeedbackJob {
+  userId: string;
+  message: string;
+  rating: number;
+}
 
-  defaultJobOptions: {
-    attempts: 3,
+export class FeedbackQueue {
+  constructor(private readonly queue: Queue<CreateFeedbackJob>) {}
 
-    backoff: {
-      type: "exponential",
-      delay: 1000,
-    },
-
-    removeOnComplete: 100,
-    removeOnFail: 500,
-  },
-});
-
-export const feedbackQueue = {
-  create: async (data: any) => queue.add("create", data),
-};
+  async create(data: CreateFeedbackJob) {
+    return this.queue.add('create', data);
+  }
+}

@@ -1,8 +1,14 @@
-import { Feedback } from "./feedback.model.js";
-import { feedbackQueue } from "./feedback.queue.js";
+import type { Feedback } from './feedback.model.js';
+import type { FeedbackQueue } from './feedback.queue.js';
 
-export const feedbackService = {
-  create: async ({ userId, message, rating }: Feedback) => {
-    await feedbackQueue.create({ userId, message, rating });
-  },
-};
+export class FeedbackService {
+  constructor(private readonly feedbackQueue: FeedbackQueue) {}
+
+  async create({ userId, message, rating }: Feedback) {
+    await this.feedbackQueue.create({
+      userId,
+      message,
+      rating,
+    });
+  }
+}

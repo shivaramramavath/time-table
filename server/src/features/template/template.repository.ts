@@ -1,89 +1,60 @@
-import { type Types } from "mongoose";
+import type { Model, Types } from 'mongoose';
 
-import { TemplateModel, type Template } from "./template.model.js";
+import type { Template } from './template.model.js';
 
-export const templateRepository = {
-  // -----------------------------------------
-  // GET BY ID
-  // -----------------------------------------
+export class TemplateRepository {
+  constructor(private readonly templateModel: Model<Template>) {}
 
   async get(id: string) {
-    return TemplateModel.findById(id).lean<Template | null>();
-  },
-
-  // -----------------------------------------
-  // GET ALL - USER TEMPLATES
-  // -----------------------------------------
+    return this.templateModel.findById(id).lean<Template | null>();
+  }
 
   async getAll(userId: Types.ObjectId | string) {
-    return TemplateModel.find({
-      userId,
-    })
-      .sort({ createdAt: -1 })
-      .lean<Template[]>();
-  },
-
-  // -----------------------------------------
-  // GET PRIVATE
-  // -----------------------------------------
+    return this.templateModel.find({ userId }).sort({ createdAt: -1 }).lean<Template[]>();
+  }
 
   async getPrivate(userId: Types.ObjectId | string) {
-    return TemplateModel.find({
-      userId,
-      visibility: "private",
-    })
+    return this.templateModel
+      .find({
+        userId,
+        visibility: 'private',
+      })
       .sort({ createdAt: -1 })
       .lean<Template[]>();
-  },
-
-  // -----------------------------------------
-  // GET PUBLIC
-  // -----------------------------------------
+  }
 
   async getPublic() {
-    return TemplateModel.find({
-      visibility: "public",
-    })
+    return this.templateModel
+      .find({
+        visibility: 'public',
+      })
       .sort({ createdAt: -1 })
       .lean<Template[]>();
-  },
+  }
 
-  async create({
-    userId,
-    name,
-    description,
-    visibility = "private",
-  }: Partial<Template>) {
-    return TemplateModel.create({
+  async create({ userId, name, description, visibility = 'private' }: Partial<Template>) {
+    return this.templateModel.create({
       userId,
       name,
       description,
       visibility,
     });
-  },
-
-  // -----------------------------------------
-  // UPDATE
-  // -----------------------------------------
+  }
 
   async update(id: string, data: Partial<Template>) {
-    return TemplateModel.findByIdAndUpdate(
-      id,
-      {
-        $set: data,
-      },
-      {
-        new: true,
-        runValidators: true,
-      },
-    ).lean<Template | null>();
-  },
-
-  // -----------------------------------------
-  // DELETE
-  // -----------------------------------------
+    return this.templateModel
+      .findByIdAndUpdate(
+        id,
+        { $set: data },
+        {
+          new: true,
+          runValidators: true,
+        },
+      )
+      .lean<Template | null>();
+  }
 
   async remove(id: string) {
-    return TemplateModel.findByIdAndDelete(id).lean<Template | null>();
-  },
-};
+    return this.templateModel.findByIdAndDelete(id).lean<Template | null>();
+  }
+}

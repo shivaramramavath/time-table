@@ -1,16 +1,16 @@
-import http from "http";
+import http from 'http';
 
-import { env } from "#configs/env.js";
-import logger from "#configs/logger.js";
-import { database } from "#configs/database.js";
-import { checkRedis } from "#configs/redis.js";
+import { env } from '#configs/env.js';
+import logger from '#configs/logger.js';
+import { checkRedis } from '#configs/redis.js';
 
-import app from "./app.js";
-import { worker } from "./workers/index.js";
+import app from './app.js';
+import { worker } from './workers/index.js';
 
-import { registerShutdownHandlers } from "#utils/graceful-shutdown.js";
-import { createSocketServer } from "#configs/socket.js";
-import { registerSocket } from "./sockets/index.js";
+import { registerShutdownHandlers } from '#utils/graceful-shutdown.js';
+import { createSocketServer } from '#configs/socket.js';
+import { registerSocket } from './sockets/index.js';
+import { database } from './infrastructure/database/mongodb.js';
 
 const server = http.createServer(app);
 
@@ -18,7 +18,7 @@ export const io = createSocketServer(server);
 
 const bootstrap = async () => {
   try {
-    logger.info("Starting server...");
+    logger.info('Starting server...');
 
     await checkRedis();
 
@@ -33,7 +33,7 @@ const bootstrap = async () => {
     registerSocket(io);
     registerShutdownHandlers(server);
   } catch (error) {
-    logger.error("Server startup failed", error);
+    logger.error('Server startup failed', error);
 
     process.exit(1);
   }

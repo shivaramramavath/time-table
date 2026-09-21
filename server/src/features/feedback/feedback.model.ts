@@ -1,4 +1,4 @@
-import { Schema, model, type InferSchemaType } from "mongoose";
+import { Schema, model, type InferSchemaType } from 'mongoose';
 
 const feedbackSchema = new Schema(
   {
@@ -34,4 +34,4 @@ feedbackSchema.index({
 
 export type Feedback = InferSchemaType<typeof feedbackSchema>;
 
-export const FeedbackModel = model("Feedback", feedbackSchema);
+export const FeedbackModel = model('Feedback', feedbackSchema);

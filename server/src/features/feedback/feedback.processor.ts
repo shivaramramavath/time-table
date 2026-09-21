@@ -1,11 +1,19 @@
-import { queueService } from '#features/auth/auth.dependency.js';
 import type { Feedback } from './feedback.model.js';
+import type { FeedbackRepository } from './feedback.repository.js';
+import type { QueueService } from '#services/queue.service.js';
 
-import { feedbackRepository } from './feedback.repository.js';
+export class FeedbackProcessor {
+  constructor(
+    private readonly feedbackRepository: FeedbackRepository,
+    private readonly queueService: QueueService,
+  ) {}
 
-export const feedbackProcessor = {
-  create: async (feedback: Feedback) => {
-    await feedbackRepository.create(feedback);
-    await queueService.feedback(feedback);
-  },
-};
+  async create(feedback: Feedback) {
+    await this.feedbackRepository.create(feedback);
+
+    await this.queueService.feedback({
+      rating: feedback.rating,
+      message: feedback.message,
+    });
+  }
+}

@@ -1,13 +1,22 @@
-import type { Request, Response } from "express";
-import expressAsyncHandler from "express-async-handler";
-import { feedbackService } from "./feedback.service.js";
+import type { Request, Response } from 'express';
+import expressAsyncHandler from 'express-async-handler';
 
-export const feedbackController = {
-  create: expressAsyncHandler(async (req: Request, res: Response) => {
+import type { FeedbackService } from './feedback.service.js';
+
+export class FeedbackController {
+  constructor(private readonly feedbackService: FeedbackService) {}
+
+  create = expressAsyncHandler(async (req: Request, res: Response) => {
     const { message, rating } = req.body;
 
-    await feedbackService.create({ userId: req.userId, message, rating });
+    await this.feedbackService.create({
+      userId: req.userId,
+      message,
+      rating,
+    });
 
-    res.status(201).json({ success: true });
-  }),
-};
+    res.status(201).json({
+      success: true,
+    });
+  });
+}

@@ -1,16 +1,13 @@
-import type { Feedback } from "./feedback.model.js";
-import { FeedbackModel } from "./feedback.model.js";
+import type { Feedback, FeedbackModel } from './feedback.model.js';
 
-export const feedbackRepository = {
-  create: async (feedback: Feedback) => {
-    return FeedbackModel.create(feedback);
-  },
+export class FeedbackRepository {
+  constructor(private readonly feedbackModel: FeedbackModel) {}
 
-  findByUserId: async (userId: string) => {
-    return FeedbackModel.find({
-      userId,
-    })
-      .sort({ createdAt: -1 })
-      .lean();
-  },
-};
+  async create(feedback: Feedback) {
+    return this.feedbackModel.create(feedback);
+  }
+
+  async findByUserId(userId: string) {
+    return this.feedbackModel.find({ userId }).sort({ createdAt: -1 }).lean();
+  }
+}
