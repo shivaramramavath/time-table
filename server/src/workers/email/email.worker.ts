@@ -1,23 +1,28 @@
-import { Worker, Job, UnrecoverableError } from "bullmq";
+import { Job, UnrecoverableError, Worker } from 'bullmq';
 
-import redis from "#configs/redis.js";
-import logger from "#configs/logger.js";
+import redis from '#configs/redis.js';
+import logger from '#configs/logger.js';
+import { EmailProcessor } from './email.processor.js';
+import { brevoService } from '../../infrastructure/email/brevo.js';
+import { env } from '#configs/env.js';
 
-import { emailProcessor } from "./email.processor.js";
+const emailProcessor = new EmailProcessor(brevoService, env.ORIGIN_URL, env.EMAIL_ID);
 
 const emailJob = async (job: Job) => {
   const { email } = job.data;
 
   try {
     switch (job.name) {
-      case "forgot-password":
-        emailProcessor.forgotPassword(email, job.data);
+      case 'forgot-password':
+        await emailProcessor.forgotPassword(job.data);
         break;
-      case "register-greeting":
-        emailProcessor.registerGreeting(email, job.data);
+
+      case 'register-greeting':
+        await emailProcessor.registerGreeting(job.data);
         break;
-      case "feedback":
-        emailProcessor.feedback(job.data);
+
+      case 'feedback':
+        await emailProcessor.feedback(job.data);
         break;
 
       default:
@@ -26,7 +31,7 @@ const emailJob = async (job: Job) => {
   } catch (error: any) {
     const status = error?.response?.status;
 
-    logger.error("Email job failed", {
+    logger.error('Email job failed', {
       jobId: job.id,
       jobName: job.name,
       email,
@@ -45,12 +50,14 @@ const emailJob = async (job: Job) => {
 };
 
 export const emailWorker = () =>
-  new Worker("email", emailJob, {
+  new Worker('email', emailJob, {
     connection: redis,
     concurrency: 10,
+
     removeOnComplete: {
       age: 0,
     },
+
     removeOnFail: {
       count: 100,
     },

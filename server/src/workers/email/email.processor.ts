@@ -1,32 +1,67 @@
-import { sendEmail } from "#services/send-email.js";
-import loadHtml from "#utils/loadHtml.js";
-import { env } from "#configs/env.js";
+import loadHtml from '#utils/loadHtml.js';
+import { BrevoService } from '../../infrastructure/email/brevo.js';
 
-type ForgotPassword = {
+export interface ForgotPasswordJob {
+  email: string;
   token: string;
-};
+}
 
-type RegisterGreeting = {
+export interface RegisterGreetingJob {
+  email: string;
   userName: string;
-};
+}
 
-export const emailProcessor = {
-  forgotPassword: async (email: string, { token }: ForgotPassword) => {
-    const resetUrl = `${env.ORIGIN_URL}/reset-password?token=${token}`;
-    const html = await loadHtml("email.forgot-password.ejs", { resetUrl });
-    return await sendEmail(email, "Password Reset", html);
-  },
+export interface FeedbackJob {
+  email: string;
+  message: string;
+}
 
-  registerGreeting: async (email: string, { userName }: RegisterGreeting) => {
-    const html = await loadHtml("email.register-greeting.ejs", {
+export class EmailProcessor {
+  constructor(
+    private readonly brevoService: BrevoService,
+    private readonly originUrl: string,
+    private readonly senderEmail: string,
+  ) {}
+
+  async forgotPassword(data: ForgotPasswordJob) {
+    const { email, token } = data;
+
+    const resetUrl = `${this.originUrl}/reset-password?token=${encodeURIComponent(token)}`;
+
+    const html = await loadHtml('email.forgot-password.ejs', {
+      resetUrl,
+    });
+
+    return this.brevoService.sendEmail({
+      toEmail: email,
+      subject: 'Password Reset',
+      htmlContent: html,
+    });
+  }
+
+  async registerGreeting(data: RegisterGreetingJob) {
+    const { email, userName } = data;
+
+    const html = await loadHtml('email.register-greeting.ejs', {
       userName,
       email,
     });
-    return await sendEmail(email, "Welcome to Time Table", html);
-  },
 
-  feedback: async (feedback: any) => {
-    const html = await loadHtml("email.feedback.ejs", feedback);
-    return await sendEmail(env.EMAIL_ID, "Feedback", html);
-  },
-};
+    return this.brevoService.sendEmail({
+      toEmail: email,
+      toName: userName,
+      subject: 'Welcome to Time Table',
+      htmlContent: html,
+    });
+  }
+
+  async feedback(data: FeedbackJob) {
+    const html = await loadHtml('email.feedback.ejs', data);
+
+    return this.brevoService.sendEmail({
+      toEmail: this.senderEmail,
+      subject: 'Feedback',
+      htmlContent: html,
+    });
+  }
+}

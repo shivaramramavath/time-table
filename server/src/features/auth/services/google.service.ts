@@ -1,14 +1,22 @@
-import { OAuth2Client } from "google-auth-library";
+import { OAuth2Client } from 'google-auth-library';
 
-const googleClient = new OAuth2Client();
+export interface GoogleTokenInfo {
+  googleId: string;
+  email?: string;
+  scopes?: string;
+  expiresAt?: number;
+  audience?: string;
+}
 
-export const googleService = {
-  async verifyAccessToken(accessToken: string) {
+export class GoogleService {
+  constructor(private readonly googleClient: OAuth2Client) {}
+
+  async verifyAccessToken(accessToken: string): Promise<GoogleTokenInfo> {
     if (!accessToken) {
-      throw new Error("Google access token is required");
+      throw new Error('Google access token is required');
     }
 
-    const tokenInfo = await googleClient.getTokenInfo(accessToken);
+    const tokenInfo = await this.googleClient.getTokenInfo(accessToken);
 
     return {
       googleId: tokenInfo.sub,
@@ -17,5 +25,5 @@ export const googleService = {
       expiresAt: tokenInfo.expiry_date,
       audience: tokenInfo.aud,
     };
-  },
-};
+  }
+}

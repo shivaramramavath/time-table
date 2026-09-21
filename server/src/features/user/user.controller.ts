@@ -1,15 +1,17 @@
-import { Request, Response } from "express";
-import expressAsyncHandler from "express-async-handler";
+import { Request, Response } from 'express';
+import expressAsyncHandler from 'express-async-handler';
 
-import { userService } from "./user.service.js";
+import { UserService } from './user.service.js';
 
-export const userController = {
-  me: expressAsyncHandler(async (req: Request, res: Response) => {
-    const user = await userService.findById(req.userId as string);
+export class UserController {
+  constructor(private readonly userService: UserService) {}
+
+  me = expressAsyncHandler(async (req: Request, res: Response) => {
+    const user = await this.userService.findById(req.userId as string);
 
     res.status(200).json({
       success: true,
-      user: user,
+      user,
     });
-  }),
-};
+  });
+}

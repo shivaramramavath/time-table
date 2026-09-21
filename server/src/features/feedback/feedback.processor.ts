@@ -1,7 +1,7 @@
-import { queueService } from "#services/queue.service.js";
-import type { Feedback } from "./feedback.model.js";
+import { queueService } from '#features/auth/auth.dependency.js';
+import type { Feedback } from './feedback.model.js';
 
-import { feedbackRepository } from "./feedback.repository.js";
+import { feedbackRepository } from './feedback.repository.js';
 
 export const feedbackProcessor = {
   create: async (feedback: Feedback) => {

@@ -1,16 +1,18 @@
-import bcrypt from "bcryptjs";
-import crypto from "crypto";
+import bcrypt from 'bcryptjs';
+import crypto from 'node:crypto';
 
-const SALT_ROUNDS = 10;
+export class PasswordService {
+  private readonly saltRounds = 10;
 
-export const passwordService = {
-  hash: (password: string): Promise<string> => {
-    return bcrypt.hash(password, SALT_ROUNDS);
-  },
+  async hash(password: string): Promise<string> {
+    return bcrypt.hash(password, this.saltRounds);
+  }
 
-  compare: (password: string, hashedPassword: string): Promise<boolean> => {
+  async compare(password: string, hashedPassword: string): Promise<boolean> {
     return bcrypt.compare(password, hashedPassword);
-  },
+  }
 
-  generatePassword: () => crypto.randomBytes(8).toString().toString(),
-};
+  generatePassword(length = 16): string {
+    return crypto.randomBytes(length).toString('base64url').slice(0, length);
+  }
+}

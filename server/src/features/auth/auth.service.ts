@@ -1,45 +1,63 @@
-import { userService } from "#features/user/user.service.js";
-import ApiError from "#utils/ApiError.js";
-import { passwordService } from "./services/password.service.js";
-import { queueService } from "../../shared/services/queue.service.js";
-import { sessionService } from "./services/session.service.js";
-import { tokenService } from "./services/token.service.js";
-import { LoginDto, RegisterDto } from "./types/auth.types.js";
+import ApiError from '#utils/ApiError.js';
 
-export const authService = {
-  register: async (data: RegisterDto) => {
-    let user;
+import { UserService } from '#features/user/user.service.js';
 
-    data.password = await passwordService.hash(data.password);
-    user = await userService.create(data);
+import { PasswordService } from './services/password.service.js';
+import { SessionService } from './services/session.service.js';
+import { TokenService } from './services/token.service.js';
+import { QueueService } from '#services/queue.service.js';
 
-    const { refreshToken } = await sessionService.create(user._id);
-    const accessToken = tokenService.generateAccessToken(user._id);
+import type { LoginDto, RegisterDto } from './types/auth.types.js';
 
-    queueService.registerGreeting({
+export class AuthService {
+  constructor(
+    private readonly userService: UserService,
+    private readonly passwordService: PasswordService,
+    private readonly sessionService: SessionService,
+    private readonly tokenService: TokenService,
+    private readonly queueService: QueueService,
+  ) {}
+
+  async register(data: RegisterDto) {
+    const hashedPassword = await this.passwordService.hash(data.password);
+
+    const user = await this.userService.create({
+      ...data,
+      password: hashedPassword,
+    });
+
+    const { refreshToken } = await this.sessionService.create(user._id);
+
+    const accessToken = this.tokenService.generateAccessToken(user._id);
+
+    this.queueService.registerGreeting({
       email: user.email,
       userName: user.userName,
     });
+
     return {
-      user: user,
+      user,
       refreshToken,
       accessToken,
     };
-  },
+  }
 
-  login: async (data: LoginDto) => {
-    const user = await userService.findByEmailWithPassword(data.email);
+  async login(data: LoginDto) {
+    const user = await this.userService.findByEmailWithPassword(data.email);
 
-    const isPasswordValid = await passwordService.compare(
-      data.password,
-      user.password,
-    );
+    if (!user) {
+      throw new ApiError(401, 'Invalid email or password');
+    }
+
+    const isPasswordValid = await this.passwordService.compare(data.password, user.password);
 
     if (!isPasswordValid) {
-      throw new ApiError(401, "Invalid password");
+      throw new ApiError(401, 'Invalid email or password');
     }
-    const accessToken = tokenService.generateAccessToken(user._id);
-    const { refreshToken } = await sessionService.create(user._id);
+
+    const accessToken = this.tokenService.generateAccessToken(user._id);
+
+    const { refreshToken } = await this.sessionService.create(user._id);
 
     return {
       user: {
@@ -49,13 +67,18 @@ export const authService = {
       accessToken,
       refreshToken,
     };
-  },
+  }
 
-  googleLogin: async (data: any) => {
-    const user = await userService.findByEmail(data.email);
+  async googleLogin(email: string) {
+    const user = await this.userService.findByEmail(email);
 
-    const accessToken = tokenService.generateAccessToken(user._id);
-    const { refreshToken } = await sessionService.create(user._id);
+    if (!user) {
+      throw new ApiError(404, 'User not found');
+    }
+
+    const accessToken = this.tokenService.generateAccessToken(user._id);
+
+    const { refreshToken } = await this.sessionService.create(user._id);
 
     return {
       user: {
@@ -65,64 +88,75 @@ export const authService = {
       accessToken,
       refreshToken,
     };
-  },
+  }
 
-  googleRegister: async (data: any) => {
-    let user;
+  async googleRegister(data: RegisterDto) {
+    const generatedPassword = this.passwordService.generatePassword();
 
-    data.password = await passwordService.hash(
-      passwordService.generatePassword(),
-    );
-    user = await userService.create(data);
+    const hashedPassword = await this.passwordService.hash(generatedPassword);
 
-    const { refreshToken } = await sessionService.create(user._id);
-    const accessToken = tokenService.generateAccessToken(user._id);
+    const user = await this.userService.create({
+      ...data,
+      password: hashedPassword,
+    });
 
-    queueService.registerGreeting({
+    const { refreshToken } = await this.sessionService.create(user._id);
+
+    const accessToken = this.tokenService.generateAccessToken(user._id);
+
+    this.queueService.registerGreeting({
       email: user.email,
       userName: user.userName,
     });
+
     return {
-      user: user,
+      user,
       refreshToken,
       accessToken,
     };
-  },
+  }
 
-  me: async (userId: string) => {
-    const user = await userService.findById(userId);
-    return user;
-  },
+  async me(userId: string) {
+    return this.userService.findById(userId);
+  }
 
-  logout: async (refreshToken: string) => {
-    await sessionService.revoke(refreshToken);
-  },
+  async logout(refreshToken: string) {
+    await this.sessionService.revoke(refreshToken);
+  }
 
-  forgotPassword: async (email: string) => {
-    const user = await userService.findByEmail(email);
+  async forgotPassword(email: string) {
+    const user = await this.userService.findByEmail(email);
 
-    const token = await sessionService.generateForgotPasswordToken(user._id);
+    if (!user) {
+      // Don't reveal whether an account exists.
+      return;
+    }
 
-    queueService.forgotPassword({ email, token });
-  },
+    const token = await this.sessionService.generateForgotPasswordToken(user._id);
 
-  resetPassword: async (token: string, password: string) => {
-    const userId = await sessionService.getUserIdFromPasswordResetToken(token);
+    this.queueService.forgotPassword({
+      email: user.email,
+      token,
+    });
+  }
 
-    password = await passwordService.hash(password);
+  async resetPassword(token: string, password: string) {
+    const userId = await this.sessionService.getUserIdFromPasswordResetToken(token);
 
-    await userService.updatePassword(userId, password);
-  },
+    const hashedPassword = await this.passwordService.hash(password);
 
-  refresh: async (refreshToken: string) => {
+    await this.userService.updatePassword(userId, hashedPassword);
+  }
+
+  async refresh(refreshToken: string) {
     const { userId, refreshToken: newRefreshToken } =
-      await sessionService.rotate(refreshToken);
+      await this.sessionService.rotate(refreshToken);
 
-    const accessToken = tokenService.generateAccessToken(userId);
+    const accessToken = this.tokenService.generateAccessToken(userId);
 
     return {
       accessToken,
       refreshToken: newRefreshToken,
     };
-  },
-};
+  }
+}

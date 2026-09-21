@@ -1,23 +1,25 @@
-import { userRepository } from "./user.reposistory.js";
+import { UserRepository } from './user.repository.js';
 
-export const userService = {
-  create: async (user: any) => {
-    return await userRepository.create(user);
-  },
+export class UserService {
+  constructor(private readonly userRepository: UserRepository) {}
 
-  findByEmail: async (email: string) => {
-    return await userRepository.findByEmail(email);
-  },
+  async create(user: any) {
+    return await this.userRepository.create(user);
+  }
 
-  findByEmailWithPassword: async (email: string) => {
-    return await userRepository.findByEmailWithPassword(email);
-  },
+  async findByEmail(email: string) {
+    return await this.userRepository.findByEmail(email);
+  }
 
-  findById: async (id: string) => {
-    return await userRepository.findById(id);
-  },
+  async findByEmailWithPassword(email: string) {
+    return await this.userRepository.findByEmailWithPassword(email);
+  }
 
-  updatePassword: async (userId: string, password: string) => {
-    return await userRepository.updatePassword(userId, password);
-  },
-};
+  async findById(id: string) {
+    return await this.userRepository.findById(id);
+  }
+
+  async updatePassword(userId: string, password: string) {
+    return await this.userRepository.updatePassword(userId, password);
+  }
+}

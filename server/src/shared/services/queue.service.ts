@@ -1,22 +1,32 @@
-import redis from "#configs/redis.js";
-import { Queue } from "bullmq";
+import type { Queue } from 'bullmq';
 
-const emailQueue = new Queue("email", {
-  connection: redis,
-  defaultJobOptions: {
-    attempts: 3,
-    backoff: {
-      type: "exponential",
-      delay: 3000,
-    },
-    removeOnComplete: true,
-    removeOnFail: false,
-    priority: 2,
-  },
-});
+export interface ForgotPasswordJob {
+  email: string;
+  token: string;
+}
 
-export const queueService = {
-  forgotPassword: (data: any) => emailQueue.add("forgot-password", data),
-  registerGreeting: (data: any) => emailQueue.add("register-greeting", data),
-  feedback: (data: any) => emailQueue.add("feedback", data),
-};
+export interface RegisterGreetingJob {
+  email: string;
+  userName: string;
+}
+
+export interface FeedbackJob {
+  email: string;
+  message: string;
+}
+
+export class QueueService {
+  constructor(private readonly emailQueue: Queue) {}
+
+  async forgotPassword(data: ForgotPasswordJob) {
+    return this.emailQueue.add('forgot-password', data);
+  }
+
+  async registerGreeting(data: RegisterGreetingJob) {
+    return this.emailQueue.add('register-greeting', data);
+  }
+
+  async feedback(data: FeedbackJob) {
+    return this.emailQueue.add('feedback', data);
+  }
+}

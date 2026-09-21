@@ -1,138 +1,146 @@
-import type { Request, Response } from "express";
-import expressAsyncHandler from "express-async-handler";
+import type { Request, Response } from 'express';
+import expressAsyncHandler from 'express-async-handler';
 
-import { authService } from "./auth.service.js";
-import { cookieService } from "./services/cookie.service.js";
-import { googleService } from "./services/google.service.js";
-import { errors } from "#utils/errors.js";
+import { AuthService } from './auth.service.js';
+import { CookieService } from './services/cookie.service.js';
+import { GoogleService } from './services/google.service.js';
+import { errors } from '#utils/errors.js';
 
-export const authController = {
-  register: expressAsyncHandler(async (req: Request, res: Response) => {
-    const { user, accessToken, refreshToken } = await authService.register(
-      req.body,
-    );
+export class AuthController {
+  constructor(
+    private readonly authService: AuthService,
+    private readonly cookieService: CookieService,
+    private readonly googleService: GoogleService,
+  ) {}
 
-    cookieService.set(res, "refreshToken", refreshToken);
+  register = expressAsyncHandler(async (req: Request, res: Response) => {
+    const { user, accessToken, refreshToken } = await this.authService.register(req.body);
+
+    this.cookieService.set(res, 'refreshToken', refreshToken);
 
     res.status(201).json({
       success: true,
       user,
       token: accessToken,
     });
-  }),
+  });
 
-  login: expressAsyncHandler(async (req: Request, res: Response) => {
-    const { user, accessToken, refreshToken } = await authService.login(
-      req.body,
-    );
+  login = expressAsyncHandler(async (req: Request, res: Response) => {
+    const { user, accessToken, refreshToken } = await this.authService.login(req.body);
 
-    cookieService.set(res, "refreshToken", refreshToken);
+    this.cookieService.set(res, 'refreshToken', refreshToken);
 
     res.status(200).json({
       success: true,
       user,
       token: accessToken,
     });
-  }),
+  });
 
-  googleLogin: expressAsyncHandler(async (req: Request, res: Response) => {
+  googleLogin = expressAsyncHandler(async (req: Request, res: Response) => {
     const { googleToken } = req.body;
 
     if (!googleToken) {
-      throw errors.badRequest("Google token is required");
+      throw errors.badRequest('Google token is required');
     }
 
-    const googleUser = await googleService.verifyAccessToken(googleToken);
+    const googleUser = await this.googleService.verifyAccessToken(googleToken);
 
-    const { user, accessToken, refreshToken } = await authService.googleLogin({
+    if (!googleUser.email) {
+      throw errors.badRequest('Google account email not available');
+    }
+
+    const { user, accessToken, refreshToken } = await this.authService.googleLogin(
+      googleUser.email,
+    );
+
+    this.cookieService.set(res, 'refreshToken', refreshToken);
+
+    res.status(200).json({
+      success: true,
+      user,
+      token: accessToken,
+    });
+  });
+
+  googleRegister = expressAsyncHandler(async (req: Request, res: Response) => {
+    const { googleToken } = req.body;
+
+    if (!googleToken) {
+      throw errors.badRequest('Google token is required');
+    }
+
+    const googleUser = await this.googleService.verifyAccessToken(googleToken);
+
+    if (!googleUser.email) {
+      throw errors.badRequest('Google account email not available');
+    }
+
+    const { user, accessToken, refreshToken } = await this.authService.googleRegister({
       email: googleUser.email,
     });
 
-    cookieService.set(res, "refreshToken", refreshToken);
+    this.cookieService.set(res, 'refreshToken', refreshToken);
 
-    res.status(200).json({
+    res.status(201).json({
       success: true,
       user,
       token: accessToken,
     });
-  }),
+  });
 
-  googleRegister: expressAsyncHandler(async (req: Request, res: Response) => {
-    const { googleToken } = req.body;
+  logout = expressAsyncHandler(async (req: Request, res: Response) => {
+    const refreshToken = this.cookieService.get(req, 'refreshToken');
 
-    if (!googleToken) {
-      throw errors.badRequest("Google token is required");
-    }
+    await this.authService.logout(refreshToken);
 
-    const googleUser = await googleService.verifyAccessToken(googleToken);
-
-    const { user, accessToken, refreshToken } =
-      await authService.googleRegister({
-        email: googleUser.email,
-      });
-
-    cookieService.set(res, "refreshToken", refreshToken);
-
-    res.status(200).json({
-      success: true,
-      user,
-      token: accessToken,
-    });
-  }),
-
-  logout: expressAsyncHandler(async (req: Request, res: Response) => {
-    const refreshToken = cookieService.get(req, "refreshToken");
-
-    await authService.logout(refreshToken);
-
-    cookieService.remove(res, "refreshToken");
+    this.cookieService.remove(res, 'refreshToken');
 
     res.status(200).json({
       success: true,
     });
-  }),
+  });
 
-  refresh: expressAsyncHandler(async (req: Request, res: Response) => {
-    const rToken = cookieService.get(req, "refreshToken");
+  refresh = expressAsyncHandler(async (req: Request, res: Response) => {
+    const refreshToken = this.cookieService.get(req, 'refreshToken');
 
-    const { accessToken, refreshToken } = await authService.refresh(
-      rToken as string,
-    );
+    const { accessToken, refreshToken: newRefreshToken } =
+      await this.authService.refresh(refreshToken);
 
-    cookieService.set(res, "refreshToken", refreshToken);
+    this.cookieService.set(res, 'refreshToken', newRefreshToken);
 
     res.status(200).json({
       success: true,
       token: accessToken,
     });
-  }),
+  });
 
-  me: expressAsyncHandler(async (req: Request, res: Response) => {
-    const user = await authService.me(req.userId);
+  me = expressAsyncHandler(async (req: Request, res: Response) => {
+    const user = await this.authService.me(req.userId);
 
     res.status(200).json({
       success: true,
       user,
     });
-  }),
+  });
 
-  forgotPassword: expressAsyncHandler(async (req: Request, res: Response) => {
-    await authService.forgotPassword(req.body.email);
+  forgotPassword = expressAsyncHandler(async (req: Request, res: Response) => {
+    await this.authService.forgotPassword(req.body.email);
 
     res.status(200).json({
       success: true,
-      message: "Check your email",
+      message: 'Check your email',
     });
-  }),
+  });
 
-  resetPassword: expressAsyncHandler(async (req: Request, res: Response) => {
+  resetPassword = expressAsyncHandler(async (req: Request, res: Response) => {
     const { password, token } = req.body;
 
-    await authService.resetPassword(token as string, password);
+    await this.authService.resetPassword(token, password);
 
     res.status(200).json({
       success: true,
-      message: "Password reset successfully",
+      message: 'Password reset successfully',
     });
-  }),
-};
+  });
+}

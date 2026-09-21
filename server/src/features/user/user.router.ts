@@ -1,6 +1,7 @@
-import express from "express";
-import { userController } from "./user.controller.js";
+import { Router } from 'express';
 
-export const userRouter = express.Router();
+import { userController } from './user.dependency.js';
 
-userRouter.get("/me", userController.me);
+export const userRouter = Router();
+
+userRouter.get('/me', userController.me);

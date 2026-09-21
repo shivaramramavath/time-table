@@ -1,51 +1,54 @@
-import type { Request, Response, CookieOptions } from "express";
-import ApiError from "#utils/ApiError.js";
-import { env } from "#configs/env.js";
-import { REFRESH_TOKEN_EXPIRES_IN } from "#configs/constants.js";
+import type { Request, Response, CookieOptions } from 'express';
 
-const baseCookieOptions: CookieOptions = {
-  httpOnly: true,
-  sameSite: "lax",
-  secure: env.NODE_ENV === "production",
-  maxAge: REFRESH_TOKEN_EXPIRES_IN,
-};
+import ApiError from '#utils/ApiError.js';
+import { env } from '#configs/env.js';
+import { REFRESH_TOKEN_EXPIRES_IN } from '#configs/constants.js';
 
-const set = (
-  res: Response,
-  name: string,
-  value: string,
-  options: CookieOptions = {},
-) => {
-  if (!name) throw new ApiError(400, "Cookie name is required");
-  if (!res || typeof res.cookie !== "function") {
-    throw new ApiError(500, "Invalid response object");
+export class CookieService {
+  private readonly baseCookieOptions: CookieOptions = {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: env.NODE_ENV === 'production',
+    maxAge: REFRESH_TOKEN_EXPIRES_IN,
+  };
+
+  set(res: Response, name: string, value: string, options: CookieOptions = {}) {
+    if (!name) {
+      throw new ApiError(400, 'Cookie name is required');
+    }
+
+    if (!res || typeof res.cookie !== 'function') {
+      throw new ApiError(500, 'Invalid response object');
+    }
+
+    return res.cookie(name, value, {
+      ...this.baseCookieOptions,
+      ...options,
+    });
   }
 
-  return res.cookie(name, value, { ...baseCookieOptions, ...options });
-};
+  remove(res: Response, name: string, options: CookieOptions = {}) {
+    if (!name) {
+      throw new ApiError(400, 'Cookie name is required');
+    }
 
-const remove = (res: Response, name: string, options: CookieOptions = {}) => {
-  if (!name) throw new ApiError(400, "Cookie name is required");
-
-  return res.clearCookie(name, { ...baseCookieOptions, ...options });
-};
-
-const get = (req: Request, name: string) => {
-  if (!req.cookies) {
-    throw new ApiError(400, "Cookies middleware not enabled");
+    return res.clearCookie(name, {
+      ...this.baseCookieOptions,
+      ...options,
+    });
   }
 
-  const cookie = req.cookies[name];
+  get(req: Request, name: string) {
+    if (!req.cookies) {
+      throw new ApiError(400, 'Cookies middleware not enabled');
+    }
 
-  if (!cookie) {
-    throw new ApiError(404, `Cookie not found: ${name}`);
+    const cookie = req.cookies[name];
+
+    if (!cookie) {
+      throw new ApiError(404, `Cookie not found: ${name}`);
+    }
+
+    return cookie;
   }
-
-  return cookie;
-};
-
-export const cookieService = {
-  set,
-  remove,
-  get,
-};
+}
