@@ -4,9 +4,11 @@ import morgan from 'morgan';
 import logger from '#configs/logger.js';
 
 export const httpLogger = morgan((tokens: any, req: Request, res: Response) => {
+  const method = tokens.method(req, res) || '';
+  if (method === 'OPTIONS') return null;
+
   const status = Number(tokens.status(req, res));
   const responseTime = Number(tokens['response-time'](req, res));
-  const method = tokens.method(req, res) || '';
   const route = req.route?.path || req.path;
   const url = tokens.url(req, res) || '';
   const contentLength = tokens.res(req, res, 'content-length') || '0';

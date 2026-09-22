@@ -1,6 +1,6 @@
 import type { Request, Response, CookieOptions } from 'express';
+import createHttpError from 'http-errors';
 
-import ApiError from '#utils/ApiError.js';
 import { env } from '#configs/env.js';
 import { REFRESH_TOKEN_EXPIRES_IN } from '#configs/constants.js';
 
@@ -14,11 +14,11 @@ export class CookieService {
 
   set(res: Response, name: string, value: string, options: CookieOptions = {}) {
     if (!name) {
-      throw new ApiError(400, 'Cookie name is required');
+      throw createHttpError.BadRequest('Cookie name is required');
     }
 
     if (!res || typeof res.cookie !== 'function') {
-      throw new ApiError(500, 'Invalid response object');
+      throw createHttpError.InternalServerError('Invalid response object');
     }
 
     return res.cookie(name, value, {
@@ -29,7 +29,7 @@ export class CookieService {
 
   remove(res: Response, name: string, options: CookieOptions = {}) {
     if (!name) {
-      throw new ApiError(400, 'Cookie name is required');
+      throw createHttpError.BadRequest('Cookie name is required');
     }
 
     return res.clearCookie(name, {
@@ -40,13 +40,13 @@ export class CookieService {
 
   get(req: Request, name: string) {
     if (!req.cookies) {
-      throw new ApiError(400, 'Cookies middleware not enabled');
+      throw createHttpError.InternalServerError('Cookies middleware not enabled');
     }
 
     const cookie = req.cookies[name];
 
     if (!cookie) {
-      throw new ApiError(404, `Cookie not found: ${name}`);
+      throw createHttpError.NotFound(`Cookie not found: ${name}`);
     }
 
     return cookie;

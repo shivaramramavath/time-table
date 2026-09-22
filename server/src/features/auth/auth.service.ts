@@ -18,11 +18,12 @@ export class AuthService {
   ) {}
 
   async register(data: RegisterDto) {
-    const hashedPassword = await this.passwordService.hash(data.password);
+    const hashedPassword =await this.passwordService.hash(data.password);
 
     const user = await this.userService.create({
       ...data,
       password: hashedPassword,
+      isEmailVerified: false,
     });
 
     const { refreshToken } = await this.sessionService.create(user._id.toString());
@@ -48,7 +49,7 @@ export class AuthService {
       throw createHttpError.NotFound('User not found');
     }
 
-    const isPasswordValid = await this.passwordService.compare(data.password, user.password);
+    const isPasswordValid =await this.passwordService.compare(data.password, user.password);
 
     if (!isPasswordValid) {
       throw createHttpError.Unauthorized('Invalid password');
@@ -90,9 +91,9 @@ export class AuthService {
   }
 
   async googleRegister(data: RegisterDto) {
-    const generatedPassword = this.passwordService.generatePassword();
+    const generatedPassword =await this.passwordService.generatePassword();
 
-    const hashedPassword = await this.passwordService.hash(generatedPassword);
+    const hashedPassword = this.passwordService.hash(generatedPassword);
 
     const user = await this.userService.create({
       ...data,
@@ -141,7 +142,7 @@ export class AuthService {
   async resetPassword(token: string, password: string) {
     const userId = await this.sessionService.getUserIdFromPasswordResetToken(token);
 
-    const hashedPassword = await this.passwordService.hash(password);
+    const hashedPassword =await this.passwordService.hash(password);
 
     await this.userService.updatePassword(userId, hashedPassword);
   }
