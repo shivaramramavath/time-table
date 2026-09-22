@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { FileStack, MoreVertical, Save, Settings } from 'lucide-react';
+import { MoreVertical, Save } from 'lucide-react';
 
 import { Button } from '@/shared/ui/button';
 
@@ -7,7 +7,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu';
 
@@ -18,7 +17,7 @@ const TemplatePanel = () => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger>
         <Button
           variant="outline"
           size="icon"

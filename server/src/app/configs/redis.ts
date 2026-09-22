@@ -1,8 +1,8 @@
-import Redis from 'ioredis';
+import { Redis } from 'ioredis';
 import { env } from '#configs/env.js';
 import logger from '#configs/logger.js';
 
-export const redis = new (Redis as any)({
+export const redis = new Redis({
   host: env.REDIS_HOST,
   port: env.REDIS_PORT,
   maxRetriesPerRequest: null,

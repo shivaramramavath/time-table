@@ -7,7 +7,6 @@ import { Button } from '@/shared/ui/button';
 import AIHeader from './AIHeader';
 import AIConversation from './AIConversation';
 import AIPrompt from './AIPrompt';
-import AISuggestions from './AISuggestions';
 import { useMessageListeners } from '@/features/timetable-designer/hooks/useMessageListeners';
 
 interface Props {

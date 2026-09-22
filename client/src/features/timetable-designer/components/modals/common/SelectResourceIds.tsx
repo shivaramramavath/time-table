@@ -65,7 +65,7 @@ const SelectResourceIds = <T extends Resource>({
     return () => {
       cancelled = true;
     };
-  }, [getAll, initialSelectedIds.join('|')]);
+  }, [getAll, initialSelectedIds]);
 
   /*
    * Load search results

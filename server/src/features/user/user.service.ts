@@ -1,9 +1,10 @@
+import { User } from './user.model.js';
 import { UserRepository } from './user.repository.js';
 
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async create(user: any) {
+  async create(user: User) {
     return await this.userRepository.create(user);
   }
 

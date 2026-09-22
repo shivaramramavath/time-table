@@ -28,7 +28,7 @@ const emailJob = async (job: Job) => {
       default:
         throw new UnrecoverableError(`Unknown email job type: ${job.name}`);
     }
-  } catch (error: any) {
+  } catch (error) {
     const status = error?.response?.status;
 
     logger.error('Email job failed', {
@@ -37,8 +37,7 @@ const emailJob = async (job: Job) => {
       email,
       status,
       attemptsMade: job.attemptsMade,
-      message: error?.message,
-      stack: error?.stack,
+      error: error,
     });
 
     if ([400, 401, 403, 404].includes(status)) {

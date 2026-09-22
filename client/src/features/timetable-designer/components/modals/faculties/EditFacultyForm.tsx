@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react';
+import { memo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { Button } from '@/shared/ui/button';

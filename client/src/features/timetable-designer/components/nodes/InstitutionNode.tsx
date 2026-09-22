@@ -1,6 +1,6 @@
 import { memo } from 'react';
 
-import { CalendarDays, Clock3, Coffee, Timer } from 'lucide-react';
+import { Clock3, Timer } from 'lucide-react';
 
 import DesignerNode from './DesignerNode';
 

@@ -1,9 +1,7 @@
-import React from 'react';
 import { useGoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@/shared/ui/button';
-import googleLogo from '@/assets/google.png';
 
 import { authService } from '@/features/auth/services/auth.service';
 

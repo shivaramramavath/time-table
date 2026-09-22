@@ -1,5 +1,4 @@
 import { useForm } from 'react-hook-form';
-import { useReactFlow } from '@xyflow/react';
 
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';

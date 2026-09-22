@@ -20,14 +20,13 @@ export class FeedbackWorker {
         default:
           throw new UnrecoverableError(`Unknown feedback job type: ${job.name}`);
       }
-    } catch (error: any) {
+    } catch (error) {
       logger.error('Feedback job failed', {
         jobId: job.id,
         jobName: job.name,
         feedback: job.data,
         attemptsMade: job.attemptsMade,
-        message: error?.message,
-        stack: error?.stack,
+        error: error,
       });
 
       throw error;

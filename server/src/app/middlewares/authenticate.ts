@@ -20,7 +20,7 @@ export const authenticate = (req: Request, res: Response, next: NextFunction) =>
     req.userId = payload.sub;
 
     next();
-  } catch (error) {
-    return next(errors.forbidden());
+  } catch {
+    return next(errors.forbidden("You're not authorized"));
   }
 };

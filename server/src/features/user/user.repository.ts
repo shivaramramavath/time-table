@@ -18,19 +18,10 @@ export class UserRepository {
     try {
       return await this.userModel.create(user);
     } catch (error: any) {
-      if (error?.code === 11000) {
-        if (error?.keyPattern?.email) {
-          throw errors.conflict('Email is already registered');
-        }
-
-        if (error?.keyPattern?.userName) {
-          throw errors.conflict('Username is already taken');
-        }
-
-        throw errors.conflict('User already exists');
-      }
-
-      throw errors.internal('Failed to create user');
+      if (error?.code === 11000) throw errors.internal('Failed to create user');
+      if (error?.keyPattern?.email) throw errors.conflict('Email is already registered');
+      if (error?.keyPattern?.userName) throw errors.conflict('Username is already taken');
+      throw errors.conflict('User already exists');
     }
   }
 

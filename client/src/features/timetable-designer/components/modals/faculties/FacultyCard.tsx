@@ -1,7 +1,6 @@
 import { memo } from 'react';
 import {
   BookOpen,
-  Building2,
   CalendarDays,
   ChevronRight,
   Mail,
