@@ -1,5 +1,6 @@
 import crypto from 'node:crypto';
 import jwt from 'jsonwebtoken';
+import { SignJWT, jwtVerify } from 'jose';
 
 import { env } from '#configs/env.js';
 import { ACCESS_TOKEN_EXPIRES_IN } from '#configs/constants.js';
@@ -9,16 +10,15 @@ export interface AccessTokenPayload {
 }
 
 export class TokenService {
-  generateAccessToken(userId: string): string {
-    return jwt.sign(
-      {
-        sub: userId,
-      } satisfies AccessTokenPayload,
-      env.JWT_SECRET_KEY,
-      {
-        expiresIn: ACCESS_TOKEN_EXPIRES_IN,
-      },
-    );
+  secret = new TextEncoder().encode(env.JWT_SECRET_KEY);
+
+  generateAccessToken(userId: string): Promise<string> | string {
+    return new SignJWT()
+      .setSubject(userId)
+      .setProtectedHeader({ alg: 'HS256' })
+      .setIssuedAt()
+      .setExpirationTime(ACCESS_TOKEN_EXPIRES_IN)
+      .sign(this.secret);
   }
 
   generateRefreshToken(sessionId: string): string {
@@ -27,8 +27,10 @@ export class TokenService {
     return `${sessionId}.${secret}`;
   }
 
-  verifyAccessToken(token: string): AccessTokenPayload {
-    return jwt.verify(token, env.JWT_SECRET_KEY) as AccessTokenPayload;
+  async verifyAccessToken(token: string): Promise<AccessTokenPayload> {
+    const { payload } = await jwtVerify(token, this.secret);
+
+    return payload as AccessTokenPayload;
   }
 
   getDataFromRefreshToken(refreshToken: string): string[] {

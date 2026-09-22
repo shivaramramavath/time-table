@@ -1,5 +1,5 @@
+import createHttpError from 'http-errors';
 import { UserModel } from './user.model.js';
-import { errors } from '#utils/errors.js';
 
 export class UserRepository {
   constructor(private readonly userModel: typeof UserModel) {}
@@ -10,7 +10,7 @@ export class UserRepository {
 
       return user !== null;
     } catch {
-      throw errors.internal('Failed to check user');
+      throw createHttpError.InternalServerError('Failed to check user');
     }
   }
 
@@ -18,10 +18,10 @@ export class UserRepository {
     try {
       return await this.userModel.create(user);
     } catch (error: any) {
-      if (error?.code === 11000) throw errors.internal('Failed to create user');
-      if (error?.keyPattern?.email) throw errors.conflict('Email is already registered');
-      if (error?.keyPattern?.userName) throw errors.conflict('Username is already taken');
-      throw errors.conflict('User already exists');
+      if (error?.code === 11000) throw createHttpError.InternalServerError('Failed to create user');
+      if (error?.keyPattern?.email) throw createHttpError.Conflict('Email is already registered');
+      if (error?.keyPattern?.userName) throw createHttpError.Conflict('Username is already taken');
+      throw createHttpError.Conflict('User already exists');
     }
   }
 
@@ -29,7 +29,7 @@ export class UserRepository {
     try {
       return await this.userModel.findOne(filter);
     } catch {
-      throw errors.internal('Failed to find user');
+      throw createHttpError.InternalServerError('Failed to find user');
     }
   }
 
@@ -37,7 +37,7 @@ export class UserRepository {
     try {
       return await this.userModel.findById(id);
     } catch {
-      throw errors.internal('Failed to find user');
+      throw createHttpError.InternalServerError('Failed to find user');
     }
   }
 
@@ -47,7 +47,7 @@ export class UserRepository {
         email: email.toLowerCase(),
       });
     } catch {
-      throw errors.internal('Failed to find user by email');
+      throw createHttpError.InternalServerError('Failed to find user by email');
     }
   }
 
@@ -59,7 +59,7 @@ export class UserRepository {
         })
         .select('+password');
     } catch {
-      throw errors.internal('Failed to find user by email');
+      throw createHttpError.InternalServerError('Failed to find user by email');
     }
   }
 
@@ -74,7 +74,7 @@ export class UserRepository {
         },
       );
     } catch {
-      throw errors.internal('Failed to update password');
+      throw createHttpError.InternalServerError('Failed to update password');
     }
   }
 }

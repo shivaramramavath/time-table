@@ -1,6 +1,5 @@
 import type { Server, Socket } from 'socket.io';
-
-import { errors } from '#utils/errors.js';
+import createHttpError from 'http-errors';
 
 import { asyncSocketHandler } from '../lib/async-socket-handler.js';
 import { timetableService } from '#features/timetable/timetable.service.js';
@@ -12,7 +11,7 @@ export const registerTimetableListeners = (io: Server, socket: Socket) => {
       const { timetableId, timetable } = payload;
 
       if (!timetableId) {
-        throw errors.badRequest('Missing timetableId');
+        throw createHttpError.BadRequest('Missing timetableId');
       }
 
       return await timetableService.update(timetableId, socket.data.user.userId, timetable);
@@ -25,7 +24,7 @@ export const registerTimetableListeners = (io: Server, socket: Socket) => {
       const { timetableId } = payload;
 
       if (!timetableId) {
-        throw errors.badRequest('Missing timetableId');
+        throw createHttpError.BadRequest('Missing timetableId');
       }
 
       return await timetableService.get(timetableId, socket.data.user.userId);
@@ -38,7 +37,7 @@ export const registerTimetableListeners = (io: Server, socket: Socket) => {
       const { timetableId } = payload;
 
       if (!timetableId) {
-        throw errors.badRequest('Missing timetableId');
+        throw createHttpError.BadRequest('Missing timetableId');
       }
 
       return await timetableService.generate({

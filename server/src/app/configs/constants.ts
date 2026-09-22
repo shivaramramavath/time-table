@@ -3,7 +3,7 @@ const MINUTE = 60 * SECOND;
 const HOUR = 60 * MINUTE;
 const DAY = 24 * HOUR;
 
-export const ACCESS_TOKEN_EXPIRES_IN = 15 * MINUTE;
+export const ACCESS_TOKEN_EXPIRES_IN = '15m';
 
 export const REFRESH_TOKEN_EXPIRES_IN = 7 * DAY;
 

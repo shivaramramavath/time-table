@@ -1,4 +1,4 @@
-import { errors } from '#utils/errors.js';
+import createHttpError from 'http-errors';
 
 import { TimetableDesignerModel } from './timetable-designer.model.js';
 
@@ -9,7 +9,7 @@ export const timetableDesignerRepository = {
         timetableId,
       });
     } catch (err) {
-      throw errors.internal(err.message);
+      throw createHttpError.InternalServerError(err.message);
     }
   },
 
@@ -17,7 +17,7 @@ export const timetableDesignerRepository = {
     try {
       return await TimetableDesignerModel.findOne({ timetableId }).lean();
     } catch {
-      throw errors.internal('Failed to get timetable Designer');
+      throw createHttpError.InternalServerError('Failed to get timetable Designer');
     }
   },
 };

@@ -1,6 +1,5 @@
 import type { Server, Socket } from 'socket.io';
-
-import { errors } from '#utils/errors.js';
+import createHttpError from 'http-errors';
 
 import { edgeService } from '#features/timetable-designer/edge/edge.service.js';
 
@@ -45,7 +44,7 @@ export const registerEdgeListeners = (io: Server, socket: Socket) => {
       const deleted = await edgeService.delete(designerId, edgeId);
 
       if (!deleted) {
-        throw errors.internal('Failed to delete edge');
+        throw createHttpError.InternalServerError('Failed to delete edge');
       }
 
       return {

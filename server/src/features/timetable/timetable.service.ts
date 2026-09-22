@@ -1,5 +1,7 @@
+import createHttpError from 'http-errors';
+
 import { timetableDesignerService } from '#features/timetable-designer/timetable-designer.service.js';
-import { errors } from '#utils/errors.js';
+
 import { timetableRepository } from './timetable.repository.js';
 
 export const timetableService = {
@@ -48,7 +50,7 @@ export const timetableService = {
     const timetable = await timetableRepository.getById(timetableId, userId);
 
     if (!timetable) {
-      throw errors.notFound('Timetable not found');
+      throw createHttpError.NotFound('Timetable not found');
     }
 
     const updatedTimetable = await timetableRepository.update(timetableId, userId, {

@@ -1,5 +1,3 @@
-import ApiError from '#utils/ApiError.js';
-
 import { UserService } from '#features/user/user.service.js';
 
 import { PasswordService } from './services/password.service.js';
@@ -8,6 +6,7 @@ import { TokenService } from './services/token.service.js';
 import { QueueService } from '#services/queue.service.js';
 
 import type { LoginDto, RegisterDto } from './types/auth.types.js';
+import createHttpError from 'http-errors';
 
 export class AuthService {
   constructor(
@@ -26,9 +25,9 @@ export class AuthService {
       password: hashedPassword,
     });
 
-    const { refreshToken } = await this.sessionService.create(user._id);
+    const { refreshToken } = await this.sessionService.create(user._id.toString());
 
-    const accessToken = this.tokenService.generateAccessToken(user._id);
+    const accessToken = await this.tokenService.generateAccessToken(user._id.toString());
 
     this.queueService.registerGreeting({
       email: user.email,
@@ -46,18 +45,18 @@ export class AuthService {
     const user = await this.userService.findByEmailWithPassword(data.email);
 
     if (!user) {
-      throw new ApiError(401, 'Invalid email or password');
+      throw createHttpError.NotFound('User not found');
     }
 
     const isPasswordValid = await this.passwordService.compare(data.password, user.password);
 
     if (!isPasswordValid) {
-      throw new ApiError(401, 'Invalid email or password');
+      throw createHttpError.Unauthorized('Invalid password');
     }
 
-    const accessToken = this.tokenService.generateAccessToken(user._id);
+    const accessToken = this.tokenService.generateAccessToken(user._id.toString());
 
-    const { refreshToken } = await this.sessionService.create(user._id);
+    const { refreshToken } = await this.sessionService.create(user._id.toString());
 
     return {
       user: {
@@ -73,12 +72,12 @@ export class AuthService {
     const user = await this.userService.findByEmail(email);
 
     if (!user) {
-      throw new ApiError(404, 'User not found');
+      throw createHttpError.NotFound('User not found');
     }
 
-    const accessToken = this.tokenService.generateAccessToken(user._id);
+    const accessToken = this.tokenService.generateAccessToken(user._id.toString());
 
-    const { refreshToken } = await this.sessionService.create(user._id);
+    const { refreshToken } = await this.sessionService.create(user._id.toString());
 
     return {
       user: {
@@ -100,9 +99,9 @@ export class AuthService {
       password: hashedPassword,
     });
 
-    const { refreshToken } = await this.sessionService.create(user._id);
+    const { refreshToken } = await this.sessionService.create(user._id.toString());
 
-    const accessToken = this.tokenService.generateAccessToken(user._id);
+    const accessToken = this.tokenService.generateAccessToken(user._id.toString());
 
     this.queueService.registerGreeting({
       email: user.email,
@@ -128,11 +127,10 @@ export class AuthService {
     const user = await this.userService.findByEmail(email);
 
     if (!user) {
-      // Don't reveal whether an account exists.
-      return;
+      throw createHttpError.NotFound('User not found');
     }
 
-    const token = await this.sessionService.generateForgotPasswordToken(user._id);
+    const token = await this.sessionService.generateForgotPasswordToken(user._id.toString());
 
     this.queueService.forgotPassword({
       email: user.email,
@@ -152,7 +150,7 @@ export class AuthService {
     const { userId, refreshToken: newRefreshToken } =
       await this.sessionService.rotate(refreshToken);
 
-    const accessToken = this.tokenService.generateAccessToken(userId);
+    const accessToken = await this.tokenService.generateAccessToken(userId);
 
     return {
       accessToken,

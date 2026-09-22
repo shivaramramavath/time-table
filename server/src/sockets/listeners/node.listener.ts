@@ -1,6 +1,5 @@
 import type { Server, Socket } from 'socket.io';
-
-import { errors } from '#utils/errors.js';
+import createHttpError from 'http-errors';
 
 import { nodeService } from '#features/timetable-designer/node/node.service.js';
 
@@ -45,7 +44,7 @@ export const registerNodeListeners = (io: Server, socket: Socket) => {
       const updatedNode = await nodeService.update(designerId, nodeId, data);
 
       if (!updatedNode) {
-        throw errors.internal('Failed to update node');
+        throw createHttpError.InternalServerError('Failed to update node');
       }
 
       return updatedNode;
@@ -64,7 +63,7 @@ export const registerNodeListeners = (io: Server, socket: Socket) => {
       const deleted = await nodeService.delete(designerId, nodeId);
 
       if (!deleted) {
-        throw errors.internal('Failed to delete node');
+        throw createHttpError.InternalServerError('Failed to delete node');
       }
 
       return {

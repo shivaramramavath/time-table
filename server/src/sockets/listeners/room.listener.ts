@@ -1,8 +1,8 @@
 import type { Server, Socket } from 'socket.io';
+import createHttpError from 'http-errors';
 
 import { roomService } from '#features/timetable-designer/room/room.service.js';
 import { asyncSocketHandler } from '../lib/async-socket-handler.js';
-import { errors } from '#utils/errors.js';
 
 export const registerRoomListeners = (io: Server, socket: Socket) => {
   socket.on(
@@ -22,7 +22,7 @@ export const registerRoomListeners = (io: Server, socket: Socket) => {
       const updatedRoom = await roomService.update(designerId, roomId, data);
 
       if (!updatedRoom) {
-        throw errors.internal('Failed to update room');
+        throw createHttpError.InternalServerError('Failed to update room');
       }
 
       return updatedRoom;
@@ -37,7 +37,7 @@ export const registerRoomListeners = (io: Server, socket: Socket) => {
       const deleted = await roomService.delete(designerId, roomId);
 
       if (!deleted) {
-        throw errors.internal('Failed to delete room');
+        throw createHttpError.InternalServerError('Failed to delete room');
       }
 
       return { roomId };

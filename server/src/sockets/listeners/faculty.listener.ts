@@ -1,8 +1,8 @@
 import type { Server, Socket } from 'socket.io';
+import createHttpError from 'http-errors';
 
 import { facultyService } from '#features/timetable-designer/faculty/faculty.service.js';
 import { asyncSocketHandler } from '../lib/async-socket-handler.js';
-import { errors } from '#utils/errors.js';
 
 export const registerFacultyListeners = (io: Server, socket: Socket) => {
   socket.on(
@@ -22,7 +22,7 @@ export const registerFacultyListeners = (io: Server, socket: Socket) => {
       const updatedFaculty = await facultyService.update(designerId, facultyId, data);
 
       if (!updatedFaculty) {
-        throw errors.internal('Failed to update faculty');
+        throw createHttpError.InternalServerError('Failed to update faculty');
       }
 
       return updatedFaculty;
@@ -37,7 +37,7 @@ export const registerFacultyListeners = (io: Server, socket: Socket) => {
       const deleted = await facultyService.delete(designerId, facultyId);
 
       if (!deleted) {
-        throw errors.internal('Failed to delete faculty');
+        throw createHttpError.InternalServerError('Failed to delete faculty');
       }
 
       return {

@@ -1,4 +1,4 @@
-import { errors } from '#utils/errors.js';
+import createHttpError from 'http-errors';
 import { getRandomDescription } from './services/descriptions.js';
 import { TimetableModel, type TimetableDocument } from './timetable.model.js';
 
@@ -30,7 +30,9 @@ export const timetableRepository = {
         description: getRandomDescription(),
       });
     } catch (error) {
-      throw errors.internal(error instanceof Error ? error.message : 'Failed to create timetable');
+      throw createHttpError.InternalServerError(
+        error instanceof Error ? error.message : 'Failed to create timetable',
+      );
     }
   },
 
@@ -53,7 +55,7 @@ export const timetableRepository = {
         .limit(limit)
         .lean();
     } catch {
-      throw errors.internal('Failed to get timetables');
+      throw createHttpError.InternalServerError('Failed to get timetables');
     }
   },
 
@@ -66,7 +68,7 @@ export const timetableRepository = {
         .limit(limit)
         .lean();
     } catch {
-      throw errors.internal('Failed to get recent timetables');
+      throw createHttpError.InternalServerError('Failed to get recent timetables');
     }
   },
 
@@ -77,7 +79,7 @@ export const timetableRepository = {
         userId,
       });
     } catch {
-      throw errors.internal('Failed to get timetable');
+      throw createHttpError.InternalServerError('Failed to get timetable');
     }
   },
 
@@ -97,7 +99,7 @@ export const timetableRepository = {
         },
       );
     } catch {
-      throw errors.internal('Failed to update timetable');
+      throw createHttpError.InternalServerError('Failed to update timetable');
     }
   },
 
@@ -108,7 +110,7 @@ export const timetableRepository = {
         userId,
       });
     } catch {
-      throw errors.internal('Failed to delete timetable');
+      throw createHttpError.InternalServerError('Failed to delete timetable');
     }
   },
 };

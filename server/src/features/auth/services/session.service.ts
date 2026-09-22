@@ -1,9 +1,9 @@
 import crypto from 'node:crypto';
+import createHttpError from 'http-errors';
 
 import type { Redis } from 'ioredis';
 
 import { SESSION_TTL } from '#configs/constants.js';
-import { errors } from '#utils/errors.js';
 
 import { TokenService } from './token.service.js';
 
@@ -75,7 +75,7 @@ export class SessionService {
     const session = await this.get(sessionId);
 
     if (!session) {
-      throw errors.unauthorized('Session not found');
+      throw createHttpError.Unauthorized('Session not found');
     }
 
     const storedHash = Buffer.from(session.refreshTokenHash, 'hex');
@@ -86,7 +86,7 @@ export class SessionService {
       storedHash.length !== providedHash.length ||
       !crypto.timingSafeEqual(storedHash, providedHash)
     ) {
-      throw errors.unauthorized('Invalid refresh token');
+      throw createHttpError.Unauthorized('Invalid refresh token');
     }
 
     return session;
@@ -127,7 +127,7 @@ export class SessionService {
     const userId = await this.redis.get(this.getPasswordResetKey(token));
 
     if (!userId) {
-      throw errors.badRequest('Invalid or expired token');
+      throw createHttpError.BadRequest('Invalid or expired token');
     }
 
     // Single-use token.

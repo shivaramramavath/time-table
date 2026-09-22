@@ -1,10 +1,10 @@
 import type { Request, Response } from 'express';
+import createHttpError from 'http-errors';
 import expressAsyncHandler from 'express-async-handler';
 
 import { AuthService } from './auth.service.js';
 import { CookieService } from './services/cookie.service.js';
 import { GoogleService } from './services/google.service.js';
-import { errors } from '#utils/errors.js';
 
 export class AuthController {
   constructor(
@@ -41,13 +41,13 @@ export class AuthController {
     const { googleToken } = req.body;
 
     if (!googleToken) {
-      throw errors.badRequest('Google token is required');
+      throw createHttpError.BadRequest('Google token is required');
     }
 
     const googleUser = await this.googleService.verifyAccessToken(googleToken);
 
     if (!googleUser.email) {
-      throw errors.badRequest('Google account email not available');
+      throw createHttpError.BadRequest('Google account email not available');
     }
 
     const { user, accessToken, refreshToken } = await this.authService.googleLogin(
@@ -67,13 +67,13 @@ export class AuthController {
     const { googleToken } = req.body;
 
     if (!googleToken) {
-      throw errors.badRequest('Google token is required');
+      throw createHttpError.BadRequest('Google token is required');
     }
 
     const googleUser = await this.googleService.verifyAccessToken(googleToken);
 
     if (!googleUser.email) {
-      throw errors.badRequest('Google account email not available');
+      throw createHttpError.BadRequest('Google account email not available');
     }
 
     const { user, accessToken, refreshToken } = await this.authService.googleRegister({

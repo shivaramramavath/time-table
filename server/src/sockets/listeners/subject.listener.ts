@@ -1,8 +1,8 @@
 import type { Server, Socket } from 'socket.io';
+import createHttpError from 'http-errors';
 
 import { subjectService } from '#features/timetable-designer/subject/subject.service.js';
 import { asyncSocketHandler } from '../lib/async-socket-handler.js';
-import { errors } from '#utils/errors.js';
 
 export const registerSubjectListeners = (io: Server, socket: Socket) => {
   socket.on(
@@ -11,11 +11,11 @@ export const registerSubjectListeners = (io: Server, socket: Socket) => {
       const { designerId, subject } = payload;
 
       if (!designerId) {
-        throw errors.badRequest('Designer ID is required');
+        throw createHttpError.BadRequest('Designer ID is required');
       }
 
       if (!subject) {
-        throw errors.badRequest('Subject is required');
+        throw createHttpError.BadRequest('Subject is required');
       }
 
       return subjectService.create(designerId, subject);
@@ -28,17 +28,17 @@ export const registerSubjectListeners = (io: Server, socket: Socket) => {
       const { designerId, subjectId, data } = payload;
 
       if (!designerId) {
-        throw errors.badRequest('Designer ID is required');
+        throw createHttpError.BadRequest('Designer ID is required');
       }
 
       if (!subjectId) {
-        throw errors.badRequest('Subject ID is required');
+        throw createHttpError.BadRequest('Subject ID is required');
       }
 
       const updatedSubject = await subjectService.update(designerId, subjectId, data);
 
       if (!updatedSubject) {
-        throw errors.internal('Failed to update subject');
+        throw createHttpError.InternalServerError('Failed to update subject');
       }
 
       return updatedSubject;
@@ -51,17 +51,17 @@ export const registerSubjectListeners = (io: Server, socket: Socket) => {
       const { designerId, subjectId } = payload;
 
       if (!designerId) {
-        throw errors.badRequest('Designer ID is required');
+        throw createHttpError.BadRequest('Designer ID is required');
       }
 
       if (!subjectId) {
-        throw errors.badRequest('Subject ID is required');
+        throw createHttpError.BadRequest('Subject ID is required');
       }
 
       const deleted = await subjectService.delete(designerId, subjectId);
 
       if (!deleted) {
-        throw errors.internal('Failed to delete subject');
+        throw createHttpError.InternalServerError('Failed to delete subject');
       }
 
       return {

@@ -1,16 +1,16 @@
 import type { Socket } from 'socket.io';
-import { errors } from '#utils/errors.js';
+import createError from 'http-errors';
 import { tokenService } from '#features/auth/auth.dependency.js';
 
-export const socketAuth = (socket: Socket, next: (err?: Error) => void) => {
+export const socketAuth =async (socket: Socket, next: (err?: Error) => void) => {
   const token = socket.handshake.auth?.token;
 
   if (!token) {
-    return next(errors.forbidden());
+    return next(createError.Forbidden());
   }
 
   try {
-    const payload = tokenService.verifyAccessToken(token);
+    const payload = await tokenService.verifyAccessToken(token);
 
     socket.data.user = {
       userId: payload.sub,
@@ -20,6 +20,6 @@ export const socketAuth = (socket: Socket, next: (err?: Error) => void) => {
   } catch (error) {
     console.error('Socket authentication failed:', error);
 
-    return next(errors.forbidden());
+    return next(createError.Forbidden());
   }
 };

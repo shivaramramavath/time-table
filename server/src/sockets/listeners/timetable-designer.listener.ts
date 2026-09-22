@@ -1,8 +1,8 @@
 import type { Server, Socket } from 'socket.io';
+import createHttpError from 'http-errors';
 
 import { timetableDesignerService } from '#features/timetable-designer/timetable-designer.service.js';
 import { asyncSocketHandler } from '../lib/async-socket-handler.js';
-import { errors } from '#utils/errors.js';
 
 export const registerTimetableDesignerListeners = (io: Server, socket: Socket) => {
   socket.on(
@@ -11,7 +11,7 @@ export const registerTimetableDesignerListeners = (io: Server, socket: Socket) =
       const { timetableId } = payload;
 
       if (!timetableId) {
-        throw errors.badRequest('Missing timetableId');
+        throw createHttpError.BadRequest('Missing timetableId');
       }
 
       const timetableDesigner = await timetableDesignerService.getOrCreate(timetableId);

@@ -1,19 +1,19 @@
 import type { Request, Response, NextFunction } from 'express';
+import createError from 'http-errors';
+
 import logger from '#configs/logger.js';
 import { env } from '#configs/env.js';
 
-interface CustomError extends Error {
-  statusCode?: number;
-}
+export const errorHandler = (err: Error, req: Request, res: Response, _: NextFunction) => {
+  const error = createError(err);
 
-export const errorHandler = (err: CustomError, req: Request, res: Response, nxt: NextFunction) => {
-  const status = err.statusCode || 500;
-  const message = err.message || 'Something went wrong';
+  const status = error.statusCode;
+  const message = error.message;
 
   logger.error({
     status,
     message,
-    stack: err.stack,
+    stack: error.stack,
     path: req.originalUrl,
     method: req.method,
   });
@@ -23,7 +23,7 @@ export const errorHandler = (err: CustomError, req: Request, res: Response, nxt:
     error: true,
     message,
     ...(env.isProd && {
-      stack: err.stack,
+      stack: error.stack,
     }),
   });
 };
