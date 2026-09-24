@@ -23,6 +23,7 @@ export const useDesignerControls = () => {
     getNodes,
     getEdges,
     setNodes,
+    fitView,
   });
 
   const selectAll = useCallback(() => {

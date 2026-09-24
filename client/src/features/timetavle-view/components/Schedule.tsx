@@ -200,7 +200,6 @@ export const mockScheduleBlocks = [
 /*                                  SECTIONS                                  */
 /* -------------------------------------------------------------------------- */
 
-
 type ScheduleBlockType = (typeof mockScheduleBlocks)[number];
 
 /* -------------------------------------------------------------------------- */

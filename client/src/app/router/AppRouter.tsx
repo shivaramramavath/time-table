@@ -18,6 +18,7 @@ import ResetPasswordPage from '@/pages/ResetPasswordPage';
 import SocketProvider from '../providers/SocketProvider';
 import TimetableViewLayout from '@/features/timetavle-view/components/TimetableViewLayout';
 import Schedule from '@/features/timetavle-view/components/Schedule';
+import ResourcesPage from '@/pages/ResourcesPage';
 
 const TimetablesPage = lazy(() => import('@/pages/TimetablesPage'));
 const TimetableDesignerPage = lazy(() => import('@/pages/TimetableDesignerPage'));
@@ -47,6 +48,7 @@ const AppRouter = () => {
             <Route path="/timetables" element={<TimetablesPage />} />
             <Route path="/templates" element={<TemplatesPage />} />
             <Route path="/feedback" element={<FeedbackPage />} />
+            <Route path="/resources" element={<ResourcesPage />} />
           </Route>
 
           <Route element={<SocketProvider />}>

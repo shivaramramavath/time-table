@@ -17,7 +17,7 @@ const MainLayout = () => {
         />
 
         {/* Page content */}
-        <div className="relative z-10 h-full min-h-0 overflow-hidden">
+        <div className="relative z-10 h-full min-h-0 max-w-6xl mx-auto overflow-hidden">
           <Outlet />
         </div>
       </main>

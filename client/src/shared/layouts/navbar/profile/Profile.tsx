@@ -1,4 +1,4 @@
-import { Moon, Settings, UserRound, SlidersHorizontal } from 'lucide-react';
+import { Moon, Settings, UserRound, SlidersHorizontal, Sun } from 'lucide-react';
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/shared/ui/dropdown-menu';
 
@@ -48,7 +48,7 @@ const Profile = () => {
         {/* Preferences */}
         <MenuSection title="Preferences">
           <MenuItem
-            icon={Moon}
+            icon={darkMode ? Moon : Sun}
             label="Appearance"
             value={darkMode ? 'Dark' : 'Light'}
             onClick={toggleDarkMode}

@@ -2,8 +2,16 @@ import { useCallback } from 'react';
 import dagre from 'dagre';
 import { nodeService } from '../services/node.service';
 import { NODE_HEIGHT, NODE_WIDTH } from '../constants';
+import type { Edge, Node } from '@xyflow/react';
 
-const useAutoArrange = ({ getNodes, getEdges, setNodes }) => {
+type UseAutoArrange = {
+  getNodes: () => Node[];
+  getEdges: () => Edge[];
+  setNodes: (payload: Node[] | ((nodes: Node[]) => Node[])) => void;
+  fitView: () => void;
+};
+
+const useAutoArrange = ({ getNodes, getEdges, setNodes, fitView }: UseAutoArrange) => {
   return useCallback(() => {
     const nodes = getNodes();
     const edges = getEdges();
@@ -67,18 +75,18 @@ const useAutoArrange = ({ getNodes, getEdges, setNodes }) => {
 
     setNodes(arrangedNodes);
 
-    setTimeout(() => {
-      setNodes((nodes) =>
-        nodes.map((node) => ({
-          ...node,
-          style: {
-            ...node.style,
-            transition: undefined,
-          },
-        })),
-      );
-    }, 350);
-  }, [getNodes, getEdges, setNodes]);
+    setNodes((nodes) =>
+      nodes.map((node) => ({
+        ...node,
+        style: {
+          ...node.style,
+          transition: undefined,
+        },
+      })),
+    );
+
+    fitView();
+  }, [getNodes, getEdges, setNodes, fitView]);
 };
 
 export default useAutoArrange;

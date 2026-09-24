@@ -2,7 +2,6 @@ import { ArrowUpRight, Globe2, Lock, MoreHorizontal } from 'lucide-react';
 
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
-import { Card } from '@/shared/ui/card';
 
 interface Template {
   id: string;
@@ -21,7 +20,6 @@ interface Template {
 interface Props {
   template: Template;
   onUse?: () => void;
-  onDelete?: () => void;
 }
 
 const GraphPreview = () => {
@@ -75,23 +73,23 @@ const GraphPreview = () => {
   );
 };
 
-const TemplateCard = ({ template, onUse, onDelete }: Props) => {
+const TemplateCard = ({ template, onUse }: Props) => {
   const isPublic = template.visibility === 'public';
 
   return (
-    <Card className="group overflow-hidden rounded-xl border-border/70 bg-card transition-all duration-200 hover:-translate-y-0.5 hover:border-border hover:shadow-md">
+    <div className="group rounded-xl border bg-transparent transition-all duration-200 hover:-translate-y-0.5 hover:border-border hover:shadow-md">
       {/* Preview */}
-      <div className="relative h-20 overflow-hidden border-b bg-muted/20">
+      <div className="relative h-25 -top-5 overflow-hidden border-b ">
         {/* Background glow */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -right-8 top-4 size-24 rounded-full bg-blue-500/15 blur-3xl transition-opacity duration-300 group-hover:bg-blue-500/25"
+          className="pointer-events-none absolute -right-8 top-5 size-24 rounded-full bg-blue-500/15 blur-3xl transition-opacity duration-300 group-hover:bg-blue-500/25"
         />
 
         <GraphPreview />
 
         {/* Visibility */}
-        <div className="absolute left-2.5 top-1 z-20">
+        <div className="absolute left-2.5 top-7 z-20">
           <Badge
             variant="secondary"
             className="h-5 gap-1 rounded-md border bg-background/90 px-1.5 text-[9px] font-medium shadow-sm backdrop-blur"
@@ -103,7 +101,7 @@ const TemplateCard = ({ template, onUse, onDelete }: Props) => {
         </div>
 
         {/* More */}
-        <div className="absolute right-2.5 top-1 z-20">
+        <div className="absolute right-2.5 top-7 z-20">
           <Button
             variant="secondary"
             size="icon"
@@ -116,12 +114,12 @@ const TemplateCard = ({ template, onUse, onDelete }: Props) => {
       </div>
 
       {/* Content */}
-      <div className="flex flex-col p-2">
+      <div className="flex flex-col px-2">
         <div className="flex items-start justify-between gap-1">
           <div className="min-w-0">
             <h3 className="truncate text-sm font-semibold tracking-tight">{template.name}</h3>
 
-            <p className="mt-0.5 line-clamp-2 min-h-8 text-xs leading-4 text-muted-foreground">
+            <p className="mt-0.5 line-clamp-2 text-xs leading-4 text-muted-foreground">
               {template.description || 'No description provided.'}
             </p>
           </div>
@@ -146,7 +144,7 @@ const TemplateCard = ({ template, onUse, onDelete }: Props) => {
           <ArrowUpRight className="size-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
         </Button>
       </div>
-    </Card>
+    </div>
   );
 };
 

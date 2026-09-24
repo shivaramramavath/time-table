@@ -27,9 +27,12 @@ import { designerNodes, NODE_HEIGHT, NODE_WIDTH } from '../constants';
 
 import type { Node, Edge } from '../types';
 
+type SetNodes = (payload: Node[] | ((nodes: Node[]) => Node[])) => void;
+type SetEdges = (payload: Edge[] | ((edges: Edge[]) => Edge[])) => void;
+
 interface Props {
-  setNodes: Dispatch<SetStateAction<ReactFlowNode[]>>;
-  setEdges: Dispatch<SetStateAction<ReactFlowEdge[]>>[];
+  setNodes: SetNodes;
+  setEdges: SetEdges;
 }
 
 export const useDesignerInteractions = ({ setNodes, setEdges }: Props) => {
@@ -158,6 +161,22 @@ export const useDesignerInteractions = ({ setNodes, setEdges }: Props) => {
     [getNode, getEdges, createsCycle],
   );
 
+  const onNodeDoubleClick: NodeMouseHandler = useCallback(
+    (event, node) => {
+      event.stopPropagation();
+
+      if (node.type === 'start') {
+        return;
+      }
+
+      openModal(node.type as never, {
+        type: node.type as never,
+        id: node.id,
+      });
+    },
+    [openModal],
+  );
+
   const onConnect = useCallback(
     (connection: Connection) => {
       if (!isValidConnection(connection)) {
@@ -174,22 +193,6 @@ export const useDesignerInteractions = ({ setNodes, setEdges }: Props) => {
       edgeService.add(edge);
     },
     [addEdges, isValidConnection],
-  );
-
-  const onNodeDoubleClick: NodeMouseHandler = useCallback(
-    (event, node) => {
-      event.stopPropagation();
-
-      if (node.type === 'start') {
-        return;
-      }
-
-      openModal(node.type as never, {
-        type: node.type as never,
-        id: node.id,
-      });
-    },
-    [openModal],
   );
 
   const onConnectEnd: OnConnectEnd = useCallback(
@@ -228,6 +231,7 @@ export const useDesignerInteractions = ({ setNodes, setEdges }: Props) => {
         type: nextType,
         position,
         data: {
+          ...sourceNode.data,
           ...nextConfig.defaultData,
         },
       };
