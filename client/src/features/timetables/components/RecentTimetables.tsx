@@ -1,5 +1,6 @@
 import { useTimetableMutation } from '@/features/timetables/hooks/timetable.query';
 import RecentTimetableCard from './RecentTimetablesCard';
+import { Badge } from '@/shared/ui/badge';
 
 const RecentTimetables = () => {
   const { data = [], isLoading, isError } = useTimetableMutation.useGetRecentTimetables();
@@ -34,9 +35,9 @@ const RecentTimetables = () => {
       <div className="flex items-center gap-2">
         <h2 className="text-lg font-semibold">Recent Timetables</h2>
 
-        <span className="rounded-md  px-2 py-1 text-xs text-muted-foreground">
+        <Badge variant="secondary">
           {data.length} recent
-        </span>
+        </Badge>
       </div>
 
       {/* List */}

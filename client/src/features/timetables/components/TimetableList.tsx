@@ -8,9 +8,10 @@ import TimetableCardSkeleton from './TimetableCardSkeleton';
 
 interface TimetableListProps {
   query: string;
+  filters: {};
 }
 
-const TimetableList = ({ query }: TimetableListProps) => {
+const TimetableList = ({ query, filters }: TimetableListProps) => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useTimetableMutation.useGetTimetables(query);
 
