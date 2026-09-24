@@ -1,6 +1,15 @@
 import { Trash2 } from 'lucide-react';
 import type { Timetable } from '../types/timetable.types';
 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/shared/ui/dialog';
+
 interface DeleteDialogProps {
   timetable: Timetable;
   isDeleting: boolean;
@@ -10,30 +19,19 @@ interface DeleteDialogProps {
 
 const DeleteDialog = ({ timetable, isDeleting, onClose, onDelete }: DeleteDialogProps) => {
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
-      onClick={onClose}
-    >
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="delete-dialog-title"
-        className="w-full max-w-sm rounded-xl border border-border bg-background p-5 shadow-2xl"
-        onClick={(event) => event.stopPropagation()}
-      >
-        <div className="mb-4">
-          <h2 id="delete-dialog-title" className="text-sm font-semibold">
-            Delete timetable?
-          </h2>
+    <Dialog open={true} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="max-w-sm">
+        <DialogHeader>
+          <DialogTitle>Delete timetable?</DialogTitle>
 
-          <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+          <DialogDescription>
             Are you sure you want to delete{' '}
             <span className="font-medium text-foreground">"{timetable.title}"</span>? This action
             cannot be undone.
-          </p>
-        </div>
+          </DialogDescription>
+        </DialogHeader>
 
-        <div className="flex justify-end gap-2">
+        <DialogFooter className="gap-2 sm:gap-2">
           <button
             type="button"
             onClick={onClose}
@@ -53,9 +51,9 @@ const DeleteDialog = ({ timetable, isDeleting, onClose, onDelete }: DeleteDialog
 
             {isDeleting ? 'Deleting...' : 'Delete'}
           </button>
-        </div>
-      </div>
-    </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 

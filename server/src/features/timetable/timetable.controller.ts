@@ -1,29 +1,32 @@
 import expressAsyncHandler from 'express-async-handler';
-import { timetableService } from './timetable.service.js';
 
-export const timetableController = {
-  create: expressAsyncHandler(async (req, res) => {
-    const userId = req.userId;
+import type { Request, Response } from 'express';
 
-    const timetable = await timetableService.create({
-      userId,
+import { timetableService, type TimetableService } from './timetable.service.js';
+
+export class TimetableController {
+  constructor(private readonly timetableService: TimetableService) {}
+
+  create = expressAsyncHandler(async (req: Request, res: Response) => {
+    const timetable = await this.timetableService.create({
+      userId: req.userId,
+      title: req.body.title,
+      description: req.body.description,
     });
 
     res.status(201).json({
       success: true,
       timetable,
     });
-  }),
+  });
 
-  getTimetables: expressAsyncHandler(async (req, res) => {
-    const userId = req.userId;
-
+  getTimetables = expressAsyncHandler(async (req: Request, res: Response) => {
     const page = Math.max(Number(req.query.page) || 1, 1);
 
     const query = typeof req.query.query === 'string' ? req.query.query : '';
 
-    const timetables = await timetableService.getTimetables({
-      userId,
+    const timetables = await this.timetableService.getTimetables({
+      userId: req.userId,
       page,
       query,
     });
@@ -33,47 +36,49 @@ export const timetableController = {
       timetables,
       page,
     });
-  }),
+  });
 
-  getRecentTimetables: expressAsyncHandler(async (req, res) => {
-    const timetables = await timetableService.getRecentTimetables(req.userId);
+  getRecentTimetables = expressAsyncHandler(async (req: Request, res: Response) => {
+    const timetables = await this.timetableService.getRecentTimetables(req.userId);
 
     res.status(200).json({
       success: true,
       timetables,
     });
-  }),
+  });
 
-  get: expressAsyncHandler(async (req, res) => {
+  get = expressAsyncHandler(async (req: Request, res: Response) => {
     const { timetableId } = req.params;
 
-    const timetable = await timetableService.get(timetableId, req.userId);
+    const timetable = await this.timetableService.get(timetableId, req.userId);
 
     res.status(200).json({
       success: true,
       timetable,
     });
-  }),
+  });
 
-  update: expressAsyncHandler(async (req, res) => {
+  update = expressAsyncHandler(async (req: Request, res: Response) => {
     const { timetableId } = req.params;
 
-    const timetable = await timetableService.update(timetableId, req.userId, req.body);
+    const timetable = await this.timetableService.update(timetableId, req.userId, req.body);
 
     res.status(200).json({
       success: true,
       timetable,
     });
-  }),
+  });
 
-  delete: expressAsyncHandler(async (req, res) => {
+  delete = expressAsyncHandler(async (req: Request, res: Response) => {
     const { timetableId } = req.params;
 
-    await timetableService.delete(timetableId, req.userId);
+    await this.timetableService.delete(timetableId, req.userId);
 
     res.status(200).json({
       success: true,
       message: 'Timetable deleted',
     });
-  }),
-};
+  });
+}
+
+export const timetableController = new TimetableController(timetableService);

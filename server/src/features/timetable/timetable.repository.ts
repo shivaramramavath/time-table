@@ -1,5 +1,6 @@
 import createHttpError from 'http-errors';
-import { getRandomDescription } from './services/descriptions.js';
+
+import { CreateTimetableDto } from './dtos/create.dto.js';
 import { TimetableModel, type TimetableDocument } from './timetable.model.js';
 
 interface GetTimetablesParams {
@@ -15,28 +16,22 @@ interface UpdateTimetableData {
   stage?: 'incomplete' | 'editing' | 'complete';
 }
 
-export const timetableRepository = {
-  create: async ({
-    title,
-    userId,
-  }: {
-    title: string;
-    userId: string;
-  }): Promise<TimetableDocument> => {
+class TimetableRepository {
+  async create({ title, userId, description }: CreateTimetableDto): Promise<TimetableDocument> {
     try {
       return await TimetableModel.create({
         title,
         userId,
-        description: getRandomDescription(),
+        description,
       });
     } catch (error) {
       throw createHttpError.InternalServerError(
         error instanceof Error ? error.message : 'Failed to create timetable',
       );
     }
-  },
+  }
 
-  getTimetables: async ({ userId, query = '', skip, limit }: GetTimetablesParams) => {
+  async getTimetables({ userId, query = '', skip, limit }: GetTimetablesParams) {
     try {
       const filter: Record<string, unknown> = {
         userId,
@@ -44,7 +39,7 @@ export const timetableRepository = {
 
       if (query.trim()) {
         filter.title = {
-          $regex: escapeRegex(query.trim()),
+          $regex: this.escapeRegex(query.trim()),
           $options: 'i',
         };
       }
@@ -57,9 +52,9 @@ export const timetableRepository = {
     } catch {
       throw createHttpError.InternalServerError('Failed to get timetables');
     }
-  },
+  }
 
-  getRecentTimetables: async (userId: string, limit = 5) => {
+  async getRecentTimetables(userId: string, limit = 5) {
     try {
       return await TimetableModel.find({
         userId,
@@ -70,9 +65,9 @@ export const timetableRepository = {
     } catch {
       throw createHttpError.InternalServerError('Failed to get recent timetables');
     }
-  },
+  }
 
-  getById: async (timetableId: string, userId: string) => {
+  async getById(timetableId: string, userId: string) {
     try {
       return await TimetableModel.findOne({
         _id: timetableId,
@@ -81,9 +76,9 @@ export const timetableRepository = {
     } catch {
       throw createHttpError.InternalServerError('Failed to get timetable');
     }
-  },
+  }
 
-  update: async (timetableId: string, userId: string, data: UpdateTimetableData) => {
+  async update(timetableId: string, userId: string, data: UpdateTimetableData) {
     try {
       return await TimetableModel.findOneAndUpdate(
         {
@@ -101,9 +96,9 @@ export const timetableRepository = {
     } catch {
       throw createHttpError.InternalServerError('Failed to update timetable');
     }
-  },
+  }
 
-  delete: async (timetableId: string, userId: string) => {
+  async delete(timetableId: string, userId: string) {
     try {
       return await TimetableModel.findOneAndDelete({
         _id: timetableId,
@@ -112,9 +107,11 @@ export const timetableRepository = {
     } catch {
       throw createHttpError.InternalServerError('Failed to delete timetable');
     }
-  },
-};
+  }
 
-function escapeRegex(value: string) {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  private escapeRegex(value: string): string {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
 }
+
+export const timetableRepository = new TimetableRepository();

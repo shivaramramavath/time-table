@@ -52,15 +52,13 @@ const Timetables = () => {
     filters.department !== 'all' || filters.academicYear !== 'all' || filters.stage !== 'all';
 
   return (
-    <section className="space-y-6 rounded-xl border border-border/50 p-3">
+    <section className="min-h-0 h-full flex-1 flex flex-col">
       {/* Search + Filters */}
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
-        {/* Search */}
+      <div className="mb-6 flex shrink-0 flex-col gap-3 lg:flex-row lg:items-center">
         <div className="min-w-0 flex-1">
           <SearchBar query={query} setQuery={setQuery} />
         </div>
 
-        {/* Filters */}
         <TimetableFilters
           filters={filters}
           onFilterChange={handleFilterChange}
@@ -69,8 +67,10 @@ const Timetables = () => {
         />
       </div>
 
-      {/* List */}
-      <TimetableList query={debouncedQuery} filters={filters} />
+      {/* Scrollable List */}
+      <div className="min-h-0 flex-1">
+        <TimetableList query={debouncedQuery} filters={filters} />
+      </div>
     </section>
   );
 };

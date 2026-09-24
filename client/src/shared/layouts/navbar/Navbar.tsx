@@ -5,16 +5,18 @@ import Profile from './profile/Profile';
 
 const Navbar = () => {
   return (
-    <nav className="fixed inset-x-0 top-0 z-50 flex h-[3.5rem] items-center justify-between border-b border-blue-500 bg-background/80 px-4 backdrop-blur-lg md:px-6">
-      <NavbarLogo />
+    <div className="flex h-[3.5rem] w-full">
+      <nav className="fixed top-0 z-50 flex h-[3.5rem] w-full items-center justify-between border-b border-border bg-background/80 px-4 backdrop-blur-lg md:px-6">
+        <NavbarLogo />
 
-      <NavbarLinks />
+        <NavbarLinks />
 
-      <div className="flex items-center gap-3">
-        <CreateWorkflowBtn />
-        <Profile />
-      </div>
-    </nav>
+        <div className="flex items-center gap-3">
+          <CreateWorkflowBtn />
+          <Profile />
+        </div>
+      </nav>
+    </div>
   );
 };
 

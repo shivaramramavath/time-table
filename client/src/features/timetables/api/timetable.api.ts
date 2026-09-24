@@ -1,8 +1,13 @@
 import { httpClient } from '@/shared/api/httpClient';
 
+interface CreateTimetableData {
+  title: string;
+  description?: string;
+}
+
 export const timetableApi = {
-  create: async () => {
-    const { data } = await httpClient.post('/timetable');
+  create: async (formData: CreateTimetableData) => {
+    const { data } = await httpClient.post('/timetable', formData);
 
     return data.timetable;
   },

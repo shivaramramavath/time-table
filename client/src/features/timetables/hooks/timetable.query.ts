@@ -6,7 +6,7 @@ const useCreateTimetable = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: timetableApi.create,
+    mutationFn:(data)=> timetableApi.create(data),
 
     onSuccess: () => {
       queryClient.invalidateQueries({

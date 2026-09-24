@@ -30,20 +30,18 @@ const RecentTimetables = () => {
   }
 
   return (
-    <section className="space-y-2">
+    <section className="space-y-2 shrink-0">
       {/* Header */}
       <div className="flex items-center gap-2">
         <h2 className="text-lg font-semibold">Recent Timetables</h2>
 
-        <Badge variant="secondary">
-          {data.length} recent
-        </Badge>
+        <Badge variant="secondary">{data.length} recent</Badge>
       </div>
 
       {/* List */}
-      <div className="flex snap-x snap-mandatory bg-muted/20 rounded-xl gap-3 overflow-x-auto px-2 scrollbar">
+      <div className="flex snap-x snap-mandatory gap-2 overflow-x-auto scrollbar">
         {data.map((timetable) => (
-          <div key={timetable._id} className="shrink-0 snap-start p-2">
+          <div key={timetable._id} className="shrink-0 snap-start p-1">
             <RecentTimetableCard timetable={timetable} />
           </div>
         ))}
