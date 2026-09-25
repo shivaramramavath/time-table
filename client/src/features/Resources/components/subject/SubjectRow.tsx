@@ -59,13 +59,6 @@ const SubjectRow = ({ subject, onEdit, onDelete }: SubjectRowProps) => {
         <span className="text-xs text-[#666]">{subject.weeklyPeriods}</span>
       </TableCell>
 
-      {/* Faculty */}
-      <TableCell className="px-4 py-3">
-        <span className="block max-w-[140px] truncate text-xs text-[#555]">
-          {subject.faculty || <span className="text-[#ef4444]">Unassigned</span>}
-        </span>
-      </TableCell>
-
       {/* Status */}
       <TableCell className="px-4 py-3">
         <span className={`rounded-md border px-2 py-0.5 text-[10px] font-medium ${statusClass}`}>

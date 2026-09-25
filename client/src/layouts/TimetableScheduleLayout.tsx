@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
 
-import TimetableSidebar from '../components/sidebar/TimetableSidebar';
+import TimetableSidebar from '../features/timetable-schedule/components/sidebar/ScheduleSidebarItem';
 
 const TimetableViewLayout = () => {
   return (

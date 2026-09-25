@@ -24,7 +24,8 @@
       "#utils/*": ["./src/shared/utils/*"],
       "#services/*": ["./src/shared/services/*"],
       "#features/*": ["./src/features/*"],
-      "#types/*": ["./src/shared/types/*"]
+      "#types/*": ["./src/shared/types/*"],
+      "#shared/*": ["./src/shared/*"]
     }
   },
   "include": ["src"],

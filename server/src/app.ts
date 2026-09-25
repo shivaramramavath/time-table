@@ -17,6 +17,7 @@ import { userRouter } from '#features/user/user.router.js';
 import { timetableRouter } from '#features/timetable/timetable.router.js';
 import { templateRouter } from '#features/template/template.route.js';
 import { feedbackRouter } from '#features/feedback/feedback.routes.js';
+import { resourceRouter } from '#features/resource/index.js';
 
 const corsOptions = {
   origin: env.ORIGIN_URL,
@@ -45,6 +46,7 @@ app.use(
 app.use('/api/auth', authRouter);
 app.use('/api/user', authenticate, userRouter);
 app.use('/api/timetable', authenticate, timetableRouter);
+app.use('/api/resources', authenticate, resourceRouter);
 app.use('/api/templates', authenticate, templateRouter);
 app.use('/api/feedback', authenticate, feedbackRouter);
 

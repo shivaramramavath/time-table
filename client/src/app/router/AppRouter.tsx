@@ -8,29 +8,32 @@ import AuthLayout from '@/layouts/AuthLayout';
 import MainLayout from '@/layouts/MainLayout';
 import LoadingHeader from '../../shared/components/LoadingHeader';
 
+import SocketProvider from '../providers/SocketProvider';
+
+import TimetableScheduleLayout from '@/layouts/TimetableScheduleLayout';
+import Schedule from '@/features/timetable-schedule/components/Schedule';
+
 const LandingPage = lazy(() => import('@/pages/LandingPage'));
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 
 const LoginPage = lazy(() => import('@/pages/LoginPage'));
 const RegisterPage = lazy(() => import('@/pages/RegisterPage'));
 const ForgotPasswordPage = lazy(() => import('@/pages/ForgotPasswordPage'));
-import ResetPasswordPage from '@/pages/ResetPasswordPage';
-import SocketProvider from '../providers/SocketProvider';
-import TimetableViewLayout from '@/features/timetavle-view/components/TimetableViewLayout';
-import Schedule from '@/features/timetavle-view/components/Schedule';
-import ResourcesPage from '@/pages/ResourcesPage';
+const ResetPasswordPage = lazy(() => import('@/pages/ResetPasswordPage'));
 
 const TimetablesPage = lazy(() => import('@/pages/TimetablesPage'));
-const TimetableDesignerPage = lazy(() => import('@/pages/TimetableDesignerPage'));
-const TimetableViewPage = lazy(() => import('@/pages/TimetableViewPage'));
 const TemplatesPage = lazy(() => import('@/pages/TemplatesPage'));
+const ResourcesPage = lazy(() => import('@/pages/ResourcesPage'));
 const FeedbackPage = lazy(() => import('@/pages/FeedbackPage'));
+
+const TimetableDesignPage = lazy(() => import('@/pages/TimetableDesignPage'));
+const TimetableEditPage = lazy(() => import('@/pages/TimetableEditPage'));
+const TimetableSchedulePage = lazy(() => import('@/pages/TimetableSchedulePage'));
 
 const AppRouter = () => {
   return (
     <Suspense fallback={<LoadingHeader />}>
       <Routes>
-        {/* Public routes */}
         <Route element={<PublicRoute />}>
           <Route path="/" element={<LandingPage />} />
 
@@ -42,22 +45,23 @@ const AppRouter = () => {
           </Route>
         </Route>
 
-        {/* Protected routes */}
         <Route element={<ProtectedRoute />}>
           <Route element={<MainLayout />}>
             <Route path="/timetables" element={<TimetablesPage />} />
             <Route path="/templates" element={<TemplatesPage />} />
-            <Route path="/feedback" element={<FeedbackPage />} />
             <Route path="/resources" element={<ResourcesPage />} />
+            <Route path="/feedback" element={<FeedbackPage />} />
           </Route>
 
           <Route element={<SocketProvider />}>
-            <Route path="/timetables/designer" element={<TimetableDesignerPage />} />
+            <Route path="/timetables/:timetableId/design" element={<TimetableDesignPage />} />
           </Route>
 
-          <Route path="/timetables/:timetableId/view" element={<TimetableViewLayout />}>
+          <Route path="/timetables/:timetableId/edit" element={<TimetableEditPage />} />
+
+          <Route path="/timetables/:timetableId" element={<TimetableScheduleLayout />}>
             <Route index element={<Schedule />} />
-            <Route path=":sectionId" element={<TimetableViewPage />} />
+            <Route path=":sectionId" element={<TimetableSchedulePage />} />
           </Route>
         </Route>
 

@@ -5,10 +5,10 @@ export interface Faculty {
   employeeId: string;
   department: string;
   subjects: string[];
-  unavailablePeriods: number;
   maxPerDay: number;
   maxPerWeek: number;
   status: 'active' | 'inactive';
+  availability: Record<string, boolean>;
 }
 
 export interface Subject {
@@ -18,7 +18,6 @@ export interface Subject {
   type: 'Theory' | 'Lab' | 'Tutorial';
   credits: number;
   weeklyPeriods: number;
-  faculty: string;
   roomType: 'Classroom' | 'Lab' | 'Seminar Hall';
   status: 'Complete' | 'Incomplete';
 }

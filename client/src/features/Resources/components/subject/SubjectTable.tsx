@@ -105,16 +105,14 @@ const SubjectTable = () => {
         <Table>
           <TableHeader>
             <TableRow className="border-[#1a1a1a] hover:bg-transparent">
-              {['Code', 'Subject', 'Type', 'Credits', 'Periods/Wk', 'Faculty', 'Status', ''].map(
-                (heading) => (
-                  <TableHead
-                    key={heading}
-                    className="h-auto px-4 py-3 text-left text-[10px] font-semibold uppercase tracking-wider text-[#444]"
-                  >
-                    {heading}
-                  </TableHead>
-                ),
-              )}
+              {['Code', 'Subject', 'Type', 'Credits', 'Periods/Wk', 'Status', ''].map((heading) => (
+                <TableHead
+                  key={heading}
+                  className="h-auto px-4 py-3 text-left text-[10px] font-semibold uppercase tracking-wider text-[#444]"
+                >
+                  {heading}
+                </TableHead>
+              ))}
             </TableRow>
           </TableHeader>
 

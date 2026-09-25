@@ -1,4 +1,4 @@
-import Resources from '@/features/Resources/components/Resources';
+import Resources from '@/features/resources/components/Resources';
 
 const ResourcesPage = () => {
   return (

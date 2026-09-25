@@ -1,7 +1,7 @@
 import TimetableDesigner from '@/features/timetable-designer/components/editor/TimetableDesigner';
 import { useSearchParams } from 'react-router-dom';
 
-const TimetableDesignerPage = () => {
+const TimetableDesignPage = () => {
   const [searchParams] = useSearchParams();
 
   const timetableId = searchParams.get('timetableId');
@@ -13,4 +13,4 @@ const TimetableDesignerPage = () => {
   );
 };
 
-export default TimetableDesignerPage;
+export default TimetableDesignPage;

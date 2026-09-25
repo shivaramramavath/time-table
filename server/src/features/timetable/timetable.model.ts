@@ -23,8 +23,8 @@ const timetableSchema = new Schema(
 
     stage: {
       type: String,
-      enum: ['incomplete', 'editing', 'complete'],
-      default: 'incomplete',
+      enum: ['draft', 'editing', 'complete', 'published', 'archived'],
+      default: 'draft',
     },
   },
   {

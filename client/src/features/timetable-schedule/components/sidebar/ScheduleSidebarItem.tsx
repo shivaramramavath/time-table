@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 
-import { SidebarItem } from './SidebarItem';
+import { SidebarItem } from './ScheduleSidebar';
 import { CalendarDays } from 'lucide-react';
 const data = [
   {

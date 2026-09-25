@@ -4,11 +4,11 @@ import { cn } from '@/shared/lib/utils';
 
 const links = [
   { name: 'Timetables', path: '/timetables' },
-  { name: 'Templates', path: '/templates' },
   {
     name: 'Resources',
     path: '/resources',
   },
+  { name: 'Templates', path: '/templates' },
   { name: 'Feedback', path: '/feedback' },
 ];
 

@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 
-const TimetableViewPage = () => {
+const TimetableSchedulePage = () => {
   const { timetableId, sectionId } = useParams<{
     timetableId: string;
     sectionId: string;
@@ -16,4 +16,4 @@ const TimetableViewPage = () => {
   );
 };
 
-export default TimetableViewPage;
+export default TimetableSchedulePage;

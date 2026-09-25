@@ -1,39 +1,55 @@
 import { useState } from 'react';
 
-const AvailabilityMatrix = () => {
-  const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
-  const PERIODS = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'];
+type AvailabilityMatrixProps = {
+  days: string[];
+  periods: string[];
+  value?: Record<string, boolean>;
+  onChange?: (availability: Record<string, boolean>) => void;
+};
 
-  const [avail, setAvail] = useState<Record<string, boolean>>({});
-  const toggle = (key: string) => setAvail((prev) => ({ ...prev, [key]: !prev[key] }));
+const AvailabilityMatrix = ({ days, periods, value = {}, onChange }: AvailabilityMatrixProps) => {
+  const [avail, setAvail] = useState<Record<string, boolean>>(value);
+
+  const toggle = (key: string) => {
+    setAvail((prev) => {
+      const updated = { ...prev, [key]: !prev[key] };
+      onChange?.(updated);
+      return updated;
+    });
+  };
+
   return (
     <div className="overflow-x-auto">
       <table className="text-[10px]">
         <thead>
           <tr>
-            <th className="w-14 text-[#555] font-normal pb-2" />
-            {DAYS.map((d) => (
-              <th key={d} className="text-[#555] font-medium text-center w-10 pb-2">
-                {d}
+            <th className="w-14 pb-2 text-[#555] font-normal" />
+            {days.map((day) => (
+              <th key={day} className="w-10 pb-2 text-center text-[#555] font-medium">
+                {day}
               </th>
             ))}
           </tr>
         </thead>
+
         <tbody>
-          {PERIODS.map((period) => (
+          {periods.map((period) => (
             <tr key={period}>
-              <td className="pr-2 text-[#555] py-0.5">{period}</td>
-              {DAYS.map((day) => {
+              <td className="pr-2 py-0.5 text-[#555]">{period}</td>
+
+              {days.map((day) => {
                 const key = `${day}-${period}`;
-                const on = avail[key] !== false;
+                const isAvailable = avail[key] !== false;
+
                 return (
-                  <td key={day} className="text-center py-0.5">
+                  <td key={day} className="py-0.5 text-center">
                     <button
+                      type="button"
                       onClick={() => toggle(key)}
-                      className="w-7 h-5 rounded transition-all"
+                      className="w-7 h-5 rounded transition-all cursor-pointer hover:bg-[#ef444420] hover:border-[#ef444430]"
                       style={{
-                        background: on ? '#22c55e20' : '#ef444415',
-                        border: `1px solid ${on ? '#22c55e40' : '#ef444430'}`,
+                        background: isAvailable ? '#22c55e20' : '#ef444415',
+                        border: `1px solid ${isAvailable ? '#22c55e40' : '#ef444430'}`,
                       }}
                     />
                   </td>
