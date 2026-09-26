@@ -5,7 +5,7 @@ import logger from '#configs/logger.js';
 import { checkRedis } from '#configs/redis.js';
 
 import app from './app.js';
-import { worker } from './workers/index.js';
+import { worker } from './worker.js';
 
 import { registerShutdownHandlers } from '#utils/graceful-shutdown.js';
 import { createSocketServer } from '#configs/socket.js';

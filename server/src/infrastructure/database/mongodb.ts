@@ -4,22 +4,41 @@ import { env } from '#configs/env.js';
 import logger from '#configs/logger.js';
 import { mongodbConfig } from '#configs/database.config.js';
 
-mongoose.connection.on('connected', () => {
-  logger.info('Connected to database');
-});
+export class Database {
+  constructor(
+    private readonly uri: string,
+    private readonly options = mongodbConfig,
+  ) {
+    this.registerEvents();
+  }
 
-mongoose.connection.on('disconnected', () => {
-  logger.info('Disconnected from database');
-});
+  private registerEvents(): void {
+    mongoose.connection.on('connected', () => {
+      logger.info('Connected to database');
+    });
 
-mongoose.connection.on('error', (error) => {
-  logger.error('Database connection error', error);
-});
+    mongoose.connection.on('disconnected', () => {
+      logger.info('Disconnected from database');
+    });
 
-const connect = async (retries = 5, delay = 2000): Promise<void> => {
-  try {
-    await mongoose.connect(env.MONGODB_URI, mongodbConfig);
-  } catch (error) {
+    mongoose.connection.on('error', (error) => {
+      logger.error('Database connection error', error);
+    });
+  }
+
+  async connect(retries = 5, delay = 2000): Promise<void> {
+    try {
+      await mongoose.connect(this.uri, this.options);
+    } catch (error) {
+      await this.handleConnectionError(error, retries, delay);
+    }
+  }
+
+  private async handleConnectionError(
+    error: unknown,
+    retries: number,
+    delay: number,
+  ): Promise<void> {
     if (retries === 0) {
       logger.error('Database connection failed. No retries left.', error);
 
@@ -28,17 +47,20 @@ const connect = async (retries = 5, delay = 2000): Promise<void> => {
 
     logger.warn(`Retrying database connection in ${delay / 1000}s (${retries} retries left)...`);
 
-    await new Promise((resolve) => setTimeout(resolve, delay));
+    await this.sleep(delay);
 
-    await connect(retries - 1, delay);
+    await this.connect(retries - 1, delay);
   }
-};
 
-const disconnect = async (): Promise<void> => {
-  await mongoose.disconnect();
-};
+  private async sleep(delay: number): Promise<void> {
+    await new Promise<void>((resolve) => {
+      setTimeout(resolve, delay);
+    });
+  }
 
-export const database = {
-  connect,
-  disconnect,
-};
+  async disconnect(): Promise<void> {
+    await mongoose.disconnect();
+  }
+}
+
+export const database = new Database(env.MONGODB_URI, mongodbConfig);

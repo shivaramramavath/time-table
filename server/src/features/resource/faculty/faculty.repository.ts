@@ -1,4 +1,4 @@
-import { BaseRepository } from '#shared/repository/BaseRepository.js';
+import { BaseRepository } from '#shared/Base/BaseRepository.js';
 
 import { FacultyModel, type Faculty } from './faculty.model.js';
 

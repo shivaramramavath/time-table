@@ -1,6 +1,11 @@
-import { createDesignerQueue } from '../shared/designer.queue.js';
+import { DesignerQueue } from '../shared/designer.queue.js';
+
 import type { Room } from './room.model.js';
 
-export const roomQueue = createDesignerQueue<Room>({
-  name: 'room',
-});
+class RoomQueue extends DesignerQueue<Room> {
+  constructor() {
+    super('room');
+  }
+}
+
+export const roomQueue = new RoomQueue();

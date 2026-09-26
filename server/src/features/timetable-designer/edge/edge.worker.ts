@@ -1,4 +1,12 @@
-import { createDesignerWorker } from '../shared/designer.worker.js';
-import { edgeProcessor } from './edge.processor.js';
+import { BaseWorker } from '#shared/Base/BaseWorker.js';
 
-export const edgeWorker = () => createDesignerWorker('edge', edgeProcessor);
+import type { Edge } from './edge.model.js';
+import { edgeProcess } from './edge.process.js';
+
+class EdgeWorker extends BaseWorker<Edge> {
+  constructor() {
+    super('edge', edgeProcess);
+  }
+}
+
+export const edgeWorker = new EdgeWorker();

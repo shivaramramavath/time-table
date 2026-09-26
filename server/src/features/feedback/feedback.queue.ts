@@ -1,4 +1,4 @@
-import type { Queue } from 'bullmq';
+import { BaseQueue } from '#shared/Base/BaseQueue.js';
 
 export interface CreateFeedbackJob {
   userId: string;
@@ -6,10 +6,14 @@ export interface CreateFeedbackJob {
   rating: number;
 }
 
-export class FeedbackQueue {
-  constructor(private readonly queue: Queue<CreateFeedbackJob>) {}
+export class FeedbackQueue extends BaseQueue<CreateFeedbackJob> {
+  constructor() {
+    super('feedback');
+  }
 
   async create(data: CreateFeedbackJob) {
-    return this.queue.add('create', data);
+    return this.add('feedback:create', data);
   }
 }
+
+export const feedbackQueue = new FeedbackQueue();

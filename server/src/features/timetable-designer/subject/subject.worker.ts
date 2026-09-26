@@ -1,4 +1,12 @@
-import { createDesignerWorker } from '../shared/designer.worker.js';
-import { subjectProcessor } from './subject.processor.js';
+import { BaseWorker } from '#shared/Base/BaseWorker.js';
 
-export const subjectWorker = () => createDesignerWorker('subject', subjectProcessor);
+import type { Subject } from './subject.model.js';
+import { subjectProcess } from './subject.process.js';
+
+class SubjectWorker extends BaseWorker<Subject> {
+  constructor() {
+    super('subject', subjectProcess);
+  }
+}
+
+export const subjectWorker = new SubjectWorker();

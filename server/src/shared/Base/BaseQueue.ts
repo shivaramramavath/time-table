@@ -2,11 +2,11 @@ import { Queue, type JobsOptions } from 'bullmq';
 
 import redis from '#configs/redis.js';
 
-export class BaseQueue {
-  protected readonly queue: Queue;
+export abstract class BaseQueue<T> {
+  protected readonly queue: Queue<T>;
 
   constructor(protected readonly queueName: string) {
-    this.queue = new Queue(queueName, {
+    this.queue = new Queue<T>(queueName, {
       connection: redis,
       defaultJobOptions: {
         attempts: 3,
@@ -20,11 +20,11 @@ export class BaseQueue {
     });
   }
 
-  async add<T>(name: string, data: T, options?: JobsOptions) {
+  async add(name: string, data: T, options?: JobsOptions) {
     return this.queue.add(name, data, options);
   }
 
-  async addBulk<T>(
+  async addBulk(
     jobs: Array<{
       name: string;
       data: T;
@@ -34,7 +34,7 @@ export class BaseQueue {
     return this.queue.addBulk(jobs);
   }
 
-  async close() {
+  async close(): Promise<void> {
     await this.queue.close();
   }
 }

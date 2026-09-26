@@ -1,4 +1,11 @@
-import { createDesignerWorker } from '../shared/designer.worker.js';
-import { roomProcessor } from './room.processor.js';
+import { BaseWorker } from '#shared/Base/BaseWorker.js';
+import type { Room } from './room.model.js';
+import { roomProcess } from './room.process.js';
 
-export const roomWorker = () => createDesignerWorker('room', roomProcessor);
+class RoomWorker extends BaseWorker<Room> {
+  constructor() {
+    super('room', roomProcess);
+  }
+}
+
+export const roomWorker = new RoomWorker();

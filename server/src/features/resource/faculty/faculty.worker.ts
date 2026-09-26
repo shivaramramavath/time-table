@@ -1,21 +1,13 @@
-import type { Job } from 'bullmq';
-
-import { BaseWorker } from '#shared/queue/BaseWorker.js';
-
 import type { FacultyJobData } from './faculty.queue.js';
-
 import { FacultyProcess } from './faculty.process.js';
 
+import { BaseWorker } from '#shared/queue/BaseWorker.js';
+import { facultyRepository } from './faculty.repository.js';
+
 export class FacultyWorker extends BaseWorker<FacultyJobData> {
-  private readonly processor = new FacultyProcess();
-
-  constructor() {
-    super('faculty', 5);
-  }
-
-  protected async process(job: Job<FacultyJobData>) {
-    return this.processor.execute(job);
+  constructor(facultyProcess: FacultyProcess, concurrency = 5) {
+    super('faculty', facultyProcess, concurrency);
   }
 }
 
-export const facultyWorker = new FacultyWorker();
+export const facultyWorker = () => new FacultyWorker(new FacultyProcess(facultyRepository));

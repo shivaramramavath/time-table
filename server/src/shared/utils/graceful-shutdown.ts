@@ -3,7 +3,7 @@ import type { Server } from 'http';
 import logger from '#configs/logger.js';
 import { disconnectRedis } from '#configs/redis.js';
 
-import { worker } from '../../workers/index.js';
+import { worker } from '../../worker.js';
 import { database } from '../../infrastructure/database/mongodb.js';
 
 let isShuttingDown = false;

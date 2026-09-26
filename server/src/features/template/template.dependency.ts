@@ -3,7 +3,7 @@ import { TemplateRepository } from './template.repository.js';
 import { TemplateService } from './template.service.js';
 import { TemplateController } from './template.controller.js';
 
-const templateRepository = new TemplateRepository(TemplateModel);
+export const templateRepository = new TemplateRepository(TemplateModel);
 
 export const templateService = new TemplateService(templateRepository);
 

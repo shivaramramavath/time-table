@@ -1,8 +1,7 @@
-import { BaseQueue } from '#shared/queue/BaseQueue.js';
+import { BaseQueue } from '#shared/Base/BaseQueue.js';
 
 export interface FacultyJobData {
   facultyId: string;
-  action: 'created' | 'updated' | 'deleted';
 }
 
 export class FacultyQueue extends BaseQueue {
@@ -11,7 +10,14 @@ export class FacultyQueue extends BaseQueue {
   }
 
   async addFacultyJob(data: FacultyJobData) {
-    return this.add(`faculty:${data.action}`, data);
+    return this.add(`faculty:create`, data);
+  }
+  async updateFacultyJob(data: FacultyJobData) {
+    return this.add(`faculty:update`, data);
+  }
+
+  async deleteFacultyJob(data: FacultyJobData) {
+    return this.add(`faculty:delete`, data);
   }
 }
 

@@ -1,20 +1,7 @@
 import loadHtml from '#utils/loadHtml.js';
-import { BrevoService } from '../../infrastructure/email/brevo.js';
+import { BrevoService } from '../../../infrastructure/email/brevo.js';
 
-export interface ForgotPasswordJob {
-  email: string;
-  token: string;
-}
-
-export interface RegisterGreetingJob {
-  email: string;
-  userName: string;
-}
-
-export interface FeedbackJob {
-  email: string;
-  message: string;
-}
+import type { ForgotPasswordJob, RegisterGreetingJob, FeedbackJob } from './email.queue.js';
 
 export class EmailProcessor {
   constructor(

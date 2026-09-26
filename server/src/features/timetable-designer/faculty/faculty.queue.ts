@@ -1,6 +1,11 @@
-import { createDesignerQueue } from '../shared/designer.queue.js';
+import { DesignerQueue } from '../shared/designer.queue.js';
+
 import type { Faculty } from './faculty.model.js';
 
-export const facultyQueue = createDesignerQueue<Faculty>({
-  name: 'faculty',
-});
+class FacultyQueue extends DesignerQueue<Faculty> {
+  constructor() {
+    super('faculty');
+  }
+}
+
+export const facultyQueue = new FacultyQueue();
