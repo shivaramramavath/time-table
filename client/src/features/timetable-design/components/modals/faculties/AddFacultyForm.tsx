@@ -8,8 +8,8 @@ import { Label } from '@/shared/ui/label';
 import type { Faculty } from '../../../types';
 import { facultyService } from '../../../services/faculty.service';
 import SelectResourceIds from '../common/SelectResourceIds';
-import { subjectService } from '@/features/timetable-designer/services/subject.service';
-import { generateFacultyId } from '@/features/timetable-designer/utils/generate-ids';
+import { subjectService } from '@/features/timetable-design/services/subject.service';
+import { generateFacultyId } from '@/features/timetable-design/utils/generate-ids';
 
 interface Props {
   onSave: () => void;

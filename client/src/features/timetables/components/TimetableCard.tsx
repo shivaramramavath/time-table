@@ -29,12 +29,16 @@ const TimetableCard = ({ timetable }: TimetableCardProps) => {
    */
   const handleOpen = () => {
     switch (timetable.stage) {
-      case 'incomplete':
-        navigate(`/timetables/designer?timetableId=${timetable._id}`);
+      case 'draft':
+        navigate(`/timetables/${timetable._id}/design`);
+        break;
+
+      case 'editing':
+        navigate(`/timetables/${timetable._id}/edit`);
         break;
 
       case 'complete':
-        navigate(`/timetables/${timetable._id}/view`);
+        navigate(`/timetables/${timetable._id}`);
         break;
 
       default:
@@ -116,7 +120,7 @@ const TimetableCard = ({ timetable }: TimetableCardProps) => {
               <h3 className="truncate text-sm font-semibold">{timetable.title}</h3>
 
               <p className="mt-0.5 text-xs text-muted-foreground">
-                {timetable.stage === 'incomplete' ? 'Work in progress' : 'Completed timetable'}
+                {timetable.stage === 'draft' ? 'Work in progress' : 'Completed timetable'}
               </p>
             </div>
           </div>
@@ -190,12 +194,12 @@ const TimetableCard = ({ timetable }: TimetableCardProps) => {
           {/* Stage */}
           <span
             className={`rounded-md border px-2 py-0.5 text-[10px] font-medium ${
-              timetable.stage === 'incomplete'
+              timetable.stage === 'draft'
                 ? 'border-amber-500/20 bg-amber-500/10 text-amber-400'
                 : 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400'
             }`}
           >
-            {timetable.stage === 'incomplete' ? 'Draft' : 'Complete'}
+            {timetable.stage === 'draft' ? 'Draft' : 'Complete'}
           </span>
         </div>
 

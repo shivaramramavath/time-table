@@ -1,4 +1,7 @@
-import { DesignerProcess, type DesignerRepository } from '../shared/designer.process.js';
+import {
+  DesignerProcess,
+  type DesignerRepository,
+} from '../../timetable-designer/shared/designer.process.js';
 
 import type { Subject } from './subject.model.js';
 import { subjectRepository } from './subject.repository.js';

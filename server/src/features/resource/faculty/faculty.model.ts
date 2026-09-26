@@ -75,4 +75,4 @@ export type Faculty = InferSchemaType<typeof facultySchema>;
 
 export type FacultyDocument = HydratedDocument<Faculty>;
 
-export const FacultyModel = model<Faculty>('Faculties', facultySchema);
+export const FacultyModel = model<Faculty>('Faculty', facultySchema);

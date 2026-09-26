@@ -4,8 +4,8 @@ import { motion } from 'framer-motion';
 
 import { Button } from '@/shared/ui/button';
 import { cn } from '@/shared/lib/utils';
-import { messageService } from '@/features/timetable-designer/services/message.service';
-import { useMessageStore } from '@/features/timetable-designer/store/message.store';
+import { messageService } from '@/features/timetable-design/services/message.service';
+import { useMessageStore } from '@/features/timetable-design/store/message.store';
 
 const AIPrompt = () => {
   const [message, setMessage] = useState('');

@@ -2,11 +2,11 @@ import redis from '#configs/redis.js';
 
 export class BaseCache {
   constructor(
-    private readonly prefix: string,
-    private readonly ttl = 300,
+    protected readonly prefix: string,
+    protected readonly ttl = 300,
   ) {}
 
-  private key(id: string) {
+  protected key(id: string): string {
     return `${this.prefix}:${id}`;
   }
 
@@ -20,19 +20,19 @@ export class BaseCache {
     return JSON.parse(value) as T;
   }
 
-  async set<T>(id: string, value: T) {
+  async set<T>(id: string, value: T): Promise<void> {
     await redis.set(this.key(id), JSON.stringify(value), 'EX', this.ttl);
   }
 
-  async delete(id: string) {
+  async delete(id: string): Promise<void> {
     await redis.del(this.key(id));
   }
 
-  async exists(id: string) {
-    return redis.exists(this.key(id));
+  async exists(id: string): Promise<boolean> {
+    return Boolean(await redis.exists(this.key(id)));
   }
 
-  async clear(ids: string[]) {
+  async clear(ids: string[]): Promise<void> {
     if (!ids.length) {
       return;
     }

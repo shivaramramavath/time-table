@@ -1,4 +1,4 @@
-import { emitToUser } from '../../../sockets/emit-to-user.js';
+import { emitToUser } from '../../../sockets/socket-emitter.js';
 
 export type MessageStatus =
   | 'thinking'

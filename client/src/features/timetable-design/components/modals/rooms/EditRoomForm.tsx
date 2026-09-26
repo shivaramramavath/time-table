@@ -5,7 +5,7 @@ import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 
-import { roomService } from '@/features/timetable-designer/services/room.service';
+import { roomService } from '@/features/timetable-design/services/room.service';
 
 import type { Room } from '../../../types';
 

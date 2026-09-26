@@ -4,7 +4,7 @@ export interface FacultyJobData {
   facultyId: string;
 }
 
-export class FacultyQueue extends BaseQueue {
+export class FacultyQueue extends BaseQueue<FacultyJobData> {
   constructor() {
     super('faculty');
   }

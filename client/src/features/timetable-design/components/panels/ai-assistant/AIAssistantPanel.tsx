@@ -7,7 +7,7 @@ import { Button } from '@/shared/ui/button';
 import AIHeader from './AIHeader';
 import AIConversation from './AIConversation';
 import AIPrompt from './AIPrompt';
-import { useMessageListeners } from '@/features/timetable-designer/hooks/useMessageListeners';
+import { useMessageListeners } from '@/features/timetable-design/hooks/useMessageListeners';
 
 interface Props {
   onClose: () => void;

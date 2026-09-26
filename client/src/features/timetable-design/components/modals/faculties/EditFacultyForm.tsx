@@ -8,7 +8,7 @@ import { Label } from '@/shared/ui/label';
 import { useDesignerStore } from '../../../store/designer.store';
 import { facultyService } from '../../../services/faculty.service';
 
-import { subjectService } from '@/features/timetable-designer/services/subject.service';
+import { subjectService } from '@/features/timetable-design/services/subject.service';
 import SelectResourceIds from '../common/SelectResourceIds';
 
 interface Props {

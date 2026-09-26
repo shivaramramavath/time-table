@@ -2,26 +2,32 @@ import redis from '#configs/redis.js';
 
 const SOCKET_TTL = 24 * 60 * 60;
 
-const getSocketKey = (userId: string) => `socket:user:${userId}`;
+export class SocketRegistry {
+  constructor(private readonly ttl = SOCKET_TTL) {}
 
-export const socketRegistry = {
-  getSocketId: async (userId: string) => {
-    const key = getSocketKey(userId);
+  private getKey(userId: string): string {
+    return `socket:user:${userId}`;
+  }
+
+  async getSocketId(userId: string): Promise<string | null> {
+    const key = this.getKey(userId);
 
     const socketId = await redis.get(key);
 
     if (socketId) {
-      await redis.expire(key, SOCKET_TTL);
+      await redis.expire(key, this.ttl);
     }
 
     return socketId;
-  },
+  }
 
-  setSocketId: async (userId: string, socketId: string) => {
-    return redis.set(getSocketKey(userId), socketId, 'EX', SOCKET_TTL);
-  },
+  async setSocketId(userId: string, socketId: string): Promise<string> {
+    return redis.set(this.getKey(userId), socketId, 'EX', this.ttl);
+  }
 
-  removeSocketId: async (userId: string) => {
-    return redis.del(getSocketKey(userId));
-  },
-};
+  async removeSocketId(userId: string): Promise<number> {
+    return redis.del(this.getKey(userId));
+  }
+}
+
+export const socketRegistry = new SocketRegistry();

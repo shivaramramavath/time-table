@@ -6,7 +6,7 @@ import { Label } from '@/shared/ui/label';
 
 import type { Subject } from '../../../types';
 import { subjectService } from '../../../services/subject.service';
-import { generateSubjectId } from '@/features/timetable-designer/utils/generate-ids';
+import { generateSubjectId } from '@/features/timetable-design/utils/generate-ids';
 
 interface Props {
   onSave: () => void;

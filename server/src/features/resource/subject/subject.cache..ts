@@ -1,4 +1,4 @@
-import { createDesignerCache } from '../shared/designer-cache.js';
+import { createDesignerCache } from '../../timetable-designer/shared/designer-cache.js';
 import { Subject } from './subject.model.js';
 
 import { subjectQueue } from './subject.queue.js';

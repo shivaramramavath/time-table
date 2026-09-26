@@ -1,4 +1,4 @@
-import { DesignerQueue } from '../shared/designer.queue.js';
+import { DesignerQueue } from '../../timetable-designer/shared/designer.queue.js';
 
 import type { Subject } from './subject.model.js';
 

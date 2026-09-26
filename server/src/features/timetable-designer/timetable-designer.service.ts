@@ -1,8 +1,8 @@
+import { facultyService } from '#features/resource/faculty/faculty.service.js';
 import { edgeService } from './edge/edge.service.js';
-import { facultyService } from './faculty/faculty.service.js';
 import { nodeService } from './node/node.service.js';
 import { roomService } from './room/room.service.js';
-import { subjectService } from './subject/subject.service.js';
+import { subjectService } from '../resource/subject/subject.service.js';
 
 import { timetableDesignerRepository } from './timetable-designer.repository.js';
 

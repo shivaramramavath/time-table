@@ -1,220 +1,189 @@
 import { DESIGNER_TTL } from '#configs/constants.js';
-import redis from '#configs/redis.js';
 import { generateId } from '#utils/generate-ids.js';
+
+import { BaseHashCache } from '#shared/Base/BaseObjectCache.js';
 
 export interface DesignerEntity {
   id: string;
   designerId: string;
 }
 
-export interface CacheRepository<T extends DesignerEntity> {
+export interface DesignerRepository<T extends DesignerEntity> {
   findById(designerId: string, id: string): Promise<T | null>;
+
   findAll(designerId: string): Promise<T[]>;
 }
 
-export interface CacheQueue<T extends DesignerEntity> {
+export interface DesignerQueue<T extends DesignerEntity> {
   add(designerId: string, entity: T): Promise<unknown>;
+
   addMany(designerId: string, entities: T[]): Promise<unknown>;
+
   update(entity: T): Promise<unknown>;
+
   remove(designerId: string, id: string): Promise<unknown>;
+
   removeMany(designerId: string, ids: string[]): Promise<unknown>;
 }
 
-interface CreateOptions<T extends DesignerEntity> {
-  resource: string;
-  repository: CacheRepository<T>;
-  queue: CacheQueue<T>;
-}
+export abstract class DesignerCache<T extends DesignerEntity> extends BaseHashCache {
+  constructor(
+    resource: string,
+    protected readonly repository: DesignerRepository<T>,
+    protected readonly queue: DesignerQueue<T>,
+  ) {
+    super(`designer`, DESIGNER_TTL);
 
-export const createDesignerCache = <T extends DesignerEntity>({
-  resource,
-  repository,
-  queue,
-}: CreateOptions<T>) => {
-  const key = (designerId: string) => `designer:${designerId}:${resource}`;
+    this.resource = resource;
+  }
 
-  const getById = async (designerId: string, id: string): Promise<T | null> => {
-    const redisKey = key(designerId);
+  private readonly resource: string;
 
-    const cached = await redis.hget(redisKey, id);
+  private designerKey(designerId: string): string {
+    return `${designerId}:${this.resource}`;
+  }
+
+  async getById(designerId: string, id: string): Promise<T | null> {
+    const key = this.designerKey(designerId);
+
+    const cached = await this.get<T>(key, id);
 
     if (cached) {
-      return JSON.parse(cached) as T;
+      return cached;
     }
 
-    const entity = await repository.findById(designerId, id);
+    const entity = await this.repository.findById(designerId, id);
 
     if (!entity) {
       return null;
     }
 
-    await redis
-      .multi()
-      .hset(redisKey, id, JSON.stringify(entity))
-      .expire(redisKey, DESIGNER_TTL)
-      .exec();
+    await this.set(key, id, entity);
 
     return entity;
-  };
+  }
 
-  const getAll = async (designerId: string): Promise<T[]> => {
-    const redisKey = key(designerId);
+  async getAll(designerId: string): Promise<T[]> {
+    const key = this.designerKey(designerId);
 
-    const cached = await redis.hgetall(redisKey);
+    const cached = await this.getAllFromCache<T>(key);
 
-    if (Object.keys(cached).length > 0) {
-      return Object.values(cached).map((value) => JSON.parse(value) as T);
+    if (cached.length) {
+      return cached;
     }
 
-    const entities = await repository.findAll(designerId);
+    const entities = await this.repository.findAll(designerId);
 
-    if (entities.length === 0) {
+    if (!entities.length) {
       return [];
     }
 
-    const pipeline = redis.multi();
-
-    for (const entity of entities) {
-      pipeline.hset(redisKey, entity.id, JSON.stringify(entity));
-    }
-
-    pipeline.expire(redisKey, DESIGNER_TTL);
-
-    await pipeline.exec();
+    await this.setMany(
+      key,
+      entities.map((entity) => ({
+        field: entity.id,
+        value: entity,
+      })),
+    );
 
     return entities;
-  };
+  }
 
-  const create = async (designerId: string, entity: T): Promise<T> => {
-    const redisKey = key(designerId);
-
-    const newEntity: T = {
+  async create(designerId: string, entity: T): Promise<T> {
+    const newEntity = {
       ...entity,
-      id: entity.id || generateId(resource),
+      id: entity.id || generateId(this.resource),
       designerId,
-    };
+    } as T;
 
-    await redis
-      .multi()
-      .hset(redisKey, newEntity.id, JSON.stringify(newEntity))
-      .expire(redisKey, DESIGNER_TTL)
-      .exec();
+    await this.set(this.designerKey(designerId), newEntity.id, newEntity);
 
-    await queue.add(designerId, newEntity);
+    await this.queue.add(designerId, newEntity);
 
     return newEntity;
-  };
+  }
 
-  const createMany = async (designerId: string, entities: T[]): Promise<T[]> => {
-    if (entities.length === 0) {
+  async createMany(designerId: string, entities: T[]): Promise<T[]> {
+    if (!entities.length) {
       return [];
     }
 
-    const redisKey = key(designerId);
+    const newEntities = entities.map(
+      (entity) =>
+        ({
+          ...entity,
+          id: entity.id || generateId(this.resource),
+          designerId,
+        }) as T,
+    );
 
-    const newEntities = entities.map((entity) => ({
-      ...entity,
-      id: entity.id || generateId(resource),
-      designerId,
-    })) as T[];
+    await this.setMany(
+      this.designerKey(designerId),
+      newEntities.map((entity) => ({
+        field: entity.id,
+        value: entity,
+      })),
+    );
 
-    const pipeline = redis.multi();
-
-    for (const entity of newEntities) {
-      pipeline.hset(redisKey, entity.id, JSON.stringify(entity));
-    }
-
-    pipeline.expire(redisKey, DESIGNER_TTL);
-
-    await pipeline.exec();
-
-    await queue.addMany(designerId, newEntities);
+    await this.queue.addMany(designerId, newEntities);
 
     return newEntities;
-  };
+  }
 
-  const updateById = async (
-    designerId: string,
-    id: string,
-    data: Partial<T>,
-  ): Promise<T | null> => {
-    const redisKey = key(designerId);
-
-    let existing = await redis.hget(redisKey, id);
+  async updateById(designerId: string, id: string, data: Partial<T>): Promise<T | null> {
+    const existing = await this.getById(designerId, id);
 
     if (!existing) {
-      const entity = await repository.findById(designerId, id);
-
-      if (!entity) {
-        return null;
-      }
-
-      existing = JSON.stringify(entity);
+      return null;
     }
 
-    const updatedEntity: T = {
-      ...JSON.parse(existing),
+    const updatedEntity = {
+      ...existing,
       ...data,
       id,
       designerId,
-    };
+    } as T;
 
-    await redis
-      .multi()
-      .hset(redisKey, id, JSON.stringify(updatedEntity))
-      .expire(redisKey, DESIGNER_TTL)
-      .exec();
+    await this.set(this.designerKey(designerId), id, updatedEntity);
 
-    await queue.update(updatedEntity);
+    await this.queue.update(updatedEntity);
 
     return updatedEntity;
-  };
+  }
 
-  const deleteById = async (designerId: string, id: string): Promise<boolean> => {
-    const redisKey = key(designerId);
+  async deleteById(designerId: string, id: string): Promise<boolean> {
+    await this.delete(this.designerKey(designerId), id);
 
-    await redis.hdel(redisKey, id);
-
-    await queue.remove(designerId, id);
+    await this.queue.remove(designerId, id);
 
     return true;
-  };
+  }
 
-  const deleteMany = async (designerId: string, ids: string[]): Promise<number> => {
-    if (ids.length === 0) {
+  async deleteMany(designerId: string, ids: string[]): Promise<number> {
+    if (!ids.length) {
       return 0;
     }
 
-    const redisKey = key(designerId);
+    const deleted = await this.deleteManyFromCache(this.designerKey(designerId), ids);
 
-    const deleted = await redis.hdel(redisKey, ...ids);
-
-    await queue.removeMany(designerId, ids);
+    await this.queue.removeMany(designerId, ids);
 
     return deleted;
-  };
+  }
 
-  const invalidate = async (designerId: string): Promise<void> => {
-    await redis.del(key(designerId));
-  };
+  async invalidate(designerId: string): Promise<void> {
+    await this.clear(this.designerKey(designerId));
+  }
 
-  const invalidateById = async (designerId: string, id: string): Promise<void> => {
-    await redis.hdel(key(designerId), id);
-  };
+  async invalidateById(designerId: string, id: string): Promise<void> {
+    await this.delete(this.designerKey(designerId), id);
+  }
 
-  return {
-    getById,
-    getAll,
+  private async getAllFromCache<TValue>(key: string): Promise<TValue[]> {
+    return super.getAll<TValue>(key);
+  }
 
-    create,
-    createMany,
-
-    updateById,
-
-    deleteById,
-    deleteMany,
-
-    invalidate,
-    invalidateById,
-  };
-};
+  private async deleteManyFromCache(key: string, ids: string[]): Promise<number> {
+    return super.deleteMany(key, ids);
+  }
+}

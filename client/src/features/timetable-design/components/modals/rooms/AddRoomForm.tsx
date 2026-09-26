@@ -5,8 +5,8 @@ import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 
 import type { Room } from '../../../types';
-import { roomService } from '@/features/timetable-designer/services/room.service';
-import { generateRoomId } from '@/features/timetable-designer/utils/generate-ids';
+import { roomService } from '@/features/timetable-design/services/room.service';
+import { generateRoomId } from '@/features/timetable-design/utils/generate-ids';
 
 interface Props {
   onSave: () => void;

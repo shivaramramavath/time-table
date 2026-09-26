@@ -1,16 +1,14 @@
 import { facultyCache } from './faculty.cache.js';
-
 import { facultyQueue } from './faculty.queue.js';
-
-import { facultyRepository } from './faculty.repository.js';
+import { FacultyRepository } from './faculty.repository.js';
 
 export class FacultyService {
+  constructor(private readonly facultyRepository: FacultyRepository) {}
   async create(data: any) {
-    const faculty = await facultyRepository.create(data);
+    const faculty = await this.facultyRepository.create(data);
 
     await facultyQueue.addFacultyJob({
       facultyId: faculty._id.toString(),
-      action: 'created',
     });
 
     return faculty;
@@ -23,7 +21,7 @@ export class FacultyService {
       return cached;
     }
 
-    const faculty = await facultyRepository.findById(id);
+    const faculty = await this.facultyRepository.findById(id);
 
     if (!faculty) {
       throw new Error('Faculty not found');
@@ -35,11 +33,11 @@ export class FacultyService {
   }
 
   async getAll(filter = {}) {
-    return facultyRepository.find(filter);
+    return this.facultyRepository.find(filter);
   }
 
   async update(id: string, data: any) {
-    const faculty = await facultyRepository.update(id, data);
+    const faculty = await this.facultyRepository.update(id, data);
 
     if (!faculty) {
       throw new Error('Faculty not found');
@@ -49,14 +47,13 @@ export class FacultyService {
 
     await facultyQueue.addFacultyJob({
       facultyId: id,
-      action: 'updated',
     });
 
     return faculty;
   }
 
   async delete(id: string) {
-    const faculty = await facultyRepository.delete(id);
+    const faculty = await this.facultyRepository.delete(id);
 
     if (!faculty) {
       throw new Error('Faculty not found');
@@ -66,11 +63,10 @@ export class FacultyService {
 
     await facultyQueue.addFacultyJob({
       facultyId: id,
-      action: 'deleted',
     });
 
     return faculty;
   }
 }
 
-export const facultyService = new FacultyService();
+export const facultyService = new FacultyService(new FacultyRepository());

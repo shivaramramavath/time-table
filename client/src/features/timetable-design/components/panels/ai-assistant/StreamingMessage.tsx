@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import AIMessage from './AIMessage';
 import AITypingIndicator from './AITypingIndicator';
 
-import { useMessageStore } from '@/features/timetable-designer/store/message.store';
+import { useMessageStore } from '@/features/timetable-design/store/message.store';
 const StreamingMessage = () => {
   const streamingMessage = useMessageStore((state) => state.streamingMessage);
 

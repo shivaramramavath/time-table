@@ -4,9 +4,9 @@ import { AnimatePresence, motion } from 'framer-motion';
 import AIMessage from './AIMessage';
 import AITopRef from './AITopRef';
 
-import { messageService } from '@/features/timetable-designer/services/message.service';
-import { useMessageStore } from '@/features/timetable-designer/store/message.store';
-import type { Message } from '@/features/timetable-designer/types';
+import { messageService } from '@/features/timetable-design/services/message.service';
+import { useMessageStore } from '@/features/timetable-design/store/message.store';
+import type { Message } from '@/features/timetable-design/types';
 import EmptyConversation from './EmptyConversation';
 import StreamingMessage from './StreamingMessage';
 
