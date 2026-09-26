@@ -4,12 +4,12 @@ import { facultyController } from './faculty.controller.js';
 
 export const facultyRouter = Router();
 
-facultyRouter.post('/', facultyController.create.bind(facultyController));
+facultyRouter.post('/', facultyController.create);
 
-facultyRouter.get('/', facultyController.getAll.bind(facultyController));
+facultyRouter.get('/', facultyController.getAll);
 
-facultyRouter.get('/:id', facultyController.getById.bind(facultyController));
+facultyRouter.get('/:id', facultyController.getById);
 
-facultyRouter.patch('/:id', facultyController.update.bind(facultyController));
+facultyRouter.patch('/:id', facultyController.update);
 
-facultyRouter.delete('/:id', facultyController.delete.bind(facultyController));
+facultyRouter.delete('/:id', facultyController.delete);

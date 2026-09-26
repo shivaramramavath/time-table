@@ -1,4 +1,4 @@
-import type { Feedback, FeedbackModel } from './feedback.model.js';
+import { Feedback, FeedbackModel } from './feedback.model.js';
 
 export class FeedbackRepository {
   constructor(private readonly feedbackModel: FeedbackModel) {}

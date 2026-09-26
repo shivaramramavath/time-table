@@ -1,9 +1,12 @@
 import type { Model, Types } from 'mongoose';
 
 import type { Template } from './template.model.js';
+import { BaseRepository } from '#shared/Base/BaseRepository.js';
 
-export class TemplateRepository {
-  constructor(private readonly templateModel: Model<Template>) {}
+export class TemplateRepository extends BaseRepository<Template> {
+  constructor(private readonly templateModel: Model<Template>) {
+    super(templateModel);
+  }
 
   async get(id: string) {
     return this.templateModel.findById(id).lean<Template | null>();
@@ -30,31 +33,5 @@ export class TemplateRepository {
       })
       .sort({ createdAt: -1 })
       .lean<Template[]>();
-  }
-
-  async create({ userId, name, description, visibility = 'private' }: Partial<Template>) {
-    return this.templateModel.create({
-      userId,
-      name,
-      description,
-      visibility,
-    });
-  }
-
-  async update(id: string, data: Partial<Template>) {
-    return this.templateModel
-      .findByIdAndUpdate(
-        id,
-        { $set: data },
-        {
-          new: true,
-          runValidators: true,
-        },
-      )
-      .lean<Template | null>();
-  }
-
-  async remove(id: string) {
-    return this.templateModel.findByIdAndDelete(id).lean<Template | null>();
   }
 }

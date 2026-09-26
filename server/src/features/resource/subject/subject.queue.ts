@@ -1,10 +1,24 @@
-import { DesignerQueue } from '../../timetable-designer/shared/designer.queue.js';
+import { BaseQueue } from '#shared/Base/BaseQueue.js';
 
-import type { Subject } from './subject.model.js';
+export interface SubjectJobData {
+  subjectId: string;
+}
 
-class SubjectQueue extends DesignerQueue<Subject> {
+export class SubjectQueue extends BaseQueue<SubjectJobData> {
   constructor() {
     super('subject');
+  }
+
+  async addSubjectJob(data: SubjectJobData) {
+    return this.add('subject:create', data);
+  }
+
+  async updateSubjectJob(data: SubjectJobData) {
+    return this.add('subject:update', data);
+  }
+
+  async deleteSubjectJob(data: SubjectJobData) {
+    return this.add('subject:delete', data);
   }
 }
 

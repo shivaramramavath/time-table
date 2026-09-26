@@ -1,12 +1,47 @@
-import { DesignerProcess, type DesignerRepository } from '../shared/designer.process.js';
+import type { Job } from 'bullmq';
 
-import type { Edge } from './edge.model.js';
-import { edgeRepository } from './edge.repository.js';
+import { BaseProcess } from '#shared/Base/BaseProcess.js';
+import { EdgeRepository, edgeRepository } from './edge.repository.js';
+import type { EdgeJob } from './edge.queue.js';
 
-class EdgeProcess extends DesignerProcess<Edge> {
-  constructor(repository: DesignerRepository<Edge> = edgeRepository) {
-    super(repository);
+export class EdgeProcess extends BaseProcess<EdgeJob> {
+  constructor(private readonly repository: EdgeRepository) {
+    super();
+  }
+
+  async execute(job: Job<EdgeJob>): Promise<unknown> {
+    switch (job.name) {
+      case 'edge:create':
+        return this.create(job);
+
+      case 'edge:update':
+        return this.update(job);
+
+      case 'edge:delete':
+        return this.delete(job);
+
+      default:
+        throw new Error(`Unsupported edge job: ${job.name}`);
+    }
+  }
+
+  private async create(job: Job<EdgeJob>) {
+    const { edge } = job.data;
+
+    return this.repository.create(edge);
+  }
+
+  private async update(job: Job<EdgeJob>) {
+    const { edge } = job.data;
+
+    return this.repository.update(edge.id, edge);
+  }
+
+  private async delete(job: Job<EdgeJob>) {
+    const { edge } = job.data;
+
+    return this.repository.delete(edge.id);
   }
 }
 
-export const edgeProcess = new EdgeProcess();
+export const edgeProcessor = new EdgeProcess(edgeRepository);

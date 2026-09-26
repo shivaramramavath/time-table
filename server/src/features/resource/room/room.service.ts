@@ -1,18 +1,20 @@
-import { Room } from './room.model.js';
+import type { Room } from './room.model.js';
 import { roomCache } from './room.cache.js';
-import { roomRepository } from './room.repository.js';
+import { roomRepository, RoomRepository } from './room.repository.js';
 
-export const roomService = {
-  getById: async (designerId: string, id: string) => {
-    return roomCache.getById(designerId, id);
-  },
+export class RoomService {
+  constructor(private readonly roomRepository: RoomRepository) {}
 
-  getAll: async (designerId: string) => {
-    return roomCache.getAll(designerId);
-  },
+  async getById(designerId: string, id: string) {
+    return this.roomCache.getById(designerId, id);
+  }
 
-  create: async (designerId: string, data: Room) => {
-    const existing = await roomRepository.findByRoomNumber(designerId, data.roomNumber);
+  async getAll(designerId: string) {
+    return this.roomCache.getAll(designerId);
+  }
+
+  async create(designerId: string, data: Room) {
+    const existing = await this.roomRepository.findByRoomNumber(designerId, data.roomNumber);
 
     if (existing) {
       throw new Error('Room number already exists');
@@ -24,22 +26,24 @@ export const roomService = {
       id: crypto.randomUUID(),
     };
 
-    return roomCache.create(designerId, room);
-  },
+    return this.roomCache.create(designerId, room);
+  }
 
-  update: async (designerId: string, id: string, data: Partial<Room>) => {
+  async update(designerId: string, id: string, data: Partial<Room>) {
     if (data.roomNumber) {
-      const existing = await roomRepository.findByRoomNumber(designerId, data.roomNumber);
+      const existing = await this.roomRepository.findByRoomNumber(designerId, data.roomNumber);
 
       if (existing && existing.id !== id) {
         throw new Error('Room number already exists');
       }
     }
 
-    return roomCache.updateById(designerId, id, data);
-  },
+    return this.roomCache.updateById(designerId, id, data);
+  }
 
-  delete: async (designerId: string, id: string) => {
-    return roomCache.deleteById(designerId, id);
-  },
-};
+  async delete(designerId: string, id: string) {
+    return this.roomCache.deleteById(designerId, id);
+  }
+}
+
+export const roomService = new RoomService(roomRepository);

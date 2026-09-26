@@ -5,7 +5,7 @@ import logger from '#configs/logger.js';
 import { checkRedis } from '#configs/redis.js';
 
 import app from './app.js';
-import { worker } from './worker.js';
+import { workerManager } from './worker.js';
 
 import { registerShutdownHandlers } from '#utils/graceful-shutdown.js';
 import { createSocketServer } from '#configs/socket.js';
@@ -24,7 +24,7 @@ const bootstrap = async () => {
 
     await database.connect();
 
-    await worker.start();
+    await workerManager.start();
 
     server.listen(env.PORT, () => {
       logger.info(`Server started on port ${env.PORT}`);

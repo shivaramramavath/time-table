@@ -1,19 +1,20 @@
 import { BaseQueue } from '#shared/Base/BaseQueue.js';
+import { User } from './user.model.js';
 
 export type UserJobAction = 'password:update';
 
-export interface UpdatePasswordJob {
+export interface UpdateJob {
   userId: string;
-  password: string;
+  data: Partial<User>;
 }
 
-export class UserQueue extends BaseQueue<UpdatePasswordJob> {
+export class UserQueue extends BaseQueue<UpdateJob> {
   constructor() {
     super('user');
   }
 
-  async updatePassword(data: UpdatePasswordJob) {
-    return this.add('user:password:update', data);
+  async updatePassword(data: UpdateJob) {
+    return this.add('user:update', data);
   }
 }
 

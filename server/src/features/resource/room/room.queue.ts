@@ -1,10 +1,24 @@
-import { DesignerQueue } from '../shared/designer.queue.js';
+import { BaseQueue } from '#shared/Base/BaseQueue.js';
 
-import type { Room } from './room.model.js';
+export interface RoomJobData {
+  roomId: string;
+}
 
-class RoomQueue extends DesignerQueue<Room> {
+export class RoomQueue extends BaseQueue<RoomJobData> {
   constructor() {
     super('room');
+  }
+
+  async addRoomJob(data: RoomJobData) {
+    return this.add('room:create', data);
+  }
+
+  async updateRoomJob(data: RoomJobData) {
+    return this.add('room:update', data);
+  }
+
+  async deleteRoomJob(data: RoomJobData) {
+    return this.add('room:delete', data);
   }
 }
 

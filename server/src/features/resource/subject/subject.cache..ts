@@ -1,11 +1,9 @@
-import { createDesignerCache } from '../../timetable-designer/shared/designer-cache.js';
-import { Subject } from './subject.model.js';
+import { BaseCache } from '#shared/Base/BaseCache.js';
 
-import { subjectQueue } from './subject.queue.js';
-import { subjectRepository } from './subject.repository.js';
+export class SubjectCache extends BaseCache {
+  constructor() {
+    super('subject', 300);
+  }
+}
 
-export const subjectCache = createDesignerCache<Subject>({
-  resource: 'subjects',
-  repository: subjectRepository,
-  queue: subjectQueue,
-});
+export const subjectCache = new SubjectCache();

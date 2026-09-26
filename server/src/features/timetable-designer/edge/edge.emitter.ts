@@ -1,5 +1,11 @@
+import { BaseEmitter } from '#shared/Base/BaseEmitter.js';
+
 import type { Edge } from './edge.model.js';
 
-import { createDesignerEmitter } from '../shared/designer.emitter.js';
+export class EdgeEmitter extends BaseEmitter<Edge> {
+  constructor() {
+    super('edge');
+  }
+}
 
-export const edgeEmitter = createDesignerEmitter<Edge>('edge');
+export const edgeEmitter = new EdgeEmitter();

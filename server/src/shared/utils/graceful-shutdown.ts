@@ -3,7 +3,7 @@ import type { Server } from 'http';
 import logger from '#configs/logger.js';
 import { disconnectRedis } from '#configs/redis.js';
 
-import { worker } from '../../worker.js';
+import { workerManager } from '../../worker.js';
 import { database } from '../../infrastructure/database/mongodb.js';
 
 let isShuttingDown = false;
@@ -31,7 +31,7 @@ export const gracefulShutdown = async (signal: string, server: Server) => {
 
     logger.info('HTTP server closed');
 
-    await worker.close();
+    await workerManager.close();
 
     logger.info('Workers closed');
 

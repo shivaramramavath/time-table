@@ -1,57 +1,17 @@
+import { BaseRepository } from '#shared/Base/BaseRepository.js';
+import { Model } from 'mongoose';
 import { NodeModel, type Node } from './node.model.js';
 
-export const nodeRepository = {
-  findById: async (designerId: string, id: string): Promise<Node | null> => {
-    return NodeModel.findOne({
-      designerId,
-      id,
-    }).lean();
-  },
+export class NodeRepository extends BaseRepository<Node> {
+  constructor(protected readonly model: Model<Node>) {
+    super(model);
+  }
 
-  findAll: async (designerId: string): Promise<Node[]> => {
-    return NodeModel.find({
-      designerId,
-    })
-      .sort({ createdAt: 1 })
-      .lean();
-  },
-
-  create: async (node: Node): Promise<Node> => {
-    const document = await NodeModel.create(node);
-
-    return document.toObject();
-  },
-
-  createMany: async (nodes: Node[]): Promise<Node[]> => {
+  async createMany(nodes: Node[]): Promise<Node[]> {
     return NodeModel.insertMany(nodes);
-  },
+  }
 
-  update: async (designerId: string, id: string, data: Partial<Node>): Promise<Node | null> => {
-    return NodeModel.findOneAndUpdate(
-      {
-        designerId,
-        id,
-      },
-      {
-        $set: data,
-      },
-      {
-        new: true,
-        runValidators: true,
-      },
-    ).lean();
-  },
-
-  delete: async (designerId: string, id: string): Promise<boolean> => {
-    const result = await NodeModel.deleteOne({
-      designerId,
-      id,
-    });
-
-    return result.deletedCount > 0;
-  },
-
-  deleteMany: async (designerId: string, ids: string[]): Promise<number> => {
+  async deleteMany(designerId: string, ids: string[]): Promise<number> {
     if (ids.length === 0) {
       return 0;
     }
@@ -64,5 +24,7 @@ export const nodeRepository = {
     });
 
     return result.deletedCount;
-  },
-};
+  }
+}
+
+export const nodeRepository = new NodeRepository(NodeModel);

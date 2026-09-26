@@ -1,24 +1,35 @@
-import { subjectCache } from './subject.cache..js';
-import { Subject } from './subject.model.js';
+import type { Subject } from './subject.model.js';
+import { subjectCache } from './subject.cache.js';
+import { SubjectRepository, subjectRepository } from './subject.repository.js';
 
-export const subjectService = {
-  getById: async (designerId: string, id: string) => {
-    return subjectCache.getById(designerId, id);
-  },
+export class SubjectService {
+  constructor(private readonly subjectRepository: SubjectRepository) {}
 
-  getAll: async (designerId: string) => {
-    return subjectCache.getAll(designerId);
-  },
+  async getById(designerId: string, id: string) {
+    return this.subjectCache.getById(designerId, id);
+  }
 
-  create: async (designerId: string, data: Subject) => {
-    return subjectCache.create(designerId, data);
-  },
+  async getAll(designerId: string) {
+    return this.subjectCache.getAll(designerId);
+  }
 
-  update: async (designerId: string, id: string, data: Partial<Subject>) => {
-    return subjectCache.updateById(designerId, id, data);
-  },
+  async create(designerId: string, data: Subject) {
+    const subject: Subject = {
+      ...data,
+      designerId,
+      id: crypto.randomUUID(),
+    };
 
-  delete: async (designerId: string, id: string) => {
-    return subjectCache.deleteById(designerId, id);
-  },
-};
+    return this.subjectCache.create(designerId, subject);
+  }
+
+  async update(designerId: string, id: string, data: Partial<Subject>) {
+    return this.subjectCache.updateById(designerId, id, data);
+  }
+
+  async delete(designerId: string, id: string) {
+    return this.subjectCache.deleteById(designerId, id);
+  }
+}
+
+export const subjectService = new SubjectService(subjectRepository);

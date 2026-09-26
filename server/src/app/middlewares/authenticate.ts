@@ -17,7 +17,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 
   try {
     const payload = await tokenService.verifyAccessToken(token);
-    req.userId = payload.sub;
+    req.userId = payload.sub as string;
 
     next();
   } catch {

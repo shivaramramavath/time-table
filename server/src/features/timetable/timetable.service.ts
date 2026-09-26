@@ -1,8 +1,11 @@
 import createHttpError from 'http-errors';
 
-import { timetableDesignerService } from '#features/timetable-designer/timetable-designer.service.js';
+import {
+  timetableDesignerService,
+  TimetableDesignerService,
+} from '#features/timetable-designer/timetable-designer.service.js';
 
-import { timetableRepository } from './timetable.repository.js';
+import { TimetableRepository, timetableRepository } from './timetable.repository.js';
 import { CreateTimetableDto } from './dtos/create.dto.js';
 
 interface GetTimetablesParams {
@@ -14,18 +17,23 @@ interface GetTimetablesParams {
 interface UpdateTimetableData {
   title?: string;
   description?: string;
-  stage?: 'incomplete' | 'editing' | 'complete';
+  stage?: 'draft' | 'editing' | 'complete' | 'published' | 'archived';
 }
 
 export class TimetableService {
+  constructor(
+    private readonly timetableRepository = TimetableRepository,
+    private readonly timetableDesignerService = TimetableDesignerService,
+  ) {}
+
   async create({ userId, title, description }: CreateTimetableDto) {
-    const timetable = await timetableRepository.create({
+    const timetable = await this.timetableRepository.create({
       title,
       description,
       userId,
     });
 
-    await timetableDesignerService.create(timetable._id.toString());
+    await this.timetableDesignerService.create(timetable._id.toString());
 
     return timetable;
   }
@@ -34,7 +42,7 @@ export class TimetableService {
     const limit = 20;
     const skip = (page - 1) * limit;
 
-    return timetableRepository.getTimetables({
+    return this.timetableRepository.getTimetables({
       userId,
       query,
       skip,
@@ -43,21 +51,21 @@ export class TimetableService {
   }
 
   async getRecentTimetables(userId: string) {
-    return timetableRepository.getRecentTimetables(userId, 5);
+    return this.timetableRepository.getRecentTimetables(userId, 5);
   }
 
   async get(timetableId: string, userId: string) {
-    return timetableRepository.getById(timetableId, userId);
+    return this.timetableRepository.getById(timetableId, userId);
   }
 
   async generate({ timetableId, userId }: { timetableId: string; userId: string }) {
-    const timetable = await timetableRepository.getById(timetableId, userId);
+    const timetable = await this.timetableRepository.getById(timetableId, userId);
 
     if (!timetable) {
       throw createHttpError.NotFound('Timetable not found');
     }
 
-    const updatedTimetable = await timetableRepository.update(timetableId, userId, {
+    const updatedTimetable = await this.timetableRepository.update(timetableId, userId, {
       stage: 'complete',
     });
 
@@ -65,12 +73,12 @@ export class TimetableService {
   }
 
   async update(timetableId: string, userId: string, data: UpdateTimetableData) {
-    return timetableRepository.update(timetableId, userId, data);
+    return this.timetableRepository.update(timetableId, userId, data);
   }
 
   async delete(timetableId: string, userId: string) {
-    return timetableRepository.delete(timetableId, userId);
+    return this.timetableRepository.delete(timetableId, userId);
   }
 }
 
-export const timetableService = new TimetableService();
+export const timetableService = new TimetableService(timetableRepository, timetableDesignerService);

@@ -1,4 +1,5 @@
-import { emitToUser } from '../../../sockets/socket-emitter.js';
+import { BaseEmitter } from '#shared/Base/BaseEmitter.js';
+import { Message } from './message.model.js';
 
 export type MessageStatus =
   | 'thinking'
@@ -11,29 +12,54 @@ export type MessageStatus =
   | 'verifying'
   | 'responding';
 
-export const messageEmitter = {
-  start: (userId: string, data: { messageId: string }) => emitToUser(userId, 'message:start', data),
+export interface MessageStartData {
+  messageId: string;
+}
 
-  token: (
-    userId: string,
-    data: {
-      messageId: string;
-      content: string;
-      seq: number;
-      timestamp: number;
-    },
-  ) => emitToUser(userId, 'message:token', data),
+export interface MessageTokenData {
+  messageId: string;
+  content: string;
+  seq: number;
+  timestamp: number;
+}
 
-  status: (
-    userId: string,
-    data: {
-      messageId: string;
-      status: MessageStatus;
-    },
-  ) => emitToUser(userId, 'message:status', data),
+export interface MessageStatusData {
+  messageId: string;
+  status: MessageStatus;
+}
 
-  finish: (userId: string, data: { messageId: string }) =>
-    emitToUser(userId, 'message:finish', data),
+export interface MessageFinishData {
+  messageId: string;
+}
 
-  error: (userId: string, data: { message: string }) => emitToUser(userId, 'message:error', data),
-};
+export interface MessageErrorData {
+  message: string;
+}
+
+export class MessageEmitter extends BaseEmitter<Message> {
+  constructor() {
+    super('message');
+  }
+
+  async start(userId: string, data: MessageStartData): Promise<void> {
+    this.emit(userId, 'start', data);
+  }
+
+  async token(userId: string, data: MessageTokenData): Promise<void> {
+    this.emit(userId, 'token', data);
+  }
+
+  async status(userId: string, data: MessageStatusData): Promise<void> {
+    this.emit(userId, 'status', data);
+  }
+
+  async finish(userId: string, data: MessageFinishData): Promise<void> {
+    this.emit(userId, 'finish', data);
+  }
+
+  async error(userId: string, data: MessageErrorData): Promise<void> {
+    this.emit(userId, 'error', data);
+  }
+}
+
+export const messageEmitter = new MessageEmitter();

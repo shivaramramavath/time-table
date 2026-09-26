@@ -1,11 +1,9 @@
-import type { Room } from './room.model.js';
+import { BaseCache } from '#shared/Base/BaseCache.js';
 
-import { roomQueue } from './room.queue.js';
-import { roomRepository } from './room.repository.js';
-import { createDesignerCache } from '../shared/designer-cache.js';
+export class RoomCache extends BaseCache {
+  constructor() {
+    super('room', 300);
+  }
+}
 
-export const roomCache = createDesignerCache<Room>({
-  resource: 'rooms',
-  repository: roomRepository,
-  queue: roomQueue,
-});
+export const roomCache = new RoomCache();

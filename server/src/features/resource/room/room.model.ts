@@ -56,6 +56,6 @@ const roomSchema = new Schema(
 // Room code should be unique
 roomSchema.index({ code: 1 }, { unique: true });
 
-export type RoomDocument = InferSchemaType<typeof roomSchema>;
+export type Room = InferSchemaType<typeof roomSchema>;
 
-export const RoomModel = model<RoomDocument>('Room', roomSchema);
+export const RoomModel = model<Room>('Room', roomSchema);

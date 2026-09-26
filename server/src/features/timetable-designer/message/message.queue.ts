@@ -1,27 +1,21 @@
-import { Queue } from 'bullmq';
+import type { JobsOptions } from 'bullmq';
 
-import redis from '#configs/redis.js';
+import { BaseQueue } from '#shared/Base/BaseQueue.js';
+
 import type { Message } from './message.model.js';
 
-const queue = new Queue('message', {
-  connection: redis,
+export interface MessageJob {
+  designerId: string;
+  message: Message;
+}
 
-  defaultJobOptions: {
-    attempts: 3,
+export class MessageQueue extends BaseQueue<MessageJob> {
+  constructor() {
+    super('message');
+  }
 
-    backoff: {
-      type: 'exponential',
-      delay: 1000,
-    },
-
-    removeOnComplete: 100,
-    removeOnFail: 500,
-  },
-});
-
-export const messageQueue = {
-  add: async (designerId: string, message: Message) => {
-    return queue.add(
+  async add(designerId: string, message: Message) {
+    return super.add(
       'create',
       {
         designerId,
@@ -31,5 +25,7 @@ export const messageQueue = {
         jobId: `message:${message.id}`,
       },
     );
-  },
-};
+  }
+}
+
+export const messageQueue = new MessageQueue();

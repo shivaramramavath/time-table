@@ -8,7 +8,7 @@ export class TemplateController {
   get = async (req: Request, res: Response) => {
     const { id } = req.params;
 
-    const template = await this.templateService.get(id, req.userId);
+    const template = await this.templateService.get(id as string, req.userId);
 
     res.status(200).json({
       success: true,
@@ -17,7 +17,7 @@ export class TemplateController {
   };
 
   getAll = async (req: Request, res: Response) => {
-    const templates = await this.templateService.getAll(req.userId);
+    const templates = await this.templateService.getAll(req.userId || '');
 
     res.status(200).json({
       success: true,
@@ -26,7 +26,7 @@ export class TemplateController {
   };
 
   getPrivate = async (req: Request, res: Response) => {
-    const templates = await this.templateService.getPrivate(req.userId);
+    const templates = await this.templateService.getPrivate(req?.userId || '');
 
     res.status(200).json({
       success: true,

@@ -1,5 +1,10 @@
+import { BaseEmitter } from '#shared/Base/BaseEmitter.js';
 import type { Node } from './node.model.js';
 
-import { createDesignerEmitter } from '../shared/designer.emitter.js';
+export class NodeEmitter extends BaseEmitter<Node> {
+  constructor() {
+    super('node');
+  }
+}
 
-export const nodeEmitter = createDesignerEmitter<Node>('node');
+export const nodeEmitter = new NodeEmitter();

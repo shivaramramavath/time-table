@@ -3,10 +3,6 @@ import { Types } from 'mongoose';
 import type { Template } from './template.model.js';
 import { TemplateRepository } from './template.repository.js';
 
-const isOwner = (template: Template, userId: string | Types.ObjectId) => {
-  return template.userId.toString() === userId.toString();
-};
-
 export class TemplateService {
   constructor(private readonly templateRepository: TemplateRepository) {}
 
@@ -17,7 +13,7 @@ export class TemplateService {
       throw new Error('Template not found');
     }
 
-    if (template.visibility === 'private' && (!userId || !isOwner(template, userId))) {
+    if (template.visibility === 'private' && (!userId || !this.isOwner(template, userId))) {
       throw new Error('You do not have access to this template');
     }
 
@@ -34,6 +30,10 @@ export class TemplateService {
 
   async getPublic() {
     return this.templateRepository.getPublic();
+  }
+
+  private isOwner(template: Template, userId: string | Types.ObjectId) {
+    return template.userId.toString() === userId.toString();
   }
 
   async create(
@@ -55,7 +55,7 @@ export class TemplateService {
       throw new Error('Template not found');
     }
 
-    if (!isOwner(template, userId)) {
+    if (!this.isOwner(template, userId)) {
       throw new Error('You are not allowed to update this template');
     }
 
@@ -77,11 +77,11 @@ export class TemplateService {
       throw new Error('Template not found');
     }
 
-    if (!isOwner(template, userId)) {
+    if (!this.isOwner(template, userId)) {
       throw new Error('You are not allowed to delete this template');
     }
 
-    const deletedTemplate = await this.templateRepository.remove(id);
+    const deletedTemplate = await this.templateRepository.delete(id);
 
     if (!deletedTemplate) {
       throw new Error('Failed to delete template');

@@ -2,14 +2,14 @@ import type { Job } from 'bullmq';
 
 import { BaseProcess } from '#shared/Base/BaseProcess.js';
 
-import type { UpdatePasswordJob } from './user.queue.js';
+import type { UpdateJob } from './user.queue.js';
 import { userRepository } from './user.dependency.js';
 
-export class UserProcess extends BaseProcess<UpdatePasswordJob> {
-  async execute(job: Job<UpdatePasswordJob>): Promise<void> {
+export class UserProcess extends BaseProcess<UpdateJob> {
+  async execute(job: Job<UpdateJob>): Promise<void> {
     switch (job.name) {
-      case 'user:password:update':
-        await this.updatePassword(job.data);
+      case 'user:update':
+        await this.update(job.data);
         break;
 
       default:
@@ -17,7 +17,7 @@ export class UserProcess extends BaseProcess<UpdatePasswordJob> {
     }
   }
 
-  private async updatePassword(data: UpdatePasswordJob): Promise<void> {
-    await userRepository.updatePassword(data.userId, data.password);
+  private async update(data: UpdateJob): Promise<void> {
+    await userRepository.update(data.userId, data.data);
   }
 }

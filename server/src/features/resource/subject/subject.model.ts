@@ -80,6 +80,6 @@ subjectSchema.index(
   },
 );
 
-export type SubjectDocument = InferSchemaType<typeof subjectSchema>;
+export type Subject = InferSchemaType<typeof subjectSchema>;
 
-export const SubjectModel = model<SubjectDocument>('Subject', subjectSchema);
+export const SubjectModel = model<Subject>('Subject', subjectSchema);

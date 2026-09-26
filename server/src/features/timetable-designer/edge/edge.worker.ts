@@ -1,12 +1,12 @@
 import { BaseWorker } from '#shared/Base/BaseWorker.js';
 
 import type { Edge } from './edge.model.js';
-import { edgeProcess } from './edge.process.js';
+import { edgeProcessor, EdgeProcess } from './edge.process.js';
 
 class EdgeWorker extends BaseWorker<Edge> {
-  constructor() {
-    super('edge', edgeProcess);
+  constructor(queueName: string, edgeProcessor: EdgeProcess) {
+    super(queueName, edgeProcessor);
   }
 }
 
-export const edgeWorker = new EdgeWorker();
+export const edgeWorker = new EdgeWorker('edge', edgeProcessor);

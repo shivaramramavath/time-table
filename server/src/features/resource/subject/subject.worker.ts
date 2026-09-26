@@ -1,12 +1,13 @@
+import type { SubjectJobData } from './subject.queue.js';
+import { SubjectProcess } from './subject.process.js';
+
 import { BaseWorker } from '#shared/Base/BaseWorker.js';
+import { subjectRepository } from './subject.repository.js';
 
-import type { Subject } from './subject.model.js';
-import { subjectProcess } from './subject.process.js';
-
-class SubjectWorker extends BaseWorker<Subject> {
-  constructor() {
-    super('subject', subjectProcess);
+export class SubjectWorker extends BaseWorker<SubjectJobData> {
+  constructor(subjectProcess: SubjectProcess, concurrency = 5) {
+    super('subject', subjectProcess, concurrency);
   }
 }
 
-export const subjectWorker = new SubjectWorker();
+export const subjectWorker = () => new SubjectWorker(new SubjectProcess(subjectRepository));

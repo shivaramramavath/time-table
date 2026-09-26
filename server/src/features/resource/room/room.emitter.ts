@@ -1,5 +1,11 @@
+import { BaseEmitter } from '#shared/Base/BaseEmitter.js';
+
 import type { Room } from './room.model.js';
 
-import { createDesignerEmitter } from '../shared/designer.emitter.js';
+class RoomEmitter extends BaseEmitter<Room> {
+  constructor() {
+    super('room');
+  }
+}
 
-export const roomEmitter = createDesignerEmitter<Room>('room');
+export const roomEmitter = new RoomEmitter();

@@ -1,31 +1,37 @@
-import { nodeCache } from './node.cache.js';
+import type { Node } from './node.model.js';
 
-export const nodeService = {
-  getById: (designerId: string, nodeId: string) => {
-    return nodeCache.getById(designerId, nodeId);
-  },
+import { NodeCache, nodeCache } from './node.cache.js';
 
-  getAll: (designerId: string) => {
-    return nodeCache.getAll(designerId);
-  },
+export class NodeService {
+  constructor(private readonly nodeCache: NodeCache) {}
 
-  create: (designerId: string, node: Node) => {
-    return nodeCache.create(designerId, node);
-  },
+  async getById(designerId: string, nodeId: string) {
+    return this.nodeCache.getById(designerId, nodeId);
+  }
 
-  createMany: (designerId: string, nodes: Node[]) => {
-    return nodeCache.createMany(designerId, nodes);
-  },
+  async getAll(designerId: string) {
+    return this.nodeCache.getAll(designerId);
+  }
 
-  update: (designerId: string, nodeId: string, data: Partial<Node>) => {
-    return nodeCache.updateById(designerId, nodeId, data);
-  },
+  async create(designerId: string, node: Node) {
+    return this.nodeCache.create(designerId, node);
+  }
 
-  delete: (designerId: string, nodeId: string) => {
-    return nodeCache.deleteById(designerId, nodeId);
-  },
+  async createMany(designerId: string, nodes: Node[]) {
+    return this.nodeCache.createMany(designerId, nodes);
+  }
 
-  deleteMany: (designerId: string, nodeIds: string[]) => {
-    return nodeCache.deleteMany(designerId, nodeIds);
-  },
-};
+  async update(designerId: string, nodeId: string, data: Partial<Node>) {
+    return this.nodeCache.updateById(designerId, nodeId, data);
+  }
+
+  async delete(designerId: string, nodeId: string) {
+    return this.nodeCache.deleteById(designerId, nodeId);
+  }
+
+  async deleteMany(designerId: string, nodeIds: string[]) {
+    return this.nodeCache.deleteMany(designerId, nodeIds);
+  }
+}
+
+export const nodeService = new NodeService(nodeCache);

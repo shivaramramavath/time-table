@@ -13,7 +13,7 @@ export class FacultyController {
   }
 
   async getById(req: Request, res: Response) {
-    const faculty = await facultyService.getById(req.params.id);
+    const faculty = await facultyService.getById(req.params.id as string);
 
     res.status(200).json({
       success: true,
@@ -31,7 +31,7 @@ export class FacultyController {
   }
 
   async update(req: Request, res: Response) {
-    const faculty = await facultyService.update(req.params.id, req.body);
+    const faculty = await facultyService.update(req.params.id as string, req.body);
 
     res.status(200).json({
       success: true,
@@ -40,7 +40,7 @@ export class FacultyController {
   }
 
   async delete(req: Request, res: Response) {
-    const faculty = await facultyService.delete(req.params.id);
+    const faculty = await facultyService.delete(req.params.id as string);
 
     res.status(200).json({
       success: true,

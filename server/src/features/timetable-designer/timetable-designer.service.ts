@@ -1,18 +1,18 @@
+import { roomService } from '#features/resource/room/room.service.js';
 import { facultyService } from '#features/resource/faculty/faculty.service.js';
+import { subjectService } from '../resource/subject/subject.service.js';
 import { edgeService } from './edge/edge.service.js';
 import { nodeService } from './node/node.service.js';
-import { roomService } from './room/room.service.js';
-import { subjectService } from '../resource/subject/subject.service.js';
 
 import { timetableDesignerRepository } from './timetable-designer.repository.js';
 
 export const timetableDesignerService = {
   create: async (timetableId: string) => {
-    return timetableDesignerRepository.create(timetableId);
+    return timetableDesignerRepository.create({ timetableId });
   },
 
   get: async (timetableId: string) => {
-    const timetableDesigner = await timetableDesignerRepository.get(timetableId);
+    const timetableDesigner = await timetableDesignerRepository.findById(timetableId);
 
     if (!timetableDesigner) {
       return null;

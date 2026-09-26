@@ -1,5 +1,11 @@
+import { BaseEmitter } from '#shared/Base/BaseEmitter.js';
+
 import type { Subject } from './subject.model.js';
 
-import { createDesignerEmitter } from '../../timetable-designer/shared/designer.emitter.js';
+class SubjectEmitter extends BaseEmitter<Subject> {
+  constructor() {
+    super('subject');
+  }
+}
 
-export const subjectEmitter = createDesignerEmitter<Subject>('subject');
+export const subjectEmitter = new SubjectEmitter();

@@ -1,23 +1,11 @@
-import createHttpError from 'http-errors';
+import { BaseRepository } from '#shared/Base/BaseRepository.js';
+import { TimetableDesigner, TimetableDesignerModel } from './timetable-designer.model.js';
 
-import { TimetableDesignerModel } from './timetable-designer.model.js';
+export class TimetableDesignerRepository extends BaseRepository<TimetableDesigner> {
+  constructor(public readonly model = TimetableDesignerModel) {
+    super(TimetableDesignerModel);
+  }
+}
 
-export const timetableDesignerRepository = {
-  create: async (timetableId: string) => {
-    try {
-      return await TimetableDesignerModel.create({
-        timetableId,
-      });
-    } catch (err) {
-      throw createHttpError.InternalServerError(err.message);
-    }
-  },
 
-  get: async (timetableId: string) => {
-    try {
-      return await TimetableDesignerModel.findOne({ timetableId }).lean();
-    } catch {
-      throw createHttpError.InternalServerError('Failed to get timetable Designer');
-    }
-  },
-};
+export const timetableDesignerRepository = new TimetableDesignerRepository();
