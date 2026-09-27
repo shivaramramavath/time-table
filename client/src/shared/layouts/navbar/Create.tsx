@@ -23,13 +23,7 @@ const Create = () => {
 
       setIsDialogOpen(false);
 
-      if (timetable.stage === 'incomplete') {
-        navigationService.navigate(`/timetables/designer?timetableId=${timetable._id}`);
-
-        return;
-      }
-
-      navigationService.navigate(`/timetables/${timetable._id}`);
+      navigationService.navigate(`/timetables/${timetable._id}/design`);
     } catch (error) {
       console.error('Failed to create timetable:', error);
     }

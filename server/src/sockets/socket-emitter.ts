@@ -3,20 +3,15 @@ import { SocketServer } from './socket-server.js';
 import { socketServer } from '../app/server.js';
 
 export class SocketEmitter {
-  constructor(
-    private readonly socketServer: SocketServer,
-    private readonly socketRegistry: SocketRegistry,
-  ) {}
-
   async emitToUser<T>(userId: string, event: string, data: T): Promise<void> {
-    const socketId = await this.socketRegistry.getSocketId(userId);
+    const socketId = await socketRegistry.getSocketId(userId);
 
     if (!socketId) {
       throw new Error(`Socket not found for user ${userId}`);
     }
 
-    this.socketServer.getInstance().to(socketId).emit(event, data);
+    socketServer.getInstance().to(socketId).emit(event, data);
   }
 }
 
-export const socketEmitter = new SocketEmitter(socketServer, socketRegistry);
+export const socketEmitter = new SocketEmitter();

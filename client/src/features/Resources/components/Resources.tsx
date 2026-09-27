@@ -2,9 +2,9 @@ import { BookOpen, DoorOpen, FlaskConical, Users, X } from 'lucide-react';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 
-import FacultyTable from './faculty/FaclutyTable';
 import SubjectTable from './subject/SubjectTable';
 import RoomTable from './room/RoomTable';
+import Faculty from './faculty/Faculty';
 
 type ResourceTab = 'faculty' | 'subjects' | 'rooms' | 'labs';
 
@@ -17,20 +17,17 @@ const TABS = [
     id: 'faculty' as const,
     label: 'Faculty',
     icon: Users,
-    count: 0,
   },
   {
     id: 'subjects' as const,
     label: 'Subjects',
     icon: BookOpen,
-    count: 0,
   },
   {
     id: 'rooms' as const,
     label: 'Rooms',
     icon: DoorOpen,
-    count: 0,
-  }
+  },
 ];
 
 export function SubjectChip({ label, onRemove }: { label: string; onRemove?: () => void }) {
@@ -57,8 +54,6 @@ export default function Resources({ initialTab = 'faculty' }: ResourcesProps) {
     <div className="flex flex-1 flex-col overflow-hidden p-2">
       {/* Header */}
       <div>
-        <h1 className="font-semibold">Resources</h1>
-
         <Tabs defaultValue={initialTab} className="w-full">
           {/* Tabs */}
           <TabsList className="h-auto w-full justify-start gap-1  border-b bg-transparent p-0">
@@ -66,15 +61,11 @@ export default function Resources({ initialTab = 'faculty' }: ResourcesProps) {
               <TabsTrigger
                 key={id}
                 value={id}
-                className="group relative -mb-px gap-1.5 rounded-none border-b-2 border-transparent px-4 py-2.5 text-xs font-medium text-[#555] shadow-none hover:text-[#a0a0a0] data-[state=active]:border-[#6366f1] data-[state=active]:bg-transparent data-[state=active]:text-white data-[state=active]:shadow-none"
+                className="group relative -mb-px gap-1.5  border-b-2 border-transparent px-4 py-2.5 text-xs font-medium text-[#555] shadow-none hover:text-[#a0a0a0] data-[state=active]:border-[#6366f1] data-[state=active]:bg-transparent data-[state=active]:text-white data-[state=active]:shadow-none"
               >
                 <Icon size={13} />
 
                 {label}
-
-                <span className="ml-0.5 rounded-full px-1.5 py-0.5 text-[10px] text-[#444] group-data-[state=active]:bg-[#6366f115] group-data-[state=active]:text-[#a5b4fc]">
-                  {count}
-                </span>
               </TabsTrigger>
             ))}
           </TabsList>
@@ -82,7 +73,7 @@ export default function Resources({ initialTab = 'faculty' }: ResourcesProps) {
           {/* Content */}
           <div className="py-5">
             <TabsContent value="faculty" className="mt-0">
-              <FacultyTable />
+              <Faculty />
             </TabsContent>
 
             <TabsContent value="subjects" className="mt-0">

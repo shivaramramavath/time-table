@@ -10,8 +10,7 @@ export class TimetableController {
   create = expressAsyncHandler(async (req: Request, res: Response) => {
     const timetable = await this.timetableService.create({
       userId: req.userId as string,
-      title: req.body.title,
-      description: req.body.description,
+      ...req.body,
     });
 
     res.status(201).json({

@@ -3,6 +3,7 @@ import { Token } from '@/features/auth/services/token.service';
 import { authService } from '@/features/auth/services/auth.service';
 import { httpClient } from './httpClient';
 import { navigationService } from '../services/navigation.service';
+import { toast } from 'sonner';
 
 interface RetryableRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
@@ -42,6 +43,7 @@ export const errorInterceptor = async (error: AxiosError<{ message?: string }>) 
   const message = error.response?.data?.message ?? error.message ?? 'Something went wrong';
 
   console.error(message);
+  toast.error(message);
 
   return Promise.reject(error);
 };

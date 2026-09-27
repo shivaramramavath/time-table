@@ -4,7 +4,7 @@ const timetableDesignerSchema = new Schema(
   {
     timetableId: {
       type: Schema.Types.ObjectId,
-      ref: 'Timetable',
+      ref: 'timetable',
       required: true,
       unique: true,
       index: true,

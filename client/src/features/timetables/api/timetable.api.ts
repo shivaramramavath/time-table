@@ -25,6 +25,6 @@ export const timetableApi = {
   },
 
   delete: async (timetableId: string) => {
-    await httpClient.delete(`/timetable?timetableId=${timetableId}`);
+    await httpClient.delete(`/timetable/${timetableId}`);
   },
 };

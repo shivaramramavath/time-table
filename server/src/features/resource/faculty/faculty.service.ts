@@ -1,14 +1,19 @@
+import mongoose from 'mongoose';
 import { facultyCache } from './faculty.cache.js';
 import { facultyQueue } from './faculty.queue.js';
 import { FacultyRepository } from './faculty.repository.js';
+import { Faculty } from './faculty.model.js';
 
 export class FacultyService {
   constructor(private readonly facultyRepository: FacultyRepository) {}
   async create(data: any) {
-    const faculty = await this.facultyRepository.create(data);
+    const faculty = await this.facultyRepository.create({
+      ...data,
+      id: new mongoose.Types.ObjectId(),
+    });
 
     await facultyQueue.addFacultyJob({
-      facultyId: faculty._id.toString(),
+      facultyId: faculty.id.toString(),
     });
 
     return faculty;
@@ -32,8 +37,13 @@ export class FacultyService {
     return faculty;
   }
 
-  async getAll(filter = {}) {
-    return this.facultyRepository.find(filter);
+  async getAll(filter) {
+    return this.facultyRepository.find({
+      name: {
+        $regex: filter.name,
+        $options: 'i',
+      },
+    });
   }
 
   async update(id: string, data: any) {

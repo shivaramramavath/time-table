@@ -1,10 +1,12 @@
 import createHttpError from 'http-errors';
 
-import { timetableDesignerService } from '#features/timetable-designer/timetable-designer.service.js';
+import {
+  TimetableDesignerService,
+  timetableDesignerService,
+} from '#features/timetable-designer/timetable-designer.service.js';
 
 import { TimetableRepository, timetableRepository } from './timetable.repository.js';
 import { CreateTimetableDto } from './dtos/create.dto.js';
-import { TimetableDesignerRepository } from '#features/timetable-designer/timetable-designer.repository.js';
 
 interface GetTimetablesParams {
   userId: string;
@@ -21,13 +23,14 @@ interface UpdateTimetableData {
 export class TimetableService {
   constructor(
     private readonly timetableRepository: TimetableRepository,
-    private readonly timetableDesignerService: TimetableDesignerRepository,
+    private readonly timetableDesignerService: TimetableDesignerService,
   ) {}
 
   async create(data: CreateTimetableDto) {
     const timetable = await this.timetableRepository.create(data);
+    console.log(timetable);
 
-    await this.timetableDesignerService.create({ timetableId: timetable._id });
+    await this.timetableDesignerService.create(timetable._id.toString());
 
     return timetable;
   }

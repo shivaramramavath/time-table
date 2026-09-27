@@ -8,6 +8,7 @@ import { TableCell, TableRow } from '@/shared/ui/table';
 
 import { SubjectChip } from '../Resources';
 import type { Faculty } from '../../api/FacultyApi';
+import { useDeleteFaculty } from '../../hooks/useFaculty';
 
 type FacultyRowProps = {
   faculty: Faculty;
@@ -17,29 +18,16 @@ type FacultyRowProps = {
   isSaving?: boolean;
 };
 
-const FacultyRow = ({
-  faculty,
-  onDelete,
-  onSave,
-  isDeleting = false,
-  isSaving = false,
-}: FacultyRowProps) => {
+const FacultyRow = ({ faculty }: FacultyRowProps) => {
   const [editFaculty, setEditFaculty] = useState<Faculty | null>(null);
+  const deleteFaculty = useDeleteFaculty();
 
   const handleEdit = () => {
-    if (isDeleting || isSaving) {
-      return;
-    }
-
     setEditFaculty(faculty);
   };
 
-  const handleDelete = () => {
-    if (isDeleting || isSaving) {
-      return;
-    }
-
-    onDelete?.(faculty);
+  const handleDeleteFaculty = () => {
+    deleteFaculty.mutate(faculty.id);
   };
 
   const handleSave = (updatedFaculty: Faculty) => {
@@ -73,7 +61,7 @@ const FacultyRow = ({
         </TableCell>
 
         <TableCell className="px-4 py-3">
-          <span className="text-xs text-[#666]">{faculty.employeeId}</span>
+          <span className="text-xs text-[#666]">{faculty.id}</span>
         </TableCell>
 
         <TableCell className="px-4 py-3">
@@ -135,7 +123,7 @@ const FacultyRow = ({
               type="button"
               variant="ghost"
               size="icon"
-              disabled={isDeleting || isSaving}
+              disabled={deleteFaculty.isPending}
               onClick={handleEdit}
               className="
                 h-7 w-7
@@ -154,8 +142,8 @@ const FacultyRow = ({
               type="button"
               variant="ghost"
               size="icon"
-              disabled={isDeleting || isSaving}
-              onClick={handleDelete}
+              disabled={deleteFaculty.isPending}
+              onClick={handleDeleteFaculty}
               className="
                 h-7 w-7
                 rounded-md

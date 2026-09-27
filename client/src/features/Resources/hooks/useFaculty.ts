@@ -4,13 +4,16 @@ import { facultyApi, type CreateFacultyInput, type UpdateFacultyInput } from '..
 
 export const facultyKeys = {
   all: ['faculty'] as const,
-  detail: (id: string) => ['faculty', id] as const,
+  lists: () => [...facultyKeys.all, 'list'] as const,
+  list: (query: string) => [...facultyKeys.lists(), query] as const,
+  details: () => [...facultyKeys.all, 'detail'] as const,
+  detail: (id: string) => [...facultyKeys.details(), id] as const,
 };
 
-export const useFaculty = () => {
+export const useFaculty = (query = '') => {
   return useQuery({
-    queryKey: facultyKeys.all,
-    queryFn: () => facultyApi.getAll(),
+    queryKey: facultyKeys.list(query),
+    queryFn: () => facultyApi.getAll(query),
   });
 };
 
@@ -61,9 +64,13 @@ export const useDeleteFaculty = () => {
   return useMutation({
     mutationFn: (id: string) => facultyApi.delete(id),
 
-    onSuccess: () => {
+    onSuccess: (_, id) => {
       queryClient.invalidateQueries({
         queryKey: facultyKeys.all,
+      });
+
+      queryClient.removeQueries({
+        queryKey: facultyKeys.detail(id),
       });
     },
   });

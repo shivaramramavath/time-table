@@ -1,5 +1,5 @@
 export type CreateTimetableDto = {
   title: string;
-  description: string;
+  description?: string;
   userId: string;
 };

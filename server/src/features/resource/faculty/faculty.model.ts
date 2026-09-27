@@ -2,6 +2,11 @@ import mongoose, { Schema, model, type InferSchemaType, type HydratedDocument } 
 
 const facultySchema = new Schema(
   {
+    id: {
+      type: Schema.Types.ObjectId,
+      required: true,
+    },
+
     name: {
       type: String,
       required: true,
@@ -13,13 +18,6 @@ const facultySchema = new Schema(
       required: true,
       trim: true,
       lowercase: true,
-    },
-
-    employeeId: {
-      type: String,
-      required: true,
-      trim: true,
-      uppercase: true,
     },
 
     department: {
@@ -67,6 +65,8 @@ const facultySchema = new Schema(
   },
   {
     timestamps: true,
+    __id: false,
+    versionKey: false,
   },
 );
 

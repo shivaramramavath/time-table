@@ -70,5 +70,3 @@ export class SocketManager {
     }
   }
 }
-
-export const socketManager = new SocketManager(socketServer.getInstance(), socketRegistry);

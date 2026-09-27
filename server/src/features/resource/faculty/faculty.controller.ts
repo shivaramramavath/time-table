@@ -22,7 +22,9 @@ export class FacultyController {
   }
 
   async getAll(req: Request, res: Response) {
-    const faculty = await facultyService.getAll(req.query);
+    const faculty = await facultyService.getAll({
+      name: req.query.name ?? '',
+    });
 
     res.status(200).json({
       success: true,
