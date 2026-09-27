@@ -53,7 +53,7 @@ const FacultyTable = ({ search }: props) => {
                 </TableRow>
               </TableHeader>
 
-              <TableBody>
+              <TableBody className="h-30 overflow-y-auto">
                 {faculties.map((faculty) => (
                   <FacultyRow key={faculty.id} faculty={faculty} />
                 ))}

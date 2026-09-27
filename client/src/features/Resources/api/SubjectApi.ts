@@ -33,37 +33,41 @@ export interface CreateSubjectInput {
 
 export type UpdateSubjectInput = Partial<CreateSubjectInput>;
 
-export interface SubjectResponse {
-  success: boolean;
-  data: Subject;
-}
-
-export interface SubjectListResponse {
-  success: boolean;
-  data: Subject[];
-}
-
 export class SubjectApi {
-  private readonly basePath = '/resources/subjects';
+  private readonly basePath = '/resources/subject';
 
   async create(data: CreateSubjectInput) {
-    return httpClient.post<SubjectResponse, CreateSubjectInput>(this.basePath, data);
+    const { data: response } = await httpClient.post(this.basePath, data);
+
+    return response.data;
   }
 
-  async getAll() {
-    return httpClient.get<SubjectListResponse>(this.basePath);
+  async getAll(query = '') {
+    const { data: response } = await httpClient.get(this.basePath, {
+      params: {
+        name: query || undefined,
+      },
+    });
+
+    return response.data;
   }
 
   async getById(id: string) {
-    return httpClient.get<SubjectResponse>(`${this.basePath}/${id}`);
+    const { data: response } = await httpClient.get(`${this.basePath}/${id}`);
+
+    return response.data;
   }
 
   async update(id: string, data: UpdateSubjectInput) {
-    return httpClient.patch<SubjectResponse, UpdateSubjectInput>(`${this.basePath}/${id}`, data);
+    const { data: response } = await httpClient.patch(`${this.basePath}/${id}`, data);
+
+    return response.data;
   }
 
   async delete(id: string) {
-    return httpClient.delete<SubjectResponse>(`${this.basePath}/${id}`);
+    const { data: response } = await httpClient.delete(`${this.basePath}/${id}`);
+
+    return response.data;
   }
 }
 

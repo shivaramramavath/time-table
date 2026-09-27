@@ -1,34 +1,34 @@
+import mongoose from 'mongoose';
+
 import type { Subject } from './subject.model.js';
-import { subjectCache } from './subject.cache.js';
 import { SubjectRepository, subjectRepository } from './subject.repository.js';
 
 export class SubjectService {
   constructor(private readonly subjectRepository: SubjectRepository) {}
 
-  async getById(designerId: string, id: string) {
-    return this.subjectCache.getById(designerId, id);
+  async getById(id: string) {
+    return this.subjectRepository.findById(id);
   }
 
-  async getAll(designerId: string) {
-    return this.subjectCache.getAll(designerId);
+  async getAll() {
+    return this.subjectRepository.find();
   }
 
-  async create(designerId: string, data: Subject) {
+  async create(data: Subject) {
     const subject: Subject = {
       ...data,
-      designerId,
-      id: crypto.randomUUID(),
+      id: new mongoose.Types.ObjectId(),
     };
 
-    return this.subjectCache.create(designerId, subject);
+    return this.subjectRepository.create(subject);
   }
 
-  async update(designerId: string, id: string, data: Partial<Subject>) {
-    return this.subjectCache.updateById(designerId, id, data);
+  async update(id: string, data: Partial<Subject>) {
+    return this.subjectRepository.update(id, data);
   }
 
-  async delete(designerId: string, id: string) {
-    return this.subjectCache.deleteById(designerId, id);
+  async delete(id: string) {
+    return this.subjectRepository.delete(id);
   }
 }
 

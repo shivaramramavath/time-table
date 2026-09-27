@@ -4,9 +4,7 @@ import { subjectService } from './subject.service.js';
 
 export class SubjectController {
   async create(req: Request, res: Response) {
-    const designerId = req.params.designerId as string;
-
-    const subject = await subjectService.create(designerId, req.body);
+    const subject = await subjectService.create(req.body);
 
     res.status(201).json({
       success: true,
@@ -15,10 +13,9 @@ export class SubjectController {
   }
 
   async getById(req: Request, res: Response) {
-    const designerId = req.params.designerId as string;
     const subjectId = req.params.id as string;
 
-    const subject = await subjectService.getById(designerId, subjectId);
+    const subject = await subjectService.getById(subjectId);
 
     res.status(200).json({
       success: true,
@@ -27,9 +24,9 @@ export class SubjectController {
   }
 
   async getAll(req: Request, res: Response) {
-    const designerId = req.params.designerId as string;
+    const subjects = await subjectService.getAll();
 
-    const subjects = await subjectService.getAll(designerId);
+    console.log(subjects);
 
     res.status(200).json({
       success: true,
@@ -38,10 +35,9 @@ export class SubjectController {
   }
 
   async update(req: Request, res: Response) {
-    const designerId = req.params.designerId as string;
     const subjectId = req.params.id as string;
 
-    const subject = await subjectService.update(designerId, subjectId, req.body);
+    const subject = await subjectService.update(subjectId, req.body);
 
     res.status(200).json({
       success: true,
@@ -50,10 +46,9 @@ export class SubjectController {
   }
 
   async delete(req: Request, res: Response) {
-    const designerId = req.params.designerId as string;
     const subjectId = req.params.id as string;
 
-    const subject = await subjectService.delete(designerId, subjectId);
+    const subject = await subjectService.delete(subjectId);
 
     res.status(200).json({
       success: true,

@@ -2,6 +2,10 @@ import { Schema, model, type InferSchemaType } from 'mongoose';
 
 const subjectSchema = new Schema(
   {
+    id: {
+      type: Schema.Types.ObjectId,
+      required: true,
+    },
     code: {
       type: String,
       required: true,

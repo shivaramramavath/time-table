@@ -2,9 +2,9 @@ import { BookOpen, DoorOpen, FlaskConical, Users, X } from 'lucide-react';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 
-import SubjectTable from './subject/SubjectTable';
-import RoomTable from './room/RoomTable';
 import Faculty from './faculty/Faculty';
+import Subject from './subject/Subject';
+import Room from './room/Room';
 
 type ResourceTab = 'faculty' | 'subjects' | 'rooms' | 'labs';
 
@@ -57,14 +57,13 @@ export default function Resources({ initialTab = 'faculty' }: ResourcesProps) {
         <Tabs defaultValue={initialTab} className="w-full">
           {/* Tabs */}
           <TabsList className="h-auto w-full justify-start gap-1  border-b bg-transparent p-0">
-            {TABS.map(({ id, label, icon: Icon, count }) => (
+            {TABS.map(({ id, label, icon: Icon }) => (
               <TabsTrigger
                 key={id}
                 value={id}
                 className="group relative -mb-px gap-1.5  border-b-2 border-transparent px-4 py-2.5 text-xs font-medium text-[#555] shadow-none hover:text-[#a0a0a0] data-[state=active]:border-[#6366f1] data-[state=active]:bg-transparent data-[state=active]:text-white data-[state=active]:shadow-none"
               >
                 <Icon size={13} />
-
                 {label}
               </TabsTrigger>
             ))}
@@ -77,11 +76,11 @@ export default function Resources({ initialTab = 'faculty' }: ResourcesProps) {
             </TabsContent>
 
             <TabsContent value="subjects" className="mt-0">
-              <SubjectTable />
+              <Subject />
             </TabsContent>
 
             <TabsContent value="rooms" className="mt-0">
-              <RoomTable />
+              <Room />
             </TabsContent>
 
             <TabsContent value="labs" className="mt-0">

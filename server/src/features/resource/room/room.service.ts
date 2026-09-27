@@ -1,20 +1,26 @@
+import mongoose from 'mongoose';
 import type { Room } from './room.model.js';
-import { roomCache } from './room.cache.js';
 import { roomRepository, RoomRepository } from './room.repository.js';
 
 export class RoomService {
   constructor(private readonly roomRepository: RoomRepository) {}
 
-  async getById(designerId: string, id: string) {
-    return this.roomCache.getById(designerId, id);
+  async getById(id: string) {
+    const room = await this.roomRepository.findById(id);
+
+    if (!room) {
+      throw new Error('Room not found');
+    }
+
+    return room;
   }
 
-  async getAll(designerId: string) {
-    return this.roomCache.getAll(designerId);
+  async getAll() {
+    return this.roomRepository.find();
   }
 
-  async create(designerId: string, data: Room) {
-    const existing = await this.roomRepository.findByRoomNumber(designerId, data.roomNumber);
+  async create(data: Room) {
+    const existing = await this.roomRepository.findByCode(data.code);
 
     if (existing) {
       throw new Error('Room number already exists');
@@ -22,27 +28,38 @@ export class RoomService {
 
     const room: Room = {
       ...data,
-      designerId,
-      id: crypto.randomUUID(),
+      id: new mongoose.Types.ObjectId(),
     };
 
-    return this.roomCache.create(designerId, room);
+    return this.roomRepository.create(room);
   }
 
-  async update(designerId: string, id: string, data: Partial<Room>) {
-    if (data.roomNumber) {
-      const existing = await this.roomRepository.findByRoomNumber(designerId, data.roomNumber);
+  async update(id: string, data: Partial<Room>) {
+    if (data.code) {
+      const existing = await this.roomRepository.findByCode(data.code);
 
       if (existing && existing.id !== id) {
         throw new Error('Room number already exists');
       }
     }
 
-    return this.roomCache.updateById(designerId, id, data);
+    const room = await this.roomRepository.update(id, data);
+
+    if (!room) {
+      throw new Error('Room not found');
+    }
+
+    return room;
   }
 
-  async delete(designerId: string, id: string) {
-    return this.roomCache.deleteById(designerId, id);
+  async delete(id: string) {
+    const room = await this.roomRepository.delete(id);
+
+    if (!room) {
+      throw new Error('Room not found');
+    }
+
+    return room;
   }
 }
 

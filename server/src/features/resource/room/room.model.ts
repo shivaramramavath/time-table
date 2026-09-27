@@ -2,6 +2,10 @@ import { Schema, model, type InferSchemaType } from 'mongoose';
 
 const roomSchema = new Schema(
   {
+    id: {
+      type: Schema.Types.ObjectId,
+      required: true,
+    },
     name: {
       type: String,
       required: true,

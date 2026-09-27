@@ -4,9 +4,7 @@ import { roomService } from './room.service.js';
 
 export class RoomController {
   async create(req: Request, res: Response) {
-    const designerId = req.params.designerId as string;
-
-    const room = await roomService.create(designerId, req.body);
+    const room = await roomService.create(req.body);
 
     res.status(201).json({
       success: true,
@@ -15,10 +13,9 @@ export class RoomController {
   }
 
   async getById(req: Request, res: Response) {
-    const designerId = req.params.designerId as string;
     const roomId = req.params.id as string;
 
-    const room = await roomService.getById(designerId, roomId);
+    const room = await roomService.getById(roomId);
 
     res.status(200).json({
       success: true,
@@ -27,9 +24,7 @@ export class RoomController {
   }
 
   async getAll(req: Request, res: Response) {
-    const designerId = req.params.designerId as string;
-
-    const rooms = await roomService.getAll(designerId);
+    const rooms = await roomService.getAll();
 
     res.status(200).json({
       success: true,
@@ -38,10 +33,9 @@ export class RoomController {
   }
 
   async update(req: Request, res: Response) {
-    const designerId = req.params.designerId as string;
     const roomId = req.params.id as string;
 
-    const room = await roomService.update(designerId, roomId, req.body);
+    const room = await roomService.update(roomId, req.body);
 
     res.status(200).json({
       success: true,
@@ -50,10 +44,9 @@ export class RoomController {
   }
 
   async delete(req: Request, res: Response) {
-    const designerId = req.params.designerId as string;
     const roomId = req.params.id as string;
 
-    const room = await roomService.delete(designerId, roomId);
+    const room = await roomService.delete(roomId);
 
     res.status(200).json({
       success: true,

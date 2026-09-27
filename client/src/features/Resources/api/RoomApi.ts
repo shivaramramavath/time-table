@@ -29,37 +29,41 @@ export interface CreateRoomInput {
 
 export type UpdateRoomInput = Partial<CreateRoomInput>;
 
-export interface RoomResponse {
-  success: boolean;
-  data: Room;
-}
-
-export interface RoomListResponse {
-  success: boolean;
-  data: Room[];
-}
-
 export class RoomApi {
-  private readonly basePath = '/resources/rooms';
+  private readonly basePath = '/resources/room';
 
   async create(data: CreateRoomInput) {
-    return httpClient.post<RoomResponse, CreateRoomInput>(this.basePath, data);
+    const { data: response } = await httpClient.post(this.basePath, data);
+
+    return response.data;
   }
 
-  async getAll() {
-    return httpClient.get<RoomListResponse>(this.basePath);
+  async getAll(query = '') {
+    const { data: response } = await httpClient.get(this.basePath, {
+      params: {
+        name: query || undefined,
+      },
+    });
+
+    return response.data;
   }
 
   async getById(id: string) {
-    return httpClient.get<RoomResponse>(`${this.basePath}/${id}`);
+    const { data: response } = await httpClient.get(`${this.basePath}/${id}`);
+
+    return response.data;
   }
 
   async update(id: string, data: UpdateRoomInput) {
-    return httpClient.patch<RoomResponse, UpdateRoomInput>(`${this.basePath}/${id}`, data);
+    const { data: response } = await httpClient.patch(`${this.basePath}/${id}`, data);
+
+    return response.data;
   }
 
   async delete(id: string) {
-    return httpClient.delete<RoomResponse>(`${this.basePath}/${id}`);
+    const { data: response } = await httpClient.delete(`${this.basePath}/${id}`);
+
+    return response.data;
   }
 }
 
