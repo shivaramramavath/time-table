@@ -54,7 +54,7 @@ const Timetables = () => {
   return (
     <section className="min-h-0 h-full flex-1 flex flex-col">
       {/* Search + Filters */}
-      <div className="mb-6 flex shrink-0 flex-col gap-3 lg:flex-row lg:items-center">
+      <div className="mb-6 flex shrink-0 gap-3">
         <div className="min-w-0 flex-1">
           <SearchBar query={query} setQuery={setQuery} />
         </div>

@@ -27,7 +27,7 @@ const RoomRow = ({ room, onDelete, onSave }: RoomRowProps) => {
   };
 
   const handleDeleteRoom = () => {
-    deleteRoom.mutate(room.id, {
+    deleteRoom.mutate(room._id, {
       onSuccess: () => {
         onDelete?.(room);
       },

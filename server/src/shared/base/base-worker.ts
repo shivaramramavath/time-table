@@ -38,10 +38,6 @@ export abstract class BaseWorker<T> {
     this.worker.on('error', (error) => {
       logger.error(`Worker error: ${this.queueName}`, error);
     });
-
-    this.worker.on('ready', () => {
-      logger.info(`Worker ready: ${this.queueName}`);
-    });
   }
 
   async close(): Promise<void> {

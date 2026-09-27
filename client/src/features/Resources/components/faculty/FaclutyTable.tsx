@@ -4,33 +4,31 @@ import FacultyRow from './FacultyRow';
 import { useFaculty } from '../../hooks/useFaculty';
 
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
+import ErrorComponent from '@/shared/components/ErrorComponent';
+import LoadingComponent from '@/shared/components/LoadingComponent';
 
 type props = {
   search: string;
 };
 
 const FacultyTable = ({ search }: props) => {
-  const { data: faculties = [], isLoading, isError } = useFaculty(search);
+  const { data: faculties = [], isLoading, isError, error, refetch } = useFaculty(search);
 
   if (isLoading) {
     return (
-      <div className="overflow-hidden rounded-xl border">
-        <div className="py-16 text-center">
-          <p className="text-sm text-muted-foreground">Loading faculty...</p>
-        </div>
-      </div>
+      <LoadingComponent
+        message="Loading faculties"
+        description="Please wait while we fetch the faculty information."
+      />
     );
   }
 
   if (isError) {
     return (
-      <div className="overflow-hidden rounded-xl border">
-        <div className="py-16 text-center">
-          <p className="mb-1 text-sm text-[#333]">Failed to load faculty</p>
-
-          <p className="text-xs text-[#222]">Please try again later</p>
-        </div>
-      </div>
+      <ErrorComponent
+        error={error instanceof Error ? error.message : 'Failed to load faculties.'}
+        onRetry={() => refetch()}
+      />
     );
   }
 

@@ -5,33 +5,31 @@ import SubjectRow from './SubjectRow';
 import { useSubject } from '../../hooks/useSubject';
 
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
+import LoadingComponent from '@/shared/components/LoadingComponent';
+import ErrorComponent from '@/shared/components/ErrorComponent';
 
 type Props = {
   search: string;
 };
 
 const SubjectTable = ({ search }: Props) => {
-  const { data: subjects = [], isLoading, isError } = useSubject(search);
+  const { data: subjects = [], isLoading, isError, error, refetch } = useSubject(search);
 
   if (isLoading) {
     return (
-      <div className="overflow-hidden rounded-xl border">
-        <div className="py-16 text-center">
-          <p className="text-sm text-muted-foreground">Loading subjects...</p>
-        </div>
-      </div>
+      <LoadingComponent
+        message="Loading subjects"
+        description="Please wait while we fetch the subject information."
+      />
     );
   }
 
   if (isError) {
     return (
-      <div className="overflow-hidden rounded-xl border">
-        <div className="py-16 text-center">
-          <p className="mb-1 text-sm text-[#333]">Failed to load subjects</p>
-
-          <p className="text-xs text-[#222]">Please try again later</p>
-        </div>
-      </div>
+      <ErrorComponent
+        error={error instanceof Error ? error.message : 'Failed to load subjects.'}
+        onRetry={() => refetch()}
+      />
     );
   }
 

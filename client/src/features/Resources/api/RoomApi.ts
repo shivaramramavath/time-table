@@ -5,6 +5,7 @@ export type RoomType = 'classroom' | 'lab' | 'seminar' | 'auditorium' | 'faculty
 export type RoomStatus = 'available' | 'unavailable' | 'maintenance';
 
 export interface Room {
+  _id: string;
   id: string;
   name: string;
   code: string;

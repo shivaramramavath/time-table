@@ -82,35 +82,19 @@ const FacultyRow = ({ faculty }: FacultyRowProps) => {
           </div>
         </TableCell>
 
-        <TableCell className="px-4 py-3">
+        <TableCell className="px-4 py-3 group/row:hover:hidden">
           <span
             className={
               faculty.status === 'active'
-                ? `
-                  rounded-md
-                  border border-[#22c55e30]
-                  bg-[#22c55e15]
-                  px-2 py-0.5
-                  text-[10px]
-                  font-medium
-                  text-[#22c55e]
-                `
-                : `
-                  rounded-md
-                  border border-[#1e1e1e]
-                  bg-[#161616]
-                  px-2 py-0.5
-                  text-[10px]
-                  font-medium
-                  text-[#555]
-                `
+                ? `rounded-md border border-[#22c55e30] bg-[#22c55e15] px-2 py-0.5 text-[10px] font-medium text-[#22c55e]`
+                : `rounded-md border border-[#1e1e1e] bg-[#161616] px-2 py-0.5 text-[10px] font-medium text-[#555]`
             }
           >
             {faculty.status === 'active' ? 'Active' : 'Inactive'}
           </span>
         </TableCell>
 
-        <TableCell className="px-4 py-3">
+        <TableCell className="px-4 py-3 group/row:hover:visible">
           <div
             className="
               flex items-center gap-1

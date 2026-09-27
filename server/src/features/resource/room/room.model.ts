@@ -57,7 +57,6 @@ const roomSchema = new Schema(
   },
 );
 
-// Room code should be unique
 roomSchema.index({ code: 1 }, { unique: true });
 
 export type Room = InferSchemaType<typeof roomSchema>;

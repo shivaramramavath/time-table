@@ -31,4 +31,8 @@ export class UserService {
   async updatePassword(userId: string, password: string) {
     return await this.userRepository.updatePassword(userId, password);
   }
+
+  async update(userId: string, data: Partial<User>) {
+    return await this.userRepository.update(userId, data);
+  }
 }

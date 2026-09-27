@@ -56,21 +56,21 @@ export default function Resources({ initialTab = 'faculty' }: ResourcesProps) {
       <div>
         <Tabs defaultValue={initialTab} className="w-full">
           {/* Tabs */}
-          <TabsList className="h-auto w-full justify-start gap-1  border-b bg-transparent p-0">
+          <TabsList className="h-auto w-full justify-start gap-1 rounded-none border-b border-border/60 bg-transparent p-0">
             {TABS.map(({ id, label, icon: Icon }) => (
               <TabsTrigger
                 key={id}
                 value={id}
-                className="group relative -mb-px gap-1.5  border-b-2 border-transparent px-4 py-2.5 text-xs font-medium text-[#555] shadow-none hover:text-[#a0a0a0] data-[state=active]:border-[#6366f1] data-[state=active]:bg-transparent data-[state=active]:text-white data-[state=active]:shadow-none"
+                className=" relative gap-2 rounded-md rounded-b-none border border-transparent px-3.5 py-2.5 text-xs font-medium text-muted-foreground shadow-none transition-all hover:bg-muted/50 hover:text-foreground data-[state=active]:border-border/60 data-[state=active]:border-b-background data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-none"
               >
-                <Icon size={13} />
-                {label}
+                <Icon className="size-3.5" />
+                <span>{label}</span>
               </TabsTrigger>
             ))}
           </TabsList>
 
           {/* Content */}
-          <div className="py-5">
+          <div className="py-5 -mt-5">
             <TabsContent value="faculty" className="mt-0">
               <Faculty />
             </TabsContent>

@@ -5,3 +5,5 @@ import { userController } from './user.dependency.js';
 export const userRouter = Router();
 
 userRouter.get('/me', userController.me);
+
+userRouter.patch('/update', userController.update);

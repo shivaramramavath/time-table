@@ -1,5 +1,16 @@
-import { ListFilter, RotateCcw } from 'lucide-react';
+import { Check, ListFilter, RotateCcw } from 'lucide-react';
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/shared/ui/dropdown-menu';
+
+import { Button } from '@/shared/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 
 import type { TimetableFiltersState } from './Timetables';
@@ -25,85 +36,97 @@ const TimetableFilters = ({
 
   return (
     <div className="flex items-center gap-2">
-      {/* Filter indicator */}
-      <div
-        className={`flex h-9 items-center gap-2 rounded-lg border px-3 text-xs transition-colors ${
-          hasFilters
-            ? 'border-primary/30 bg-primary/5 text-primary'
-            : 'border-border/60 bg-background text-muted-foreground'
-        }`}
-      >
-        <ListFilter className="size-3.5" />
-
-        <span className="hidden sm:inline">Filters</span>
-
-        {activeFilterCount > 0 && (
-          <span className="flex size-4 items-center justify-center rounded-full bg-primary text-[9px] font-semibold text-primary-foreground">
-            {activeFilterCount}
-          </span>
-        )}
-      </div>
-
-      {/* Department */}
-      <Select
-        value={filters.department}
-        onValueChange={(value) => onFilterChange('department', value)}
-      >
-        <SelectTrigger
-          className={`h-9 w-auto min-w-[105px] gap-1.5 border-border/60 bg-background text-xs shadow-none ${
-            filters.department !== 'all' ? 'border-primary/30 bg-primary/5' : ''
-          }`}
+      {/* Filters */}
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          render={
+            <Button
+              variant="outline"
+              className={`h-9 gap-2 border-border/60 px-3 text-xs shadow-none ${
+                hasFilters ? 'border-primary/30 bg-primary/5 text-primary' : 'text-muted-foreground'
+              }`}
+            />
+          }
         >
-          <SelectValue placeholder="Department" />
-        </SelectTrigger>
+          <ListFilter className="size-3.5" />
 
-        <SelectContent>
-          <SelectItem value="all">All Departments</SelectItem>
-          <SelectItem value="CSE">CSE</SelectItem>
-          <SelectItem value="ECE">ECE</SelectItem>
-          <SelectItem value="EEE">EEE</SelectItem>
-          <SelectItem value="CIVIL">CIVIL</SelectItem>
-          <SelectItem value="MECH">MECH</SelectItem>
-        </SelectContent>
-      </Select>
+          <span className="hidden sm:inline">Filters</span>
 
-      {/* Academic Year */}
-      <Select
-        value={filters.academicYear}
-        onValueChange={(value) => onFilterChange('academicYear', value)}
-      >
-        <SelectTrigger
-          className={`h-9 w-auto min-w-[105px] gap-1.5 border-border/60 bg-background text-xs shadow-none ${
-            filters.academicYear !== 'all' ? 'border-primary/30 bg-primary/5' : ''
-          }`}
-        >
-          <SelectValue placeholder="Academic Year" />
-        </SelectTrigger>
+          {activeFilterCount > 0 && (
+            <span className="flex size-4 items-center justify-center rounded-full bg-primary text-[9px] font-semibold text-primary-foreground">
+              {activeFilterCount}
+            </span>
+          )}
+        </DropdownMenuTrigger>
 
-        <SelectContent>
-          <SelectItem value="all">All Years</SelectItem>
-          <SelectItem value="2026-27">2026-27</SelectItem>
-          <SelectItem value="2025-26">2025-26</SelectItem>
-          <SelectItem value="2024-25">2024-25</SelectItem>
-        </SelectContent>
-      </Select>
+        <DropdownMenuContent align="start" className="w-56">
+          {/* Department */}
+          <DropdownMenuGroup>
+            <DropdownMenuLabel>Department</DropdownMenuLabel>
 
-      {/* Stage */}
-      <Select value={filters.stage} onValueChange={(value) => onFilterChange('stage', value)}>
-        <SelectTrigger
-          className={`h-9 w-auto min-w-[100px] gap-1.5 border-border/60 bg-background text-xs shadow-none ${
-            filters.stage !== 'all' ? 'border-primary/30 bg-primary/5' : ''
-          }`}
-        >
-          <SelectValue placeholder="Stage" />
-        </SelectTrigger>
+            <DropdownMenuItem onClick={() => onFilterChange('department', 'all')}>
+              <span>All Departments</span>
+              {filters.department === 'all' && <Check className="ml-auto size-4" />}
+            </DropdownMenuItem>
 
-        <SelectContent>
-          <SelectItem value="all">All Stages</SelectItem>
-          <SelectItem value="incomplete">Incomplete</SelectItem>
-          <SelectItem value="complete">Complete</SelectItem>
-        </SelectContent>
-      </Select>
+            {['CSE', 'ECE', 'EEE', 'CIVIL', 'MECH'].map((department) => (
+              <DropdownMenuItem
+                key={department}
+                onClick={() => onFilterChange('department', department)}
+              >
+                <span>{department}</span>
+
+                {filters.department === department && <Check className="ml-auto size-4" />}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuGroup>
+
+          <DropdownMenuSeparator />
+
+          {/* Academic Year */}
+          <DropdownMenuGroup>
+            <DropdownMenuLabel>Academic Year</DropdownMenuLabel>
+
+            {[
+              { value: 'all', label: 'All Years' },
+              { value: '2026-27', label: '2026-27' },
+              { value: '2025-26', label: '2025-26' },
+              { value: '2024-25', label: '2024-25' },
+            ].map((year) => (
+              <DropdownMenuItem
+                key={year.value}
+                onClick={() => onFilterChange('academicYear', year.value)}
+              >
+                <span>{year.label}</span>
+
+                {filters.academicYear === year.value && <Check className="ml-auto size-4" />}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuGroup>
+
+          <DropdownMenuSeparator />
+
+          {/* Stage */}
+          <DropdownMenuGroup>
+            <DropdownMenuLabel>Stage</DropdownMenuLabel>
+
+            {[
+              { value: 'all', label: 'All Stages' },
+              { value: 'incomplete', label: 'Incomplete' },
+              { value: 'complete', label: 'Complete' },
+            ].map((stage) => (
+              <DropdownMenuItem
+                key={stage.value}
+                onClick={() => onFilterChange('stage', stage.value)}
+              >
+                <span>{stage.label}</span>
+
+                {filters.stage === stage.value && <Check className="ml-auto size-4" />}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
 
       {/* Divider */}
       <div className="mx-1 h-5 w-px bg-border/60" />
@@ -116,16 +139,13 @@ const TimetableFilters = ({
 
         <SelectContent>
           <SelectItem value="recent">Recently Created</SelectItem>
-
           <SelectItem value="oldest">Oldest First</SelectItem>
-
           <SelectItem value="az">Name A-Z</SelectItem>
-
           <SelectItem value="za">Name Z-A</SelectItem>
         </SelectContent>
       </Select>
 
-      {/* Clear filters */}
+      {/* Clear */}
       {hasFilters && (
         <button
           type="button"
