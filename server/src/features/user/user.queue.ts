@@ -1,4 +1,4 @@
-import { BaseQueue } from '#shared/Base/BaseQueue.js';
+import { BaseQueue } from '#shared/base/base-queue.js';
 import { User } from './user.model.js';
 
 export type UserJobAction = 'password:update';

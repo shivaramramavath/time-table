@@ -1,6 +1,6 @@
 import express from 'express';
 import { timetableController } from './timetable.controller.js';
-import { requestValidator } from '#middlewares/request-validator.js';
+import { requestValidator } from '#middlewares/http/request-validator.middleware.js';
 import { timetableSchema } from './schema/timetable.schema.js';
 
 export const timetableRouter = express.Router();

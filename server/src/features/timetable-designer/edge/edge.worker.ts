@@ -1,4 +1,4 @@
-import { BaseWorker } from '#shared/Base/BaseWorker.js';
+import { BaseWorker } from '#shared/base/base-worker.js';
 
 import type { Edge } from './edge.model.js';
 import { edgeProcessor, EdgeProcess } from './edge.process.js';

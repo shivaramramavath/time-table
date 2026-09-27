@@ -1,4 +1,4 @@
-import { BaseCache } from '#shared/Base/BaseCache.js';
+import { BaseCache } from '#shared/base/base-cache.js';
 
 export class SubjectCache extends BaseCache {
   constructor() {

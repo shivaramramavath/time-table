@@ -1,7 +1,7 @@
 import { UnrecoverableError, type Job } from 'bullmq';
 import type { EmailJobData } from './email.queue.js';
 
-import { BaseProcess } from '#shared/Base/BaseProcess.js';
+import { BaseProcess } from '#shared/base/base-process.js';
 import logger from '#configs/logger.js';
 import { EmailProcessor } from './email.processor.js';
 

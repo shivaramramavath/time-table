@@ -1,4 +1,4 @@
-import { BaseWorker } from '#shared/Base/BaseWorker.js';
+import { BaseWorker } from '#shared/base/base-worker.js';
 
 import type { MessageJobData } from './message.process.js';
 import { messageProcessor } from './message.process.js';

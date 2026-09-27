@@ -1,7 +1,7 @@
 import type { Job } from 'bullmq';
 import createHttpError from 'http-errors';
 
-import { BaseProcess } from '#shared/Base/BaseProcess.js';
+import { BaseProcess } from '#shared/base/base-process.js';
 
 import type { TimetableJobData } from './timetable.queue.js';
 import { timetableRepository } from './timetable.repository.js';

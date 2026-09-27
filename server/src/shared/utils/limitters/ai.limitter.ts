@@ -1,4 +1,4 @@
-import createRateLimiter from '#middlewares/rateLimiter.js';
+import createRateLimiter from '#middlewares/security/rate-limiter.middleware.js';
 
 const askAiLimiter = createRateLimiter({
   keyPrefix: 'askAI',

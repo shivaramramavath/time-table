@@ -82,4 +82,4 @@ subjectSchema.index(
 
 export type Subject = InferSchemaType<typeof subjectSchema>;
 
-export const SubjectModel = model<Subject>('Subject', subjectSchema);
+export const SubjectModel = model<Subject>('subject', subjectSchema);

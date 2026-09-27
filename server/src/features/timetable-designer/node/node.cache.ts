@@ -1,4 +1,4 @@
-import { BaseObjectCache } from '#shared/Base/BaseObjectCache.js';
+import { BaseObjectCache } from '#shared/base/base-object-cache.js';
 
 import type { Node } from './node.model.js';
 import { nodeQueue, NodeQueue } from './node.queue.js';

@@ -1,7 +1,7 @@
 import type { SubjectJobData } from './subject.queue.js';
 import { SubjectProcess } from './subject.process.js';
 
-import { BaseWorker } from '#shared/Base/BaseWorker.js';
+import { BaseWorker } from '#shared/base/base-worker.js';
 import { subjectRepository } from './subject.repository.js';
 
 export class SubjectWorker extends BaseWorker<SubjectJobData> {

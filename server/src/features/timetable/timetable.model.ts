@@ -51,4 +51,4 @@ export type Timetable = InferSchemaType<typeof timetableSchema>;
 
 export type TimetableDocument = HydratedDocument<Timetable>;
 
-export const TimetableModel = model<Timetable>('Timetable', timetableSchema);
+export const TimetableModel = model<Timetable>('timetable', timetableSchema);

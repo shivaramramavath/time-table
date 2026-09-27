@@ -1,4 +1,4 @@
-import { BaseRepository } from '#shared/Base/BaseRepository.js';
+import { BaseRepository } from '#shared/base/base-repository.js';
 import { TimetableDesigner, TimetableDesignerModel } from './timetable-designer.model.js';
 
 export class TimetableDesignerRepository extends BaseRepository<TimetableDesigner> {
@@ -6,6 +6,5 @@ export class TimetableDesignerRepository extends BaseRepository<TimetableDesigne
     super(TimetableDesignerModel);
   }
 }
-
 
 export const timetableDesignerRepository = new TimetableDesignerRepository();

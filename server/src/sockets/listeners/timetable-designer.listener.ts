@@ -1,22 +1,43 @@
-import type { Server, Socket } from 'socket.io';
+import type { Socket } from 'socket.io';
 import createHttpError from 'http-errors';
 
-import { timetableDesignerService } from '#features/timetable-designer/timetable-designer.service.js';
-import { asyncSocketHandler } from '../lib/async-socket-handler.js';
+import {
+  TimetableDesignerService,
+  timetableDesignerService,
+} from '#features/timetable-designer/timetable-designer.service.js';
 
-export const registerTimetableDesignerListeners = (io: Server, socket: Socket) => {
-  socket.on(
-    'timetable-designer:get',
-    asyncSocketHandler('timetable-designer:get', async (payload) => {
-      const { timetableId } = payload;
+import { asyncSocketHandler } from '../handlers/async-socket-handler.js';
 
-      if (!timetableId) {
-        throw createHttpError.BadRequest('Missing timetableId');
-      }
+export class TimetableDesignerListener {
+  constructor(
+    private readonly socket: Socket,
+    private readonly service: TimetableDesignerService,
+  ) {}
 
-      const timetableDesigner = await timetableDesignerService.getOrCreate(timetableId);
+  register(): void {
+    this.registerGet();
+  }
 
-      return timetableDesigner;
-    }),
-  );
+  private registerGet(): void {
+    this.socket.on(
+      'timetable-designer:get',
+      asyncSocketHandler('timetable-designer:get', async (payload) => {
+        const { timetableId } = payload;
+
+        if (!timetableId) {
+          throw createHttpError.BadRequest('Missing timetableId');
+        }
+
+        return this.service.getOrCreate(timetableId);
+      }),
+    );
+  }
+}
+
+export const registerTimetableDesignerListeners = (socket: Socket): TimetableDesignerListener => {
+  const listener = new TimetableDesignerListener(socket, timetableDesignerService);
+
+  listener.register();
+
+  return listener;
 };

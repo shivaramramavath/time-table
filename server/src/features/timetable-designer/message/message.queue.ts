@@ -1,6 +1,6 @@
 import type { JobsOptions } from 'bullmq';
 
-import { BaseQueue } from '#shared/Base/BaseQueue.js';
+import { BaseQueue } from '#shared/base/base-queue.js';
 
 import type { Message } from './message.model.js';
 

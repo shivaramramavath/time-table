@@ -1,12 +1,10 @@
 import createHttpError from 'http-errors';
 
-import {
-  timetableDesignerService,
-  TimetableDesignerService,
-} from '#features/timetable-designer/timetable-designer.service.js';
+import { timetableDesignerService } from '#features/timetable-designer/timetable-designer.service.js';
 
 import { TimetableRepository, timetableRepository } from './timetable.repository.js';
 import { CreateTimetableDto } from './dtos/create.dto.js';
+import { TimetableDesignerRepository } from '#features/timetable-designer/timetable-designer.repository.js';
 
 interface GetTimetablesParams {
   userId: string;
@@ -22,18 +20,14 @@ interface UpdateTimetableData {
 
 export class TimetableService {
   constructor(
-    private readonly timetableRepository = TimetableRepository,
-    private readonly timetableDesignerService = TimetableDesignerService,
+    private readonly timetableRepository: TimetableRepository,
+    private readonly timetableDesignerService: TimetableDesignerRepository,
   ) {}
 
-  async create({ userId, title, description }: CreateTimetableDto) {
-    const timetable = await this.timetableRepository.create({
-      title,
-      description,
-      userId,
-    });
+  async create(data: CreateTimetableDto) {
+    const timetable = await this.timetableRepository.create(data);
 
-    await this.timetableDesignerService.create(timetable._id.toString());
+    await this.timetableDesignerService.create({ timetableId: timetable._id });
 
     return timetable;
   }
@@ -65,19 +59,19 @@ export class TimetableService {
       throw createHttpError.NotFound('Timetable not found');
     }
 
-    const updatedTimetable = await this.timetableRepository.update(timetableId, userId, {
+    const updatedTimetable = await this.timetableRepository.update(timetableId, {
       stage: 'complete',
     });
 
     return updatedTimetable;
   }
 
-  async update(timetableId: string, userId: string, data: UpdateTimetableData) {
-    return this.timetableRepository.update(timetableId, userId, data);
+  async update(timetableId: string, data: UpdateTimetableData) {
+    return this.timetableRepository.update(timetableId, data);
   }
 
-  async delete(timetableId: string, userId: string) {
-    return this.timetableRepository.delete(timetableId, userId);
+  async delete(timetableId: string) {
+    return this.timetableRepository.delete(timetableId);
   }
 }
 

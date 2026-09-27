@@ -1,5 +1,5 @@
 import { PAGE_SIZE } from '#configs/constants.js';
-import { BaseRepository } from '#shared/Base/BaseRepository.js';
+import { BaseRepository } from '#shared/base/base-repository.js';
 
 import { MessageModel, type Message } from './message.model.js';
 

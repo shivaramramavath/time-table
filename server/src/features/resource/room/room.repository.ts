@@ -1,4 +1,4 @@
-import { BaseRepository } from '#shared/Base/BaseRepository.js';
+import { BaseRepository } from '#shared/base/base-repository.js';
 
 import { RoomModel, type Room } from './room.model.js';
 

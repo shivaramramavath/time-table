@@ -1,7 +1,7 @@
 import { Worker, type Job, type Processor } from 'bullmq';
 
 import redis from '#configs/redis.js';
-import type { BaseProcess } from '../Base/BaseProcess.js';
+import type { BaseProcess } from './base-process.js';
 import logger from '#configs/logger.js';
 
 export abstract class BaseWorker<T> {

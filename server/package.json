@@ -4,8 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node dist/server.js",
-    "start:dev": "tsx watch src/server.ts",
+    "start": "node dist/app/server.js",
+    "start:dev": "tsx watch src/app/server.ts",
     "build": "tsc",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

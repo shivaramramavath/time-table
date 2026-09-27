@@ -1,4 +1,4 @@
-import { BaseObjectCache } from '#shared/Base/BaseObjectCache.js';
+import { BaseObjectCache } from '#shared/base/base-object-cache.js';
 
 import type { Edge } from './edge.model.js';
 import { edgeQueue, EdgeQueue } from './edge.queue.js';

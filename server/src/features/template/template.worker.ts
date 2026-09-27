@@ -1,4 +1,4 @@
-import { BaseWorker } from '#shared/Base/BaseWorker.js';
+import { BaseWorker } from '#shared/base/base-worker.js';
 
 import type { TemplateJobData } from './template.queue.js';
 import { TemplateProcess } from './template.process.js';

@@ -1,6 +1,6 @@
 import type { Job } from 'bullmq';
 
-import { BaseProcess } from '#shared/Base/BaseProcess.js';
+import { BaseProcess } from '#shared/base/base-process.js';
 import { EdgeRepository, edgeRepository } from './edge.repository.js';
 import type { EdgeJob } from './edge.queue.js';
 

@@ -1,5 +1,5 @@
 import { User, UserModel } from './user.model.js';
-import { BaseRepository } from '#shared/Base/BaseRepository.js';
+import { BaseRepository } from '#shared/base/base-repository.js';
 
 export class UserRepository extends BaseRepository<User> {
   constructor(private readonly userModel: typeof UserModel) {

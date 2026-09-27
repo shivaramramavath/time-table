@@ -41,4 +41,4 @@ messageSchema.index({
 
 export type Message = InferSchemaType<typeof messageSchema>;
 
-export const MessageModel = model('Message', messageSchema);
+export const MessageModel = model('message', messageSchema);

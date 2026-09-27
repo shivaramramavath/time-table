@@ -65,4 +65,4 @@ edgeSchema.index({
 
 export type Edge = InferSchemaType<typeof edgeSchema>;
 
-export const EdgeModel = model('Edge', edgeSchema);
+export const EdgeModel = model('edge', edgeSchema);

@@ -1,46 +1,74 @@
-import type { Server, Socket } from 'socket.io';
+import type { Socket } from 'socket.io';
 import createHttpError from 'http-errors';
 
-import { roomService } from '#features/timetable-designer/room/room.service.js';
-import { asyncSocketHandler } from '../lib/async-socket-handler.js';
+import { RoomService, roomService } from '#features/resource/room/room.service.js';
 
-export const registerRoomListeners = (io: Server, socket: Socket) => {
-  socket.on(
-    'room:create',
-    asyncSocketHandler('room:create', async (payload) => {
-      const { designerId, room } = payload;
+import { asyncSocketHandler } from '../handlers/async-socket-handler.js';
 
-      return roomService.create(designerId, room);
-    }),
-  );
+export class RoomListener {
+  constructor(
+    private readonly socket: Socket,
+    private readonly service: RoomService,
+  ) {}
 
-  socket.on(
-    'room:update',
-    asyncSocketHandler('room:update', async (payload) => {
-      const { designerId, roomId, data } = payload;
+  register(): void {
+    this.registerCreate();
+    this.registerUpdate();
+    this.registerDelete();
+  }
 
-      const updatedRoom = await roomService.update(designerId, roomId, data);
+  private registerCreate(): void {
+    this.socket.on(
+      'room:create',
+      asyncSocketHandler('room:create', async (payload) => {
+        const { designerId, room } = payload;
 
-      if (!updatedRoom) {
-        throw createHttpError.InternalServerError('Failed to update room');
-      }
+        return this.service.create(designerId, room);
+      }),
+    );
+  }
 
-      return updatedRoom;
-    }),
-  );
+  private registerUpdate(): void {
+    this.socket.on(
+      'room:update',
+      asyncSocketHandler('room:update', async (payload) => {
+        const { designerId, roomId, data } = payload;
 
-  socket.on(
-    'room:delete',
-    asyncSocketHandler('room:delete', async (payload) => {
-      const { designerId, roomId } = payload;
+        const updatedRoom = await this.service.update(designerId, roomId, data);
 
-      const deleted = await roomService.delete(designerId, roomId);
+        if (!updatedRoom) {
+          throw createHttpError.InternalServerError('Failed to update room');
+        }
 
-      if (!deleted) {
-        throw createHttpError.InternalServerError('Failed to delete room');
-      }
+        return updatedRoom;
+      }),
+    );
+  }
 
-      return { roomId };
-    }),
-  );
+  private registerDelete(): void {
+    this.socket.on(
+      'room:delete',
+      asyncSocketHandler('room:delete', async (payload) => {
+        const { designerId, roomId } = payload;
+
+        const deleted = await this.service.delete(designerId, roomId);
+
+        if (!deleted) {
+          throw createHttpError.InternalServerError('Failed to delete room');
+        }
+
+        return {
+          roomId,
+        };
+      }),
+    );
+  }
+}
+
+export const registerRoomListeners = (socket: Socket): RoomListener => {
+  const listener = new RoomListener(socket, roomService);
+
+  listener.register();
+
+  return listener;
 };

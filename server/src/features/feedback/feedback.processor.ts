@@ -1,7 +1,7 @@
 import type { Feedback } from './feedback.model.js';
 import type { FeedbackRepository } from './feedback.repository.js';
 import type { QueueService } from '#services/queue.service.js';
-import { BaseProcess } from '#shared/Base/BaseProcess.js';
+import { BaseProcess } from '#shared/base/base-process.js';
 import { Job } from 'bullmq';
 import { CreateFeedbackJob } from './feedback.queue.js';
 

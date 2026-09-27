@@ -58,4 +58,4 @@ roomSchema.index({ code: 1 }, { unique: true });
 
 export type Room = InferSchemaType<typeof roomSchema>;
 
-export const RoomModel = model<Room>('Room', roomSchema);
+export const RoomModel = model<Room>('room', roomSchema);

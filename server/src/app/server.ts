@@ -4,17 +4,17 @@ import { env } from '#configs/env.js';
 import logger from '#configs/logger.js';
 import { checkRedis } from '#configs/redis.js';
 
-import app from './app.js';
+import { app } from './app.js';
 import { workerManager } from './worker.js';
 
 import { registerShutdownHandlers } from '#utils/graceful-shutdown.js';
-import { createSocketServer } from '#configs/socket.js';
-import { registerSocket } from './sockets/index.js';
-import { database } from './infrastructure/database/mongodb.js';
+import { socketManager } from '../sockets/socket-manager.js';
+import { database } from '../infrastructure/database/mongodb.js';
+import { SocketServer } from '../sockets/socket-server.js';
 
 const server = http.createServer(app);
 
-export const io = createSocketServer(server);
+export const socketServer = new SocketServer(server);
 
 const bootstrap = async () => {
   try {
@@ -30,7 +30,7 @@ const bootstrap = async () => {
       logger.info(`Server started on port ${env.PORT}`);
     });
 
-    registerSocket(io);
+    socketManager.register();
     registerShutdownHandlers(server);
   } catch (error) {
     logger.error('Server startup failed', error);

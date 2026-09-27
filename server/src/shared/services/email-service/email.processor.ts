@@ -1,4 +1,4 @@
-import loadHtml from '#utils/loadHtml.js';
+import loadHtml from '#utils/file/load-html.js';
 import { BrevoService } from '../../../infrastructure/email/brevo.js';
 
 import type { ForgotPasswordJob, RegisterGreetingJob, FeedbackJob } from './email.queue.js';

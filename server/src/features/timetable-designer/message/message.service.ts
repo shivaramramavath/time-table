@@ -1,4 +1,4 @@
-import { generateMessageId } from '#utils/generate-ids.js';
+import { generateMessageId } from '#utils/crypto/generate-ids.js';
 import { messageCache } from './message.cache.js';
 import type { Message } from './message.model.js';
 

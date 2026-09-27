@@ -1,4 +1,4 @@
-import { BaseEmitter } from '#shared/Base/BaseEmitter.js';
+import { BaseEmitter } from '#shared/base/base-emitter.js';
 
 import type { Faculty } from './faculty.model.js';
 

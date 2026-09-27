@@ -1,49 +1,75 @@
-import type { Server, Socket } from 'socket.io';
+import type { Socket } from 'socket.io';
 import createHttpError from 'http-errors';
 
-import { asyncSocketHandler } from '../lib/async-socket-handler.js';
-import { timetableService } from '#features/timetable/timetable.service.js';
+import { TimetableService, timetableService } from '#features/timetable/timetable.service.js';
 
-export const registerTimetableListeners = (io: Server, socket: Socket) => {
-  socket.on(
-    'timetable:update',
-    asyncSocketHandler('timetable:update', async (payload) => {
-      const { timetableId, timetable } = payload;
+import { asyncSocketHandler } from '../handlers/async-socket-handler.js';
 
-      if (!timetableId) {
-        throw createHttpError.BadRequest('Missing timetableId');
-      }
+export class TimetableListener {
+  constructor(
+    private readonly socket: Socket,
+    private readonly service: TimetableService,
+  ) {}
 
-      return await timetableService.update(timetableId, socket.data.user.userId, timetable);
-    }),
-  );
+  register(): void {
+    this.registerUpdate();
+    this.registerGet();
+    this.registerGenerate();
+  }
 
-  socket.on(
-    'timetable:get',
-    asyncSocketHandler('timetable:get', async (payload) => {
-      const { timetableId } = payload;
+  private registerUpdate(): void {
+    this.socket.on(
+      'timetable:update',
+      asyncSocketHandler('timetable:update', async (payload) => {
+        const { timetableId, timetable } = payload;
 
-      if (!timetableId) {
-        throw createHttpError.BadRequest('Missing timetableId');
-      }
+        if (!timetableId) {
+          throw createHttpError.BadRequest('Missing timetableId');
+        }
 
-      return await timetableService.get(timetableId, socket.data.user.userId);
-    }),
-  );
+        return this.service.update(timetableId, this.socket.data.user.userId, timetable);
+      }),
+    );
+  }
 
-  socket.on(
-    'timetable:generate',
-    asyncSocketHandler('timetable:generate', async (payload) => {
-      const { timetableId } = payload;
+  private registerGet(): void {
+    this.socket.on(
+      'timetable:get',
+      asyncSocketHandler('timetable:get', async (payload) => {
+        const { timetableId } = payload;
 
-      if (!timetableId) {
-        throw createHttpError.BadRequest('Missing timetableId');
-      }
+        if (!timetableId) {
+          throw createHttpError.BadRequest('Missing timetableId');
+        }
 
-      return await timetableService.generate({
-        timetableId,
-        userId: socket.data.user.userId,
-      });
-    }),
-  );
+        return this.service.get(timetableId, this.socket.data.user.userId);
+      }),
+    );
+  }
+
+  private registerGenerate(): void {
+    this.socket.on(
+      'timetable:generate',
+      asyncSocketHandler('timetable:generate', async (payload) => {
+        const { timetableId } = payload;
+
+        if (!timetableId) {
+          throw createHttpError.BadRequest('Missing timetableId');
+        }
+
+        return this.service.generate({
+          timetableId,
+          userId: this.socket.data.user.userId,
+        });
+      }),
+    );
+  }
+}
+
+export const registerTimetableListeners = (socket: Socket): TimetableListener => {
+  const listener = new TimetableListener(socket, timetableService);
+
+  listener.register();
+
+  return listener;
 };

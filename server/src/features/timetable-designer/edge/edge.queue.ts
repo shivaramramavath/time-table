@@ -1,4 +1,4 @@
-import { BaseQueue } from '#shared/Base/BaseQueue.js';
+import { BaseQueue } from '#shared/base/base-queue.js';
 
 import type { Edge } from './edge.model.js';
 

@@ -39,4 +39,4 @@ const templateSchema = new Schema(
 
 export type Template = InferSchemaType<typeof templateSchema>;
 
-export const TemplateModel = model('Template', templateSchema);
+export const TemplateModel = model('template', templateSchema);

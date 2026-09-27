@@ -1,4 +1,4 @@
-import { BaseRepository } from '#shared/Base/BaseRepository.js';
+import { BaseRepository } from '#shared/base/base-repository.js';
 import { Model } from 'mongoose';
 import { NodeModel, type Node } from './node.model.js';
 

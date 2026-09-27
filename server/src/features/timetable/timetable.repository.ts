@@ -1,7 +1,7 @@
 import createHttpError from 'http-errors';
 
 import { TimetableModel, type Timetable } from './timetable.model.js';
-import { BaseRepository } from '#shared/Base/BaseRepository.js';
+import { BaseRepository } from '#shared/base/base-repository.js';
 
 interface GetTimetablesParams {
   userId: string;

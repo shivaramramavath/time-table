@@ -1,11 +1,10 @@
-import type { Server } from 'socket.io';
-
 import { socketRegistry, type SocketRegistry } from './socket-registry.js';
-import { io } from '../server.js';
+import { SocketServer } from './socket-server.js';
+import { socketServer } from '../app/server.js';
 
 export class SocketEmitter {
   constructor(
-    private readonly io: Server,
+    private readonly socketServer: SocketServer,
     private readonly socketRegistry: SocketRegistry,
   ) {}
 
@@ -13,11 +12,11 @@ export class SocketEmitter {
     const socketId = await this.socketRegistry.getSocketId(userId);
 
     if (!socketId) {
-      return;
+      throw new Error(`Socket not found for user ${userId}`);
     }
 
-    this.io.to(socketId).emit(event, data);
+    this.socketServer.getInstance().to(socketId).emit(event, data);
   }
 }
 
-export const socketEmitter = new SocketEmitter(io, socketRegistry);
+export const socketEmitter = new SocketEmitter(socketServer, socketRegistry);

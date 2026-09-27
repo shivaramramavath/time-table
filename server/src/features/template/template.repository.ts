@@ -1,7 +1,7 @@
 import type { Model, Types } from 'mongoose';
 
 import type { Template } from './template.model.js';
-import { BaseRepository } from '#shared/Base/BaseRepository.js';
+import { BaseRepository } from '#shared/base/base-repository.js';
 
 export class TemplateRepository extends BaseRepository<Template> {
   constructor(private readonly templateModel: Model<Template>) {

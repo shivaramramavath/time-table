@@ -1,5 +1,5 @@
 import { FeedbackProcessor } from './feedback.processor.js';
-import { BaseWorker } from '#shared/Base/BaseWorker.js';
+import { BaseWorker } from '#shared/base/base-worker.js';
 import { CreateFeedbackJob } from './feedback.queue.js';
 import { queueService } from '#features/auth/auth.dependency.js';
 import { feedbackRepository } from './feedback.dependency.js';

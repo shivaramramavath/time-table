@@ -1,4 +1,4 @@
-import { BaseWorker } from '#shared/Base/BaseWorker.js';
+import { BaseWorker } from '#shared/base/base-worker.js';
 
 import type { TimetableJobData } from './timetable.queue.js';
 import { TimetableProcess } from './timetable.process.js';

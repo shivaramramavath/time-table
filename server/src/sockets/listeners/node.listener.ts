@@ -1,92 +1,103 @@
-import type { Server, Socket } from 'socket.io';
+import type { Socket } from 'socket.io';
 import createHttpError from 'http-errors';
 
-import { nodeService } from '#features/timetable-designer/node/node.service.js';
+import { NodeService, nodeService } from '#features/timetable-designer/node/node.service.js';
 
-import { asyncSocketHandler } from '../lib/async-socket-handler.js';
+import { asyncSocketHandler } from '../handlers/async-socket-handler.js';
 
-export const registerNodeListeners = (io: Server, socket: Socket) => {
-  // -----------------------------------------
-  // CREATE
-  // -----------------------------------------
+export class NodeListener {
+  constructor(
+    private readonly socket: Socket,
+    private readonly service: NodeService,
+  ) {}
 
-  socket.on(
-    'node:create',
-    asyncSocketHandler('node:create', async (payload) => {
-      const { designerId, node } = payload;
+  register(): void {
+    this.registerCreate();
+    this.registerCreateMany();
+    this.registerUpdate();
+    this.registerDelete();
+    this.registerDeleteMany();
+  }
 
-      return nodeService.create(designerId, node);
-    }),
-  );
+  private registerCreate(): void {
+    this.socket.on(
+      'node:create',
+      asyncSocketHandler('node:create', async (payload) => {
+        const { designerId, node } = payload;
 
-  // -----------------------------------------
-  // CREATE MANY
-  // -----------------------------------------
+        return this.service.create(designerId, node);
+      }),
+    );
+  }
 
-  socket.on(
-    'node:createMany',
-    asyncSocketHandler('node:createMany', async (payload) => {
-      const { designerId, nodes } = payload;
+  private registerCreateMany(): void {
+    this.socket.on(
+      'node:createMany',
+      asyncSocketHandler('node:createMany', async (payload) => {
+        const { designerId, nodes } = payload;
 
-      return nodeService.createMany(designerId, nodes);
-    }),
-  );
+        return this.service.createMany(designerId, nodes);
+      }),
+    );
+  }
 
-  // -----------------------------------------
-  // UPDATE
-  // -----------------------------------------
+  private registerUpdate(): void {
+    this.socket.on(
+      'node:update',
+      asyncSocketHandler('node:update', async (payload) => {
+        const { designerId, nodeId, data } = payload;
 
-  socket.on(
-    'node:update',
-    asyncSocketHandler('node:update', async (payload) => {
-      const { designerId, nodeId, data } = payload;
+        const updatedNode = await this.service.update(designerId, nodeId, data);
 
-      const updatedNode = await nodeService.update(designerId, nodeId, data);
+        if (!updatedNode) {
+          throw createHttpError.InternalServerError('Failed to update node');
+        }
 
-      if (!updatedNode) {
-        throw createHttpError.InternalServerError('Failed to update node');
-      }
+        return updatedNode;
+      }),
+    );
+  }
 
-      return updatedNode;
-    }),
-  );
+  private registerDelete(): void {
+    this.socket.on(
+      'node:delete',
+      asyncSocketHandler('node:delete', async (payload) => {
+        const { designerId, nodeId } = payload;
 
-  // -----------------------------------------
-  // DELETE
-  // -----------------------------------------
+        const deleted = await this.service.delete(designerId, nodeId);
 
-  socket.on(
-    'node:delete',
-    asyncSocketHandler('node:delete', async (payload) => {
-      const { designerId, nodeId } = payload;
+        if (!deleted) {
+          throw createHttpError.InternalServerError('Failed to delete node');
+        }
 
-      const deleted = await nodeService.delete(designerId, nodeId);
+        return {
+          nodeId,
+        };
+      }),
+    );
+  }
 
-      if (!deleted) {
-        throw createHttpError.InternalServerError('Failed to delete node');
-      }
+  private registerDeleteMany(): void {
+    this.socket.on(
+      'node:deleteMany',
+      asyncSocketHandler('node:deleteMany', async (payload) => {
+        const { designerId, nodeIds } = payload;
 
-      return {
-        nodeId,
-      };
-    }),
-  );
+        const deleted = await this.service.deleteMany(designerId, nodeIds);
 
-  // -----------------------------------------
-  // DELETE MANY
-  // -----------------------------------------
+        return {
+          nodeIds,
+          deletedCount: deleted,
+        };
+      }),
+    );
+  }
+}
 
-  socket.on(
-    'node:deleteMany',
-    asyncSocketHandler('node:deleteMany', async (payload) => {
-      const { designerId, nodeIds } = payload;
+export const registerNodeListeners = (socket: Socket): NodeListener => {
+  const listener = new NodeListener(socket, nodeService);
 
-      const deleted = await nodeService.deleteMany(designerId, nodeIds);
+  listener.register();
 
-      return {
-        nodeIds,
-        deletedCount: deleted,
-      };
-    }),
-  );
+  return listener;
 };

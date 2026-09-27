@@ -1,21 +1,49 @@
-import type { Server, Socket } from 'socket.io';
+import type { Socket } from 'socket.io';
 
-import { asyncSocketHandler } from '../lib/async-socket-handler.js';
-import { messageService } from '#features/timetable-designer/message/message.service.js';
-import { aiService } from '#features/timetable-designer/ai-assistant/ai.service.js';
+import { asyncSocketHandler } from '../handlers/async-socket-handler.js';
 
-export const registerMessageListeners = (io: Server, socket: Socket) => {
-  socket.on(
-    'message:send',
-    asyncSocketHandler('message:send', async ({ message }) => {
-      aiService.generate(socket.data.user.userId, message.designerId, message);
-    }),
-  );
+import {
+  MessageService,
+  messageService,
+} from '#features/timetable-designer/message/message.service.js';
 
-  socket.on(
-    'message:get',
-    asyncSocketHandler('message:get', async ({ designerId, page = 1 }) => {
-      return await messageService.get(designerId, page);
-    }),
-  );
+import { AiService, aiService } from '#features/timetable-designer/ai-assistant/ai.service.js';
+
+export class MessageListener {
+  constructor(
+    private readonly socket: Socket,
+    private readonly messageService: MessageService,
+    private readonly aiService: AiService,
+  ) {}
+
+  register(): void {
+    this.registerSend();
+    this.registerGet();
+  }
+
+  private registerSend(): void {
+    this.socket.on(
+      'message:send',
+      asyncSocketHandler('message:send', async ({ message }) => {
+        return this.aiService.generate(this.socket.data.user.userId, message.designerId, message);
+      }),
+    );
+  }
+
+  private registerGet(): void {
+    this.socket.on(
+      'message:get',
+      asyncSocketHandler('message:get', async ({ designerId, page = 1 }) => {
+        return this.messageService.get(designerId, page);
+      }),
+    );
+  }
+}
+
+export const registerMessageListeners = (socket: Socket): MessageListener => {
+  const listener = new MessageListener(socket, messageService, aiService);
+
+  listener.register();
+
+  return listener;
 };

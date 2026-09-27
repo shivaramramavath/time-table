@@ -1,6 +1,6 @@
 import { HumanMessage } from '@langchain/core/messages';
 
-import { generateMessageId } from '#utils/generate-ids.js';
+import { generateMessageId } from '#utils/crypto/generate-ids.js';
 
 import { messageEmitter } from '../message/message.emiter.js';
 import { Message } from '../message/message.model.js';

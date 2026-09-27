@@ -1,4 +1,4 @@
-import { BaseWorker } from '#shared/Base/BaseWorker.js';
+import { BaseWorker } from '#shared/base/base-worker.js';
 import { Node } from './node.model.js';
 import { nodeProcessor } from './node.process.js';
 

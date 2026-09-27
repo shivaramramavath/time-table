@@ -1,7 +1,7 @@
 import type { FacultyJobData } from './faculty.queue.js';
 import { FacultyProcess } from './faculty.process.js';
 
-import { BaseWorker } from '#shared/Base/BaseWorker.js';
+import { BaseWorker } from '#shared/base/base-worker.js';
 import { facultyRepository } from './faculty.repository.js';
 
 export class FacultyWorker extends BaseWorker<FacultyJobData> {

@@ -6,11 +6,11 @@ import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
 
-import { httpLogger } from '#middlewares/http-logger.js';
-import { routeNotFound } from '#middlewares/route-not-found.js';
-import { errorHandler } from '#middlewares/error-handler.js';
+import { httpLogger } from '#middlewares/http/http-logger.middleware.js';
+import { routeNotFound } from '#middlewares/error/route-not-found.middleware.js';
+import { errorHandler } from '#middlewares/error/error-handler.middleware.js';
 
-import { authenticate } from '#middlewares/authenticate.js';
+import { authenticate } from '#middlewares/auth/authenticate.middleware.js';
 
 import { authRouter } from '#features/auth/auth.routes.js';
 import { userRouter } from '#features/user/user.router.js';
@@ -24,7 +24,7 @@ const corsOptions = {
   credentials: true,
 };
 
-const app = express();
+export const app = express();
 
 app.set('view engine', 'ejs');
 app.set('trust proxy', 1);
@@ -52,5 +52,3 @@ app.use('/api/feedback', authenticate, feedbackRouter);
 
 app.use(errorHandler);
 app.use(routeNotFound);
-
-export default app;

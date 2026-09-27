@@ -1,6 +1,6 @@
 import type { Job } from 'bullmq';
 
-import { BaseProcess } from '#shared/Base/BaseProcess.js';
+import { BaseProcess } from '#shared/base/base-process.js';
 
 import type { Message } from './message.model.js';
 import { messageRepository, MessageRepository } from './message.repository.js';

@@ -1,48 +1,74 @@
-import type { Server, Socket } from 'socket.io';
+import type { Socket } from 'socket.io';
 import createHttpError from 'http-errors';
 
-import { facultyService } from '#features/timetable-designer/faculty/faculty.service.js';
-import { asyncSocketHandler } from '../lib/async-socket-handler.js';
+import { FacultyService, facultyService } from '#features/resource/faculty/faculty.service.js';
 
-export const registerFacultyListeners = (io: Server, socket: Socket) => {
-  socket.on(
-    'faculty:create',
-    asyncSocketHandler('faculty:create', async (payload) => {
-      const { designerId, faculty } = payload;
+import { asyncSocketHandler } from '../handlers/async-socket-handler.js';
 
-      return facultyService.create(designerId, faculty);
-    }),
-  );
+export class FacultyListener {
+  constructor(
+    private readonly socket: Socket,
+    private readonly service: FacultyService,
+  ) {}
 
-  socket.on(
-    'faculty:update',
-    asyncSocketHandler('faculty:update', async (payload) => {
-      const { designerId, facultyId, data } = payload;
+  register(): void {
+    this.registerCreate();
+    this.registerUpdate();
+    this.registerDelete();
+  }
 
-      const updatedFaculty = await facultyService.update(designerId, facultyId, data);
+  private registerCreate(): void {
+    this.socket.on(
+      'faculty:create',
+      asyncSocketHandler('faculty:create', async (payload) => {
+        const { designerId, faculty } = payload;
 
-      if (!updatedFaculty) {
-        throw createHttpError.InternalServerError('Failed to update faculty');
-      }
+        return this.service.create(faculty);
+      }),
+    );
+  }
 
-      return updatedFaculty;
-    }),
-  );
+  private registerUpdate(): void {
+    this.socket.on(
+      'faculty:update',
+      asyncSocketHandler('faculty:update', async (payload) => {
+        const { designerId, facultyId, data } = payload;
 
-  socket.on(
-    'faculty:delete',
-    asyncSocketHandler('faculty:delete', async (payload) => {
-      const { designerId, facultyId } = payload;
+        const updatedFaculty = await this.service.update(facultyId, data);
 
-      const deleted = await facultyService.delete(designerId, facultyId);
+        if (!updatedFaculty) {
+          throw createHttpError.InternalServerError('Failed to update faculty');
+        }
 
-      if (!deleted) {
-        throw createHttpError.InternalServerError('Failed to delete faculty');
-      }
+        return updatedFaculty;
+      }),
+    );
+  }
 
-      return {
-        facultyId,
-      };
-    }),
-  );
+  private registerDelete(): void {
+    this.socket.on(
+      'faculty:delete',
+      asyncSocketHandler('faculty:delete', async (payload) => {
+        const { designerId, facultyId } = payload;
+
+        const deleted = await this.service.delete(facultyId);
+
+        if (!deleted) {
+          throw createHttpError.InternalServerError('Failed to delete faculty');
+        }
+
+        return {
+          facultyId,
+        };
+      }),
+    );
+  }
+}
+
+export const registerFacultyListeners = (socket: Socket): FacultyListener => {
+  const listener = new FacultyListener(socket, facultyService);
+
+  listener.register();
+
+  return listener;
 };

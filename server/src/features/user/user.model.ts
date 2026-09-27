@@ -56,4 +56,4 @@ export type User = InferSchemaType<typeof userSchema>;
 
 export type UserDocument = HydratedDocument<User>;
 
-export const UserModel = model<User>('User', userSchema);
+export const UserModel = model<User>('user', userSchema);

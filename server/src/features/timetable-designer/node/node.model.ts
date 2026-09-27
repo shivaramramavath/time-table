@@ -68,4 +68,4 @@ nodeSchema.index({
 
 export type Node = InferSchemaType<typeof nodeSchema>;
 
-export const NodeModel = model('Node', nodeSchema);
+export const NodeModel = model('node', nodeSchema);

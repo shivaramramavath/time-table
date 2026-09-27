@@ -1,73 +1,85 @@
-import type { Server, Socket } from 'socket.io';
+import type { Socket } from 'socket.io';
 import createHttpError from 'http-errors';
 
-import { edgeService } from '#features/timetable-designer/edge/edge.service.js';
+import { EdgeService, edgeService } from '#features/timetable-designer/edge/edge.service.js';
 
-import { asyncSocketHandler } from '../lib/async-socket-handler.js';
+import { asyncSocketHandler } from '../handlers/async-socket-handler.js';
 
-export const registerEdgeListeners = (io: Server, socket: Socket) => {
-  // -----------------------------------------
-  // CREATE
-  // -----------------------------------------
+export class EdgeListener {
+  constructor(
+    private readonly socket: Socket,
+    private readonly service: EdgeService,
+  ) {}
 
-  socket.on(
-    'edge:create',
-    asyncSocketHandler('edge:create', async (payload) => {
-      const { designerId, edge } = payload;
+  register(): void {
+    this.registerCreate();
+    this.registerCreateMany();
+    this.registerDelete();
+    this.registerDeleteMany();
+  }
 
-      return edgeService.create(designerId, edge);
-    }),
-  );
+  private registerCreate(): void {
+    this.socket.on(
+      'edge:create',
+      asyncSocketHandler('edge:create', async (payload) => {
+        const { designerId, edge } = payload;
 
-  // -----------------------------------------
-  // CREATE MANY
-  // -----------------------------------------
+        return this.service.create(designerId, edge);
+      }),
+    );
+  }
 
-  socket.on(
-    'edge:createMany',
-    asyncSocketHandler('edge:createMany', async (payload) => {
-      const { designerId, edges } = payload;
+  private registerCreateMany(): void {
+    this.socket.on(
+      'edge:createMany',
+      asyncSocketHandler('edge:createMany', async (payload) => {
+        const { designerId, edges } = payload;
 
-      return edgeService.createMany(designerId, edges);
-    }),
-  );
+        return this.service.createMany(designerId, edges);
+      }),
+    );
+  }
 
-  // -----------------------------------------
-  // DELETE
-  // -----------------------------------------
+  private registerDelete(): void {
+    this.socket.on(
+      'edge:delete',
+      asyncSocketHandler('edge:delete', async (payload) => {
+        const { designerId, edgeId } = payload;
 
-  socket.on(
-    'edge:delete',
-    asyncSocketHandler('edge:delete', async (payload) => {
-      const { designerId, edgeId } = payload;
+        const deleted = await this.service.delete(designerId, edgeId);
 
-      const deleted = await edgeService.delete(designerId, edgeId);
+        if (!deleted) {
+          throw createHttpError.InternalServerError('Failed to delete edge');
+        }
 
-      if (!deleted) {
-        throw createHttpError.InternalServerError('Failed to delete edge');
-      }
+        return {
+          edgeId,
+        };
+      }),
+    );
+  }
 
-      return {
-        edgeId,
-      };
-    }),
-  );
+  private registerDeleteMany(): void {
+    this.socket.on(
+      'edge:deleteMany',
+      asyncSocketHandler('edge:deleteMany', async (payload) => {
+        const { designerId, edgeIds } = payload;
 
-  // -----------------------------------------
-  // DELETE MANY
-  // -----------------------------------------
+        const deleted = await this.service.deleteMany(designerId, edgeIds);
 
-  socket.on(
-    'edge:deleteMany',
-    asyncSocketHandler('edge:deleteMany', async (payload) => {
-      const { designerId, edgeIds } = payload;
+        return {
+          edgeIds,
+          deletedCount: deleted,
+        };
+      }),
+    );
+  }
+}
 
-      const deleted = await edgeService.deleteMany(designerId, edgeIds);
+export const registerEdgeListeners = (socket: Socket): EdgeListener => {
+  const listener = new EdgeListener(socket, edgeService);
 
-      return {
-        edgeIds,
-        deletedCount: deleted,
-      };
-    }),
-  );
+  listener.register();
+
+  return listener;
 };

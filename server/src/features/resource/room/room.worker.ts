@@ -1,7 +1,7 @@
 import type { RoomJobData } from './room.queue.js';
 import { RoomProcess } from './room.process.js';
 
-import { BaseWorker } from '#shared/Base/BaseWorker.js';
+import { BaseWorker } from '#shared/base/base-worker.js';
 import { roomRepository } from './room.repository.js';
 
 export class RoomWorker extends BaseWorker<RoomJobData> {

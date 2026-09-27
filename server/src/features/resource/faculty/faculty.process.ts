@@ -1,6 +1,6 @@
 import type { Job } from 'bullmq';
 
-import { BaseProcess } from '#shared/Base/BaseProcess.js';
+import { BaseProcess } from '#shared/base/base-process.js';
 
 import type { FacultyJobData } from './faculty.queue.js';
 import type { FacultyRepository } from './faculty.repository.js';

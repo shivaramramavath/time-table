@@ -1,7 +1,7 @@
 import express from 'express';
 
-import { requestValidator } from '#middlewares/request-validator.js';
-import { authenticate } from '#middlewares/authenticate.js';
+import { requestValidator } from '#middlewares/http/request-validator.middleware.js';
+import { authenticate } from '#middlewares/auth/authenticate.middleware.js';
 
 import { authSchema } from './schemas/auth.schema.js';
 import { authController } from './auth.dependency.js';

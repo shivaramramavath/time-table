@@ -12,7 +12,7 @@ import { roomWorker } from '#features/resource/room/room.worker.js';
 import { facultyWorker } from '#features/resource/faculty/faculty.worker.js';
 import { emailWorker } from '#services/email-service/index.js';
 
-import type { BaseWorker } from '#shared/Base/BaseWorker.js';
+import type { BaseWorker } from '#shared/base/base-worker.js';
 
 export class WorkerManager {
   private readonly workers: BaseWorker[];

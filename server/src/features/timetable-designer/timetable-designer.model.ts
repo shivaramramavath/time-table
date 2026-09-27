@@ -20,6 +20,6 @@ export type TimetableDesigner = InferSchemaType<typeof timetableDesignerSchema>;
 export type TimetableDesignerDocument = HydratedDocument<TimetableDesigner>;
 
 export const TimetableDesignerModel = model<TimetableDesigner>(
-  'TimetableDesigner',
+  'timetable-designer',
   timetableDesignerSchema,
 );
