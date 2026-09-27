@@ -1,6 +1,6 @@
 import { Worker, type Job, type Processor } from 'bullmq';
 
-import redis from '#configs/redis.js';
+import { redis } from '#infrastructure/cache/redis/redis.client.js';
 import type { BaseProcess } from './base-process.js';
 import logger from '#configs/logger.js';
 

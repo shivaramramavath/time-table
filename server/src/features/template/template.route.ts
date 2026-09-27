@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { templateController } from './template.dependency.js';
+import { templateController } from './template.controller.js';
 
 export const templateRouter = Router();
 

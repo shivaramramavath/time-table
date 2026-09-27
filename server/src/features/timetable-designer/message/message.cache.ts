@@ -1,6 +1,6 @@
 import { DESIGNER_TTL, PAGE_SIZE } from '#configs/constants.js';
 
-import redis from '#configs/redis.js';
+import { redis } from '#infrastructure/cache/redis/redis.client.js';
 
 import type { Message } from './message.model.js';
 import { messageQueue } from './message.queue.js';

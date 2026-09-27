@@ -1,18 +1,33 @@
-import { roomService } from '#features/resource/room/room.service.js';
-import { facultyService } from '#features/resource/faculty/faculty.service.js';
-import { subjectService } from '../resource/subject/subject.service.js';
-import { edgeService } from './edge/edge.service.js';
-import { nodeService } from './node/node.service.js';
+import { RoomService, roomService } from '#features/resource/room/room.service.js';
+import { FacultyService, facultyService } from '#features/resource/faculty/faculty.service.js';
+import { SubjectService, subjectService } from '#features/resource/subject/subject.service.js';
 
-import { timetableDesignerRepository } from './timetable-designer.repository.js';
+import { EdgeService, edgeService } from './edge/edge.service.js';
+import { NodeService, nodeService } from './node/node.service.js';
 
-export const timetableDesignerService = {
-  create: async (timetableId: string) => {
-    return timetableDesignerRepository.create({ timetableId });
-  },
+import {
+  TimetableDesignerRepository,
+  timetableDesignerRepository,
+} from './timetable-designer.repository.js';
 
-  get: async (timetableId: string) => {
-    const timetableDesigner = await timetableDesignerRepository.findById(timetableId);
+export class TimetableDesignerService {
+  constructor(
+    private readonly repository: TimetableDesignerRepository,
+    private readonly roomService: RoomService,
+    private readonly subjectService: SubjectService,
+    private readonly facultyService: FacultyService,
+    private readonly nodeService: NodeService,
+    private readonly edgeService: EdgeService,
+  ) {}
+
+  async create(timetableId: string) {
+    return this.repository.create({
+      timetableId,
+    });
+  }
+
+  async get(timetableId: string) {
+    const timetableDesigner = await this.repository.findById(timetableId);
 
     if (!timetableDesigner) {
       return null;
@@ -21,11 +36,11 @@ export const timetableDesignerService = {
     const designerId = timetableDesigner._id.toString();
 
     const [rooms, subjects, faculties, nodes, edges] = await Promise.all([
-      roomService.getAll(designerId),
-      subjectService.getAll(designerId),
-      facultyService.getAll(designerId),
-      nodeService.getAll(designerId),
-      edgeService.getAll(designerId),
+      this.roomService.getAll(designerId),
+      this.subjectService.getAll(designerId),
+      this.facultyService.getAll(designerId),
+      this.nodeService.getAll(designerId),
+      this.edgeService.getAll(designerId),
     ]);
 
     return {
@@ -38,15 +53,24 @@ export const timetableDesignerService = {
       nodes: nodes ?? [],
       edges: edges ?? [],
     };
-  },
+  }
 
-  getOrCreate: async (timetableId: string) => {
-    const existing = await timetableDesignerService.get(timetableId);
+  async getOrCreate(timetableId: string) {
+    const existing = await this.get(timetableId);
 
     if (existing) {
       return existing;
     }
 
-    return timetableDesignerService.create(timetableId);
-  },
-};
+    return this.create(timetableId);
+  }
+}
+
+export const timetableDesignerService = new TimetableDesignerService(
+  timetableDesignerRepository,
+  roomService,
+  subjectService,
+  facultyService,
+  nodeService,
+  edgeService,
+);

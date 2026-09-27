@@ -5,7 +5,7 @@ import asyncHandler from 'express-async-handler';
 
 import type { NextFunction, Request, Response } from 'express';
 
-import redis from '#configs/redis.js';
+import { redis } from '#infrastructure/cache/redis/redis.client.js';
 
 interface LimitOptions {
   keyPrefix: string;

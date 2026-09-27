@@ -3,7 +3,7 @@ import { BaseWorker } from '#shared/base/base-worker.js';
 import type { TemplateJobData } from './template.queue.js';
 import { TemplateProcess } from './template.process.js';
 
-import { templateRepository } from './template.dependency.js';
+import { templateRepository } from './template.repository.js';
 
 export class TemplateWorker extends BaseWorker<TemplateJobData> {
   constructor(templateProcess: TemplateProcess, concurrency = 5) {

@@ -1,6 +1,6 @@
 import { Queue, type JobsOptions } from 'bullmq';
 
-import redis from '#configs/redis.js';
+import { redis } from '#infrastructure/cache/redis/redis.client.js';
 
 export abstract class BaseQueue<T> {
   protected readonly queue: Queue<T>;

@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
 
 import type { Template } from './template.model.js';
-import { TemplateRepository } from './template.repository.js';
+import { templateRepository, TemplateRepository } from './template.repository.js';
 
 export class TemplateService {
   constructor(private readonly templateRepository: TemplateRepository) {}
@@ -90,3 +90,5 @@ export class TemplateService {
     return deletedTemplate;
   }
 }
+
+export const templateService = new TemplateService(templateRepository);

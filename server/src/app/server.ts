@@ -2,15 +2,15 @@ import http from 'http';
 
 import { env } from '#configs/env.js';
 import logger from '#configs/logger.js';
-import { checkRedis } from '#configs/redis.js';
 
 import { app } from './app.js';
 import { workerManager } from './worker.js';
 
-import { registerShutdownHandlers } from '#utils/graceful-shutdown.js';
+import { registerShutdownHandlers } from '#utils/shutdown/register-shutdown-handlers.js';
 import { socketManager } from '../sockets/socket-manager.js';
 import { database } from '../infrastructure/database/mongodb.js';
 import { SocketServer } from '../sockets/socket-server.js';
+import { redisClient } from '../infrastructure/cache/redis/redis.client.js';
 
 const server = http.createServer(app);
 
@@ -20,7 +20,7 @@ const bootstrap = async () => {
   try {
     logger.info('Starting server...');
 
-    await checkRedis();
+    await redisClient.checkHealth();
 
     await database.connect();
 

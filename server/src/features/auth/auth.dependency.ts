@@ -3,7 +3,7 @@ import { AuthService } from './auth.service.js';
 
 import { userService } from '#features/user/user.dependency.js';
 import { QueueService } from '#services/queue.service.js';
-import redis from '#configs/redis.js';
+import { redis } from '#infrastructure/cache/redis/redis.client.js';
 
 import { PasswordService } from './services/password.service.js';
 import { SessionService } from './services/session.service.js';

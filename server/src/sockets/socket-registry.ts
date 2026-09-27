@@ -1,4 +1,4 @@
-import redis from '#configs/redis.js';
+import { redis } from '#infrastructure/cache/redis/redis.client.js';
 
 const SOCKET_TTL = 24 * 60 * 60;
 

@@ -70,9 +70,8 @@ const facultySchema = new Schema(
   },
 );
 
-
 export type Faculty = InferSchemaType<typeof facultySchema>;
 
 export type FacultyDocument = HydratedDocument<Faculty>;
 
-export const FacultyModel =mongoose.models.Faculty || model<Faculty>('faculty', facultySchema);
+export const FacultyModel = mongoose.models.Faculty || model<Faculty>('faculty', facultySchema);

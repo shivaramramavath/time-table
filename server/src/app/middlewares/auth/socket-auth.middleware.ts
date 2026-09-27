@@ -2,7 +2,7 @@ import type { Socket } from 'socket.io';
 import createError from 'http-errors';
 import { tokenService } from '#features/auth/auth.dependency.js';
 
-export const socketAuth =async (socket: Socket, next: (err?: Error) => void) => {
+export const socketAuth = async (socket: Socket, next: (err?: Error) => void) => {
   const token = socket.handshake.auth?.token;
 
   if (!token) {

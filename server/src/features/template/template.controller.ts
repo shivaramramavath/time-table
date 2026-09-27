@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 
-import { TemplateService } from './template.service.js';
+import { templateService, TemplateService } from './template.service.js';
 
 export class TemplateController {
   constructor(private readonly templateService: TemplateService) {}
@@ -43,3 +43,5 @@ export class TemplateController {
     });
   };
 }
+
+export const templateController = new TemplateController(templateService);

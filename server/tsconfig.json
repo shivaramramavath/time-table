@@ -25,7 +25,9 @@
       "#services/*": ["./src/shared/services/*"],
       "#features/*": ["./src/features/*"],
       "#types/*": ["./src/shared/types/*"],
-      "#shared/*": ["./src/shared/*"]
+      "#shared/*": ["./src/shared/*"],
+      "#app/*": ["./src/app/*"],
+      "#infrastructure/*": ["./src/infrastructure/*"]
     }
   },
   "include": ["src"],

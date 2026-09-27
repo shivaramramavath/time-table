@@ -25,7 +25,7 @@ export class MessageListener {
     this.socket.on(
       'message:send',
       asyncSocketHandler('message:send', async ({ message }) => {
-        return this.aiService.generate(this.socket.data.user.userId, message.designerId, message);
+        // return this.aiService.generate(this.socket.data.user.userId, message.designerId, message);
       }),
     );
   }

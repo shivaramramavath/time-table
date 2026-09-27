@@ -1,4 +1,4 @@
-import redis from '#configs/redis.js';
+import { redis } from '#infrastructure/cache/redis/redis.client.js';
 import os from 'os';
 import type { Request, Response } from 'express';
 

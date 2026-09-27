@@ -61,7 +61,11 @@ export class TimetableController {
   update = expressAsyncHandler(async (req: Request, res: Response) => {
     const { timetableId } = req.params;
 
-    const timetable = await this.timetableService.update(timetableId as string, req.userId as string, req.body);
+    const timetable = await this.timetableService.update(
+      timetableId as string,
+      req.userId as string,
+      req.body,
+    );
 
     res.status(200).json({
       success: true,

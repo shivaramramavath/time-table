@@ -1,6 +1,6 @@
 import type { Model, Types } from 'mongoose';
 
-import type { Template } from './template.model.js';
+import { TemplateModel, type Template } from './template.model.js';
 import { BaseRepository } from '#shared/base/base-repository.js';
 
 export class TemplateRepository extends BaseRepository<Template> {
@@ -35,3 +35,5 @@ export class TemplateRepository extends BaseRepository<Template> {
       .lean<Template[]>();
   }
 }
+
+export const templateRepository = new TemplateRepository(TemplateModel);
