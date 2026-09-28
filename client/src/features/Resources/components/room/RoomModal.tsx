@@ -27,6 +27,7 @@ import { Input } from '@/shared/ui/input';
 import { Button } from '@/shared/ui/button';
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
+import TagsInput from './TagsInput';
 
 interface RoomModalProps {
   room?: Room;
@@ -92,19 +93,6 @@ const RoomModal = ({ room, open, onClose, onSave }: RoomModalProps) => {
     }
 
     onClose();
-  };
-
-  const handleFacilitiesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-
-    const nextFacilities = value
-      .split(',')
-      .map((facility) => facility.trim())
-      .filter(Boolean);
-
-    form.setValue('facilities', nextFacilities, {
-      shouldDirty: true,
-    });
   };
 
   return (
@@ -273,15 +261,18 @@ const RoomModal = ({ room, open, onClose, onSave }: RoomModalProps) => {
                     <FieldLabel htmlFor="facilities">Facilities</FieldLabel>
 
                     <FieldContent>
-                      <Input
-                        id="facilities"
-                        value={facilities.join(', ')}
-                        onChange={handleFacilitiesChange}
-                        placeholder="Projector, Whiteboard, AC"
-                        className="h-9 border-[#262626] bg-[#101010] text-xs text-white focus-visible:ring-1 focus-visible:ring-[#6366f1]"
+                      <TagsInput
+                        value={facilities}
+                        onChange={(value) => {
+                          form.setValue('facilities', value, {
+                            shouldDirty: true,
+                            shouldValidate: true,
+                          });
+                        }}
+                        placeholder="Add facility..."
                       />
 
-                      <p className="text-[10px] text-[#555]">Separate facilities with commas.</p>
+                      <p className="text-[10px] text-[#555]">Press Enter to add a facility.</p>
                     </FieldContent>
                   </Field>
 
@@ -316,27 +307,29 @@ const RoomModal = ({ room, open, onClose, onSave }: RoomModalProps) => {
             </FieldGroup>
           </div>
 
-          <DialogFooter className="flex-row gap-2 border-t border-[#1e1e1e] px-6 py-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onClose}
-              className="flex-1 border-[#262626] bg-[#1a1a1a] text-xs text-[#666] hover:bg-[#222] hover:text-white"
-            >
-              Cancel
-            </Button>
+          <DialogFooter>
+            <div className="flex items-center gap-2 px-2 py-3">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={onClose}
+                className="flex-1 border-[#262626] bg-[#1a1a1a] text-xs text-[#666] hover:bg-[#222] hover:text-white"
+              >
+                Cancel
+              </Button>
 
-            <Button
-              type="submit"
-              disabled={createRoom.isPending || updateRoom.isPending}
-              className="flex-1 bg-[#6366f1] text-xs font-medium text-white hover:bg-[#5558e8]"
-            >
-              {createRoom.isPending || updateRoom.isPending
-                ? 'Saving...'
-                : room
-                  ? 'Save Changes'
-                  : 'Add Room'}
-            </Button>
+              <Button
+                type="submit"
+                disabled={createRoom.isPending || updateRoom.isPending}
+                className="flex-1 bg-[#6366f1] text-xs font-medium text-white hover:bg-[#5558e8]"
+              >
+                {createRoom.isPending || updateRoom.isPending
+                  ? 'Saving...'
+                  : room
+                    ? 'Save Changes'
+                    : 'Add Room'}
+              </Button>
+            </div>
           </DialogFooter>
         </form>
       </DialogContent>

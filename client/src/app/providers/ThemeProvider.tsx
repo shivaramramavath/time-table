@@ -1,13 +1,12 @@
+import { useUserStore } from '@/shared/user/user.store';
 import React, { useEffect } from 'react';
-
-import { usePreferencesStore } from '@/shared/preferences/preferences.store';
 
 interface ThemeProviderProps {
   children: React.ReactNode;
 }
 
 const ThemeProvider = ({ children }: ThemeProviderProps) => {
-  const darkMode = usePreferencesStore((state) => state.darkMode);
+  const darkMode = useUserStore((state) => state.user?.preferences.darkMode);
 
   useEffect(() => {
     const root = document.documentElement;

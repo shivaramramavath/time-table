@@ -2,8 +2,6 @@ import '@xyflow/react/dist/style.css';
 
 import { Background, ReactFlow, useEdgesState, useNodesState } from '@xyflow/react';
 
-import { usePreferencesStore } from '@/shared/preferences/preferences.store';
-
 import DesignerPanels from '../panels/DesignerPanels';
 
 import { useDesignerDnD, useDesignerInteractions, useEdgeTypes, useNodeTypes } from '../../hooks';
@@ -11,6 +9,7 @@ import { useDesignerDnD, useDesignerInteractions, useEdgeTypes, useNodeTypes } f
 import { useDesignerSocketListeners } from '../../hooks/useDesignerSocketListeners';
 
 import type { Edge, Node } from '../../types';
+import { useUserStore } from '@/shared/user/user.store';
 
 interface Props {
   timetableId: string;
@@ -19,7 +18,7 @@ interface Props {
 }
 
 const DesignerCanvas = ({ timetableId, initialNodes, initialEdges }: Props) => {
-  const darkMode = usePreferencesStore((state) => state.darkMode);
+  const darkMode = useUserStore((state) => state.user?.preferences.darkMode);
 
   const [nodes, setNodes] = useNodesState(initialNodes);
 

@@ -16,6 +16,7 @@ export class UserController {
   });
 
   update = expressAsyncHandler(async (req: Request, res: Response) => {
+    console.log(req.body);
     const user = await this.userService.update(req.userId as string, req.body);
 
     res.status(200).json({

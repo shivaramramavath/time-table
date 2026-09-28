@@ -43,10 +43,6 @@ const Faculty = () => {
     console.log('Import faculty');
   };
 
-  const handleExport = () => {
-    console.log('Export faculty');
-  };
-
   return (
     <div>
       <div className="flex items-center gap-3 p-4">
@@ -73,16 +69,6 @@ const Faculty = () => {
           >
             <Upload size={13} />
             Import
-          </Button>
-
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleExport}
-            className="h-9 gap-1.5 border-[#1e1e1e] text-xs hover:border-[#2a2a2a]"
-          >
-            <Download size={13} />
-            Export
           </Button>
 
           <Button

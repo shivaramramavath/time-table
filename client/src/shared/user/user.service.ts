@@ -1,16 +1,17 @@
-import { usePreferencesStore } from '../preferences/preferences.store';
+import { userApi } from './user.api';
 import { useUserStore } from './user.store';
+import type { User } from './user.types';
 
 export const userService = {
-  setUser: async (user) => {
+  setUser: async (user: User) => {
     useUserStore.getState().setUser(user);
-
-    usePreferencesStore.getState().setPreferences(user.preferences);
   },
 
   clearUser: () => {
     useUserStore.getState().clearUser();
+  },
 
-    usePreferencesStore.getState().resetPreferences();
+  updateUser: async (user: Partial<User>) => {
+    await userApi.updateCurrentUser(user);
   },
 };

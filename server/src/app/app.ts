@@ -18,6 +18,7 @@ import { timetableRouter } from '#features/timetable/timetable.router.js';
 import { templateRouter } from '#features/template/template.route.js';
 import { feedbackRouter } from '#features/feedback/feedback.routes.js';
 import { resourceRouter } from '#features/resource/index.js';
+import { health } from '#utils/health.js';
 
 const corsOptions = {
   origin: env.ORIGIN_URL,
@@ -42,6 +43,8 @@ app.use(
     level: 6,
   }),
 );
+
+app.get('/health', health)
 
 app.use('/api/auth', authRouter);
 app.use('/api/user', authenticate, userRouter);

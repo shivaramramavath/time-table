@@ -5,16 +5,30 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/shared
 import ProfileAvatar from './ProfileAvatar';
 import LogoutButton from './LogoutButton';
 import { useUserStore } from '@/shared/user/user.store';
-import { usePreferencesStore } from '@/shared/preferences/preferences.store';
 import MenuItem from './MenuItem';
 import MenuSection from './MenuSection';
 import { navigationService } from '@/shared/services/navigation.service';
 import NotificationMenuItem from './NotificationsMenuItem';
+import { userService } from '@/shared/user/user.service';
 
 const Profile = () => {
   const user = useUserStore((state) => state.user);
-  const darkMode = usePreferencesStore((state) => state.darkMode);
-  const toggleDarkMode = usePreferencesStore((state) => state.toggleDarkMode);
+
+  const toggleDarkMode = async () => {
+    const darkMode = !user?.preferences?.darkMode;
+
+    await userService.updateUser({
+      preferences: {
+        darkMode,
+      },
+    });
+
+    useUserStore.getState().setUser({
+      preferences: {
+        darkMode,
+      },
+    });
+  };
 
   return (
     <DropdownMenu>
@@ -48,9 +62,9 @@ const Profile = () => {
         {/* Preferences */}
         <MenuSection title="Preferences">
           <MenuItem
-            icon={darkMode ? Moon : Sun}
+            icon={user?.preferences?.darkMode ? Moon : Sun}
             label="Appearance"
-            value={darkMode ? 'Dark' : 'Light'}
+            value={user?.preferences?.darkMode ? 'Dark' : 'Light'}
             onClick={toggleDarkMode}
           />
 

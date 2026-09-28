@@ -15,15 +15,14 @@ const App = () => {
     <QueryProvider>
       <BrowserRouter>
         <NavigationProvider>
-          <ThemeProvider>
-            <GoogleProvider>
-              <AuthProvider>
+          <GoogleProvider>
+            <AuthProvider>
+              <ThemeProvider>
                 <AppRouter />
-              </AuthProvider>
-
-              <Toaster position="top-right" richColors duration={2000} />
-            </GoogleProvider>
-          </ThemeProvider>
+                <Toaster position="top-right" richColors duration={2000} />
+              </ThemeProvider>
+            </AuthProvider>
+          </GoogleProvider>
         </NavigationProvider>
       </BrowserRouter>
     </QueryProvider>

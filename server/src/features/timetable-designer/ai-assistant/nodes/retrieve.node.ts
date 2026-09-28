@@ -3,9 +3,9 @@ import { GraphStatus } from '../types.js';
 
 import { nodeService } from '#features/timetable-designer/node/node.service.js';
 import { edgeService } from '#features/timetable-designer/edge/edge.service.js';
-import { facultyService } from '#features/timetable-designer/faculty/faculty.service.js';
-import { subjectService } from '#features/timetable-designer/subject/subject.service.js';
-import { roomService } from '#features/timetable-designer/room/room.service.js';
+import { facultyService } from '#features/resource/faculty/faculty.service.js';
+import { subjectService } from '#features/resource/subject/subject.service.js';
+import { roomService } from '#features/resource/room/room.service.js';
 
 export async function retrieveNode(state: DesignerGraphState) {
   const { designerId, intent } = state;

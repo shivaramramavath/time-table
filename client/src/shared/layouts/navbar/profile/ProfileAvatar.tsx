@@ -1,4 +1,3 @@
-import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { useUserStore } from '@/shared/user/user.store';
 

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import type { CreateFacultyInput, Faculty } from '../../api/FacultyApi';
@@ -26,6 +26,8 @@ import { Button } from '@/shared/ui/button';
 
 import AvailabilityMatrix from './AvailabilityMatrix';
 import { useCreateFaculty, useUpdateFaculty } from '../../hooks/useFaculty';
+import SelectResourceIds from './SelectResourceIds';
+import RoomSelect from './RoomSelect';
 
 interface FacultyModalProps {
   faculty?: Faculty;
@@ -58,11 +60,41 @@ const FacultyModal = ({ faculty, open, onClose }: FacultyModalProps) => {
   const createFaculty = useCreateFaculty();
   const updateFaculty = useUpdateFaculty();
 
+  const [selectedSubjectIds, setSelectedSubjectIds] = useState<string[]>([]);
+
+  const subjects = [
+    {
+      id: 's1',
+      name: 'Database Management Systems',
+      code: 'CS301',
+      type: 'theory',
+    },
+    {
+      id: 's2',
+      name: 'Operating Systems',
+      code: 'CS302',
+      type: 'theory',
+    },
+    {
+      id: 's3',
+      name: 'Computer Networks',
+      code: 'CS303',
+      type: 'theory',
+    },
+  ];
+
+  const getSubjects = (query: string) => {
+    const value = query.toLowerCase().trim();
+
+    return subjects.filter((subject) => subject.name.toLowerCase().includes(value));
+  };
+
   const form = useForm<FacultyFormValues>({
     defaultValues,
   });
 
   const availability = form.watch('availability');
+  const roomId = form.watch('roomId');
 
   useEffect(() => {
     if (faculty) {
@@ -180,23 +212,38 @@ const FacultyModal = ({ faculty, open, onClose }: FacultyModalProps) => {
                       )}
                     </FieldContent>
                   </Field>
-
                   <Field>
-                    <FieldLabel htmlFor="roomId">Room ID</FieldLabel>
+                    <FieldLabel>Subjects</FieldLabel>
 
                     <FieldContent>
-                      <Input
-                        id="roomId"
-                        placeholder="Select faculty room"
-                        {...form.register('roomId', {
-                          required: 'Room is required',
-                        })}
-                        className="h-9 border-[#262626] bg-[#101010] text-xs text-white focus-visible:ring-1 focus-visible:ring-[#6366f1]"
+                      <SelectResourceIds
+                        getAll={getSubjects}
+                        initialSelectedIds={selectedSubjectIds}
+                        setSelectedIds={setSelectedSubjectIds}
+                        placeholder="Search subjects..."
+                        renderMeta={(subject) => (
+                          <>
+                            {subject.code} · {subject.type}
+                          </>
+                        )}
                       />
+                    </FieldContent>
+                  </Field>
 
-                      {form.formState.errors.roomId && (
-                        <FieldError>{form.formState.errors.roomId.message}</FieldError>
-                      )}
+                  <Field>
+                    <FieldLabel>Room</FieldLabel>
+
+                    <FieldContent>
+                      <RoomSelect
+                        value={roomId}
+                        onChange={(roomId) =>
+                          form.setValue('roomId', roomId, {
+                            shouldDirty: true,
+                            shouldValidate: true,
+                          })
+                        }
+                        placeholder="Select a room"
+                      />
                     </FieldContent>
                   </Field>
 
