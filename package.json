@@ -22,6 +22,21 @@
     "typecheck:server": "npm --prefix server run typecheck"
   },
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.10",
     "husky": "^9.1.7"
+  },
+  "dependencies": {
+    "@nestjs/config": "^12.0.1",
+    "@nestjs/jwt": "^12.0.2",
+    "@nestjs/mongoose": "^12.0.0",
+    "bullmq": "^6.3.11",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.15.1",
+    "compression": "^1.8.2",
+    "cookie-parser": "^1.4.7",
+    "helmet": "^8.3.0",
+    "ioredis": "^6.0.0",
+    "mongoose": "^9.11.1",
+    "pino-http": "^11.0.0"
   }
 }
