@@ -3,8 +3,3 @@ export interface AccessTokenPayload {
   email: string;
   type: 'access';
 }
-
-export interface RefreshTokenPayload {
-  sub: string;
-  type: 'refresh';
-}

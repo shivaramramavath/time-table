@@ -2,7 +2,7 @@ import { InjectQueue } from '@nestjs/bullmq';
 import { Injectable } from '@nestjs/common';
 import { Queue } from 'bullmq';
 
-import type { SendEmailOptions } from '../email.types';
+import type { SignUpGreeting } from '../email.types';
 
 export const EMAIL_QUEUE = 'email';
 export const EMAIL_JOB_SEND = 'email.send';
@@ -14,7 +14,7 @@ export class EmailQueue {
     private readonly queue: Queue,
   ) {}
 
-  async send(options: SendEmailOptions) {
+  async send(options: SignUpGreeting) {
     return this.queue.add(EMAIL_JOB_SEND, options, {
       attempts: 5,
 

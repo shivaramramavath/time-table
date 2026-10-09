@@ -4,6 +4,7 @@ import { Module } from '@nestjs/common';
 import { EMAIL_QUEUE, EmailQueue } from './queue/email.queue';
 
 import { BrevoService } from './brevo/brevo.service';
+import { EmailService } from './email.service';
 import { EmailProcessor } from './queue/email.processor';
 
 @Module({
@@ -13,8 +14,8 @@ import { EmailProcessor } from './queue/email.processor';
     }),
   ],
 
-  providers: [BrevoService, EmailQueue, EmailProcessor],
+  providers: [BrevoService, EmailQueue, EmailProcessor, EmailService],
 
-  exports: [EmailQueue],
+  exports: [EmailService],
 })
 export class EmailModule {}

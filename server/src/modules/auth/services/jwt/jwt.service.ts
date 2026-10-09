@@ -1,13 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { JwtService as NestJwtService } from '@nestjs/jwt';
-
-import { AccessTokenPayload, RefreshTokenPayload } from './jwt.types';
+import { JwtService } from '@nestjs/jwt';
+import { AccessTokenPayload } from './jwt.types';
 
 @Injectable()
 export class JwtTokenService {
   constructor(
-    private readonly jwtService: NestJwtService,
+    private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
   ) {}
 
@@ -21,22 +20,15 @@ export class JwtTokenService {
     );
   }
 
-  signRefreshToken(payload: RefreshTokenPayload): string {
-    return this.jwtService.sign(payload, {
-      secret: this.configService.getOrThrow<string>('JWT_REFRESH_SECRET'),
-      expiresIn: '7d',
-    });
-  }
-
   verifyAccessToken(token: string): AccessTokenPayload {
-    return this.jwtService.verify<AccessTokenPayload>(token, {
+    const payload = this.jwtService.verify<AccessTokenPayload>(token, {
       secret: this.configService.getOrThrow<string>('JWT_ACCESS_SECRET'),
     });
-  }
 
-  verifyRefreshToken(token: string): RefreshTokenPayload {
-    return this.jwtService.verify<RefreshTokenPayload>(token, {
-      secret: this.configService.getOrThrow<string>('JWT_REFRESH_SECRET'),
-    });
+    if (payload.type !== 'access' || !payload.sub) {
+      throw new Error('Invalid access token payload');
+    }
+
+    return payload;
   }
 }

@@ -11,6 +11,7 @@ import jwtConfig from './config/jwt.config';
 import redisConfig from './config/redis.config';
 import { EmailModule } from './infrastructure/email/email.module';
 import { AppLoggerModule } from './infrastructure/logger/logger.module';
+import { RedisModule } from './infrastructure/redis/redis.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 
@@ -41,6 +42,7 @@ import { UserModule } from './modules/user/user.module';
       }),
     }),
     AppLoggerModule,
+    RedisModule,
     EmailModule,
     UserModule,
     AuthModule,

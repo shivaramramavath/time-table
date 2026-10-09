@@ -1,14 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import os from 'node:os';
+import { RedisService } from 'src/infrastructure/redis/redis.service';
 
 @Injectable()
 export class AppService {
+  constructor(private readonly redisService: RedisService) {}
+
   getHello(): string {
     return 'server running..';
   }
 
   getHealth() {
     const startedAt = Date.now();
+    const redisHealth = this.redisService.ping();
 
     return {
       status: 'ok',
@@ -20,6 +24,10 @@ export class AppService {
       },
 
       responseTime: `${Date.now() - startedAt}ms`,
+
+      redis: {
+        status: redisHealth,
+      },
 
       server: {
         platform: process.platform,

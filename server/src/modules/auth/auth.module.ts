@@ -8,6 +8,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { EmailModule } from 'src/infrastructure/email/email.module';
 import { UserModule } from '../user/user.module';
+import { CookieService } from './services/cookie/cookie.service';
 import { JwtTokenService } from './services/jwt/jwt.service';
 
 @Module({
@@ -23,6 +24,12 @@ import { JwtTokenService } from './services/jwt/jwt.service';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, BcryptService, PasswordService, JwtTokenService],
+  providers: [
+    AuthService,
+    BcryptService,
+    PasswordService,
+    JwtTokenService,
+    CookieService,
+  ],
 })
 export class AuthModule {}
