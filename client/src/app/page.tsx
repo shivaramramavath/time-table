@@ -1,7 +1,5 @@
-import Image from "next/image";
+import Landing from "@/features/landing/Landing";
 
 export default function Home() {
-  return (
-    <h1>client</h1>
-  );
+  return <Landing />;
 }

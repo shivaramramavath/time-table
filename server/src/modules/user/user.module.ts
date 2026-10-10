@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { GuardModule } from '../../common/guards/guard.module';
 import { JwtTokenModule } from '../auth/services/jwt/jwt-token.module';
 import { UserController } from './controllers/user.controller';
-import { User, UserSchema } from './entities/user.model';
+import { User, UserSchema } from './entities/user.entity';
 import { UserRepository } from './repository/user.repository';
 import { UserService } from './services/user.service';
 
