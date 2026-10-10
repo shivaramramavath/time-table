@@ -6,10 +6,11 @@ import { PasswordService } from './services/password/password.service';
 
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { EmailModule } from 'src/infrastructure/email/email.module';
+import { EmailModule } from '../../infrastructure/email/email.module';
 import { UserModule } from '../user/user.module';
 import { CookieService } from './services/cookie/cookie.service';
 import { JwtTokenService } from './services/jwt/jwt.service';
+import { SessionService } from './services/session/session.service';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { JwtTokenService } from './services/jwt/jwt.service';
     BcryptService,
     PasswordService,
     JwtTokenService,
+    SessionService,
     CookieService,
   ],
 })

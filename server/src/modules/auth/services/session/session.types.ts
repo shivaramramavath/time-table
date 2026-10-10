@@ -21,7 +21,7 @@ export interface CreatedSession {
   sid: string;
   sub: string;
   email: string;
-  refreshToken: string;
+  secret: string;
   expiresIn: number;
 }
 
@@ -34,4 +34,12 @@ export interface SessionIdentity {
   lastUsedAt: number;
   expiresAt: number;
   device?: SessionRecord['device'];
+}
+
+export interface SessionForgotPassword {
+  sid: string;
+  sub: string;
+  email: string;
+  secret: string;
+  expiresIn: number;
 }

@@ -1,0 +1,64 @@
+
+@baseUrl = http://localhost:8080/api
+@email = ramavathshiva6300@gmail.com
+@password = 12345678
+
+### 1. Sign up
+POST {{baseUrl}}/auth/signup
+Content-Type: application/json
+Accept: application/json
+
+{
+  "userName": "test-1",
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+###
+
+### 2. Sign in
+POST {{baseUrl}}/auth/signin
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+###
+
+### 3. Refresh access token
+# Sends the refreshToken cookie received from sign-in.
+POST {{baseUrl}}/auth/refresh
+Accept: application/json
+
+###
+
+### 4. Sign out
+# Requires a valid refreshToken cookie.
+POST {{baseUrl}}/auth/signout
+Accept: application/json
+
+###
+
+### 5. Forgot password
+POST {{baseUrl}}/auth/forgot-password
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "{{email}}"
+}
+
+###
+
+### 6. Reset password
+# Replace the token with a valid reset token for testing.
+POST {{baseUrl}}/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YWM5ZDhjNTI4MDVmNDg4ODkxMDgzZGEiLCJqdGkiOiJhMjIyMjZiNi1mYjUyLTQ1MTgtOWQyYy0zYmNjZDBkYmVlMDQiLCJ0eXBlIjoicGFzc3dvcmQtcmVzZXQiLCJpYXQiOjE3OTE2MTQwMDQsImV4cCI6MTc5MTYxNDkwNH0.T1W7FtB0sFeHxAXJtB9N1fVIlquwztVFSJh-Ly2QKvc
+Content-Type: application/json
+Accept: application/json
+
+{
+  "password": "{{password}}"
+}

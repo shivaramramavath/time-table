@@ -6,19 +6,20 @@ import {
   Post,
   Req,
   Res,
+  UseGuards,
 } from '@nestjs/common';
-import type { Request, Response } from 'express';
+import type { Response } from 'express';
 
-import {
-  ForgotPasswordDto,
-  ResetPasswordDto,
-  SignInDto,
-  SignUpDto,
-} from '../dtos';
+import { ForgotPasswordDto, PasswordDto, SignInDto, SignUpDto } from '../dtos';
+import type { RefreshTokenRequest } from '../guards/refresh-token.guard';
+import { RefreshTokenGuard } from '../guards/refresh-token.guard';
+
+import type { PasswordResetRequest } from '../guards/password-reset.guard';
+import { PasswordResetGuard } from '../guards/password-reset.guard';
 import { AuthService } from '../services/auth.service';
 import { CookieService } from '../services/cookie/cookie.service';
 
-const REFRESH_COOKIE = 'refreshToken';
+export const REFRESH_COOKIE = 'refreshToken';
 
 @Controller('auth')
 export class AuthController {
@@ -62,16 +63,16 @@ export class AuthController {
 
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
+  @UseGuards(RefreshTokenGuard)
   async refresh(
-    @Req() request: Request,
+    @Req() request: RefreshTokenRequest,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const refreshToken = this.cookieService.get(request, REFRESH_COOKIE);
+    const payload = request.refreshTokenPayload!;
 
-    const { refreshToken: rotatedToken, ...data } =
-      await this.authService.refresh(refreshToken);
+    const { refreshToken, ...data } = await this.authService.refresh(payload);
 
-    this.cookieService.set(response, REFRESH_COOKIE, rotatedToken);
+    this.cookieService.set(response, REFRESH_COOKIE, refreshToken);
 
     return {
       data,
@@ -81,22 +82,16 @@ export class AuthController {
 
   @Post('signout')
   @HttpCode(HttpStatus.OK)
+  @UseGuards(RefreshTokenGuard)
   async signOut(
-    @Req() request: Request,
+    @Req() request: RefreshTokenRequest,
     @Res({ passthrough: true }) response: Response,
   ) {
-    try {
-      await this.authService.signOut(
-        this.cookieService.get(request, REFRESH_COOKIE),
-      );
-    } finally {
-      response.clearCookie(REFRESH_COOKIE, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        path: '/api/auth',
-      });
-    }
+    const payload = request.refreshTokenPayload!;
+
+    await this.authService.signOut(payload);
+
+    this.cookieService.remove(response, REFRESH_COOKIE);
 
     return {
       data: { success: true },
@@ -106,23 +101,29 @@ export class AuthController {
 
   @Post('forgot-password')
   @HttpCode(HttpStatus.OK)
-  forgotPassword(@Body() dto: ForgotPasswordDto) {
-    const { token } = this.authService.forgotPassword(dto);
+  async forgotPassword(@Body() dto: ForgotPasswordDto) {
+    await this.authService.forgotPassword(dto);
 
     return {
       data: {
         message:
           'If an account matches that email, password-reset instructions will be sent.',
-        token,
       },
       success: true,
     };
   }
 
   @Post('reset-password')
+  @UseGuards(PasswordResetGuard)
   @HttpCode(HttpStatus.OK)
-  resetPassword(@Body() dto: ResetPasswordDto) {
-    this.authService.resetPassword(dto);
+  resetPassword(
+    @Req() request: PasswordResetRequest,
+    @Body() dto: PasswordDto,
+  ) {
+    this.authService.resetPassword({
+      userId: request.passwordResetPayload?.sub as string,
+      password: dto.password,
+    });
 
     return {
       data: { message: 'Password reset successfully' },

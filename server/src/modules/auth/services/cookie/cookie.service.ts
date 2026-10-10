@@ -40,7 +40,7 @@ export class CookieService {
     return value;
   }
 
-  clear(res: Response, name: string, options: CookieOptions = {}): void {
+  remove(res: Response, name: string, options: CookieOptions = {}): void {
     res.clearCookie(name, {
       ...this.baseCookieOptions,
       ...options,

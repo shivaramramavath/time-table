@@ -1,15 +1,20 @@
-export interface SendEmailOptions {
-  toEmail: string;
-  toName?: string;
-  subject: string;
-  htmlContent: string;
+export interface EmailRecipient {
+  email: string;
+  name?: string;
 }
 
-export interface SignUpGreeting {
-  toEmail: string;
-  toName: string;
-  data: {
-    userName: string;
-    email: string;
-  };
+export interface SignupGreetingEmailData {
+  recipient: EmailRecipient;
+  userName: string;
+}
+
+export interface PasswordResetEmailData {
+  recipient: EmailRecipient;
+  resetUrl: string;
+}
+
+export interface EmailMessage {
+  recipient: EmailRecipient;
+  subject: string;
+  html: string;
 }

@@ -3,10 +3,7 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { timingSafeEqual } from 'node:crypto';
-
-import { RedisDataService } from 'src/infrastructure/redis/redis-data.service';
 
 import {
   CreatedSession,
@@ -14,11 +11,11 @@ import {
   SessionRecord,
 } from './session.types';
 
+import { RedisDataService } from '../../../../infrastructure/redis/redis-data.service';
 import {
   generateSessionId,
   generateSessionSecret,
   hashSessionSecret,
-  parseRefreshToken,
 } from './session.utils';
 
 const DEFAULT_SESSION_TTL = 30 * 24 * 60 * 60;
@@ -27,10 +24,7 @@ const DEFAULT_SESSION_TTL = 30 * 24 * 60 * 60;
 export class SessionService {
   private readonly sessionTtl: number;
 
-  constructor(
-    private readonly redis: RedisDataService,
-    private readonly configService: ConfigService,
-  ) {
+  constructor(private readonly redis: RedisDataService) {
     this.sessionTtl = DEFAULT_SESSION_TTL;
 
     if (!Number.isSafeInteger(this.sessionTtl) || this.sessionTtl <= 0) {
@@ -38,6 +32,7 @@ export class SessionService {
     }
   }
 
+  // create a new session
   async create(
     sub: string,
     email: string,
@@ -83,55 +78,12 @@ export class SessionService {
       sid,
       sub,
       email,
-      refreshToken: `${sid}.${secret}`,
+      secret,
       expiresIn: this.sessionTtl,
     };
   }
 
-  async find(refreshToken: string): Promise<SessionIdentity> {
-    const parsed = parseRefreshToken(refreshToken);
-
-    if (!parsed) {
-      throw new UnauthorizedException('Invalid session');
-    }
-
-    const { sid, secret } = parsed;
-    const sessionKey = this.sessionKey(sid);
-    const raw = await this.redis.get(sessionKey);
-
-    if (!raw) {
-      throw new UnauthorizedException('Invalid session');
-    }
-
-    const session = this.parseSession(raw);
-
-    if (
-      session.sid !== sid ||
-      session.status !== 'active' ||
-      session.expiresAt <= Date.now() ||
-      !this.matchesSecret(secret, session.refreshTokenHash)
-    ) {
-      throw new UnauthorizedException('Invalid session');
-    }
-
-    session.lastUsedAt = Date.now();
-
-    const remainingTtl = this.remainingTtl(session.expiresAt);
-
-    if (remainingTtl <= 0) {
-      await this.redis.delete(sessionKey);
-      throw new UnauthorizedException('Session expired');
-    }
-
-    await this.redis.setWithExpiry(
-      sessionKey,
-      JSON.stringify(session),
-      remainingTtl,
-    );
-
-    return this.toIdentity(session);
-  }
-
+  // delete a session
   async destroy(sid: string, sub: string): Promise<void> {
     if (!this.isValidSessionId(sid) || !sub) {
       return;
@@ -170,14 +122,14 @@ export class SessionService {
     await this.redis.removeFromSet(this.userSessionsKey(sub), sid);
   }
 
-  async rotate(refreshToken: string): Promise<CreatedSession> {
-    const parsed = parseRefreshToken(refreshToken);
-
-    if (!parsed) {
-      throw new UnauthorizedException('Invalid session');
-    }
-
-    const { sid, secret } = parsed;
+  // rotate session
+  async rotate({
+    sid,
+    secret,
+  }: {
+    sid: string;
+    secret: string;
+  }): Promise<CreatedSession> {
     const sessionKey = this.sessionKey(sid);
     const raw = await this.redis.get(sessionKey);
 
@@ -218,7 +170,7 @@ export class SessionService {
       sid,
       sub: session.sub,
       email: session.email,
-      refreshToken: `${sid}.${newSecret}`,
+      secret: newSecret,
       expiresIn: remainingTtl,
     };
   }
@@ -278,12 +230,21 @@ export class SessionService {
   }
 
   private toIdentity(session: SessionRecord): SessionIdentity {
-    const { sid, sub, status, createdAt, lastUsedAt, expiresAt, device } =
-      session;
+    const {
+      sid,
+      sub,
+      email,
+      status,
+      createdAt,
+      lastUsedAt,
+      expiresAt,
+      device,
+    } = session;
 
     return {
       sid,
       sub,
+      email,
       status,
       createdAt,
       lastUsedAt,

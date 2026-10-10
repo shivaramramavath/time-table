@@ -1,0 +1,12 @@
+
+@baseUrl = http://localhost:8080/api
+
+### App: Root endpoint
+GET {{baseUrl}}
+Accept: application/json
+
+###
+
+### App: Health check
+GET {{baseUrl}}/health
+Accept: application/json

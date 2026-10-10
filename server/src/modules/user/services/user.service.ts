@@ -16,15 +16,24 @@ export class UserService {
       return await this.userRepository.create(user);
     } catch (error: any) {
       if (error?.code === 11000) {
-        if (error?.keyPattern?.email) {
+        if (error?.keyPattern?.email)
           throw new ConflictException('Email is already registered');
-        }
 
         throw new ConflictException('User already exists');
       }
 
       throw new InternalServerErrorException('Failed to create user');
     }
+  }
+
+  async findByEmail(email: string): Promise<User> {
+    const user = await this.userRepository.findByEmail(email);
+
+    if (!user) {
+      throw new InternalServerErrorException('User not found');
+    }
+
+    return user;
   }
 
   async findByEmailWithPassword(email: string): Promise<User> {
@@ -42,6 +51,14 @@ export class UserService {
   }
 
   async update(userId: string, data: Partial<User>) {
+    // Remove password
+    if (data.password) {
+      delete data.password;
+    }
     return this.userRepository.update(userId, data);
+  }
+
+  async updatePassword(userId: string, password: string) {
+    return this.userRepository.update(userId, { password });
   }
 }

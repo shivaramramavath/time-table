@@ -1,12 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { SignUpGreeting } from './email.types';
-import { EmailQueue } from './queue/email.queue';
+
+import type {
+  PasswordResetEmailData,
+  SignupGreetingEmailData,
+} from './email.types';
+import { EmailQueueService } from './queue/email-queue.service';
 
 @Injectable()
 export class EmailService {
-  constructor(private readonly emailQueue: EmailQueue) {}
+  constructor(private readonly emailQueue: EmailQueueService) {}
 
-  async signUpGreeting(data: SignUpGreeting) {
-    await this.emailQueue.send(data);
+  async sendSignupGreeting(data: SignupGreetingEmailData): Promise<void> {
+    await this.emailQueue.enqueueSignupGreeting(data);
+  }
+
+  async sendPasswordReset(data: PasswordResetEmailData): Promise<void> {
+    await this.emailQueue.enqueuePasswordReset(data);
   }
 }

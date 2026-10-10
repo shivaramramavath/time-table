@@ -3,3 +3,17 @@ export interface AccessTokenPayload {
   email: string;
   type: 'access';
 }
+
+export interface RefreshTokenPayload {
+  sub: string;
+  sid: string;
+  email: string;
+  secret: string;
+  type: 'refresh';
+}
+
+export interface PasswordResetTokenPayload {
+  sub: string;
+  jti: string;
+  type: 'password-reset';
+}

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import os from 'node:os';
-import { RedisService } from 'src/infrastructure/redis/redis.service';
+import { RedisService } from '../infrastructure/redis/redis.service';
 
 @Injectable()
 export class AppService {

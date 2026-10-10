@@ -1,6 +1,6 @@
 import { registerAs } from '@nestjs/config';
 
-export default registerAs('email', () => ({
+export const emailConfig = registerAs('email', () => ({
   apiKey: process.env.BREVO_API_KEY ?? '',
   sender: {
     email: process.env.BREVO_SENDER_EMAIL ?? '',

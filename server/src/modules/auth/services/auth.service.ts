@@ -1,21 +1,30 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 
-import { EmailService } from 'src/infrastructure/email/email.service';
-import { UserService } from 'src/modules/user/services/user.service';
-
-import { ForgotPasswordDto, SignInDto, SignUpDto } from '../dtos';
+import { ConfigService } from '@nestjs/config';
+import { PinoLogger } from 'nestjs-pino';
+import { EmailService } from '../../../infrastructure/email/email.service';
+import { UserService } from '../../user/services/user.service';
+import {
+  ForgotPasswordDto,
+  ResetPasswordDto,
+  SignInDto,
+  SignUpDto,
+} from '../dtos';
 import { JwtTokenService } from './jwt/jwt.service';
+import { RefreshTokenPayload } from './jwt/jwt.types';
 import { PasswordService } from './password/password.service';
 import { SessionService } from './session/session.service';
 
 @Injectable()
 export class AuthService {
   constructor(
+    private readonly logger: PinoLogger,
     private readonly userService: UserService,
     private readonly passwordService: PasswordService,
     private readonly jwtTokenService: JwtTokenService,
     private readonly sessionService: SessionService,
     private readonly emailService: EmailService,
+    private readonly configService: ConfigService,
   ) {}
 
   async signUp(createUserDto: SignUpDto) {
@@ -39,24 +48,30 @@ export class AuthService {
       email: user.email,
     });
 
+    // Generate the refresh token
+    const refreshToken = this.jwtTokenService.signRefreshToken({
+      sid: session.sid,
+      sub: userId,
+      email: user.email,
+      secret: session.secret,
+    });
+
     // Email failure should ideally be handled by a retryable queue.
     try {
-      await this.emailService.signUpGreeting({
-        toEmail: user.email,
-        toName: user.userName,
-        data: {
-          userName: user.userName,
+      await this.emailService.sendSignupGreeting({
+        recipient: {
           email: user.email,
+          name: user.userName,
         },
+        userName: user.userName,
       });
     } catch {
-      // Do not log passwords or tokens.
-      // Queue/retry the greeting email in production.
+      // todo: handle email failure
     }
 
     return {
       accessToken,
-      refreshToken: session.refreshToken,
+      refreshToken,
       user,
     };
   }
@@ -92,48 +107,91 @@ export class AuthService {
       email: user.email,
     });
 
+    // Generate the refresh token
+    const refreshToken = this.jwtTokenService.signRefreshToken({
+      sid: session.sid,
+      sub: userId,
+      email: user.email,
+      secret: session.secret,
+    });
+
     return {
       accessToken,
-      refreshToken: session.refreshToken,
+      refreshToken,
       user,
     };
   }
 
-  async refresh(refreshToken: string) {
-    if (!refreshToken) {
+  async refresh(payload: RefreshTokenPayload) {
+    if (!payload) {
       throw new UnauthorizedException('Refresh token is required');
     }
 
-    const rotatedSession = await this.sessionService.rotate(refreshToken);
+    const { sid, secret } = payload;
 
+    // rotate the session
+    const rotatedSession = await this.sessionService.rotate({ sid, secret });
+
+    // Generate the access token
     const accessToken = this.jwtTokenService.signAccessToken({
       sub: rotatedSession.sub,
       email: rotatedSession.email,
     });
 
+    // Generate the refresh token
+    const refreshToken = this.jwtTokenService.signRefreshToken({
+      sid: rotatedSession.sid,
+      sub: rotatedSession.sub,
+      email: rotatedSession.email,
+      secret: rotatedSession.secret,
+    });
+
     return {
       accessToken,
-      refreshToken: rotatedSession.refreshToken,
+      refreshToken,
     };
   }
 
-  async signOut(refreshToken: string) {
-    if (!refreshToken) {
+  async signOut(payload: RefreshTokenPayload) {
+    if (!payload) {
       return { success: true };
     }
 
-    const session = await this.sessionService.find(refreshToken);
-
-    await this.sessionService.destroy(session.sid, session.sub);
+    await this.sessionService.destroy(payload.sid, payload.sub);
 
     return { success: true };
   }
 
-  forgotPassword(dto: ForgotPasswordDto) {
-    return { token: 'token' };
+  async forgotPassword(dto: ForgotPasswordDto) {
+    // find the user
+    const user = await this.userService.findByEmail(dto.email);
+
+    // generate a password reset token
+    const token = this.jwtTokenService.signPasswordResetToken(
+      user._id.toString(),
+    );
+
+    // send the password reset email
+    await this.emailService.sendPasswordReset({
+      recipient: {
+        email: dto.email,
+      },
+      resetUrl: `${this.configService.get('originUrl')}/reset-password?token=${token}`,
+    });
+
+    return {
+      success: true,
+    };
   }
 
-  resetPassword({ token, password }) {
+  async resetPassword(dto: ResetPasswordDto) {
+    // hash the password
+    const hashedPassword = await this.passwordService.hash(dto.password);
+
+    // update the password
+    await this.userService.updatePassword(dto.userId, hashedPassword);
+
+    // todo: single time use the token
     return { success: true };
   }
 }
