@@ -5,8 +5,8 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import type { Request } from 'express';
-import { JwtTokenService } from '../services/jwt/jwt.service';
-import type { PasswordResetTokenPayload } from '../services/jwt/jwt.types';
+import { JwtTokenService } from '../services/jwt/jwt-token.service';
+import type { PasswordResetTokenPayload } from '../services/jwt/jwt-token.types';
 
 export interface PasswordResetRequest extends Request {
   passwordResetPayload?: PasswordResetTokenPayload;

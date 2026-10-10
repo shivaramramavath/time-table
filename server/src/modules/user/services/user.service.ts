@@ -1,9 +1,11 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
 
+import { UpdateUserDto } from '../dtos/update-user.dto';
 import { User } from '../entities/user.model';
 import { UserRepository } from '../repository/user.repository';
 
@@ -47,18 +49,23 @@ export class UserService {
   }
 
   async getProfile(userId: string) {
-    return this.userRepository.findById(userId);
+    const user = await this.userRepository.findById(userId);
+
+    if (!user) {
+      throw new InternalServerErrorException('User not found');
+    }
+
+    return user;
   }
 
-  async update(userId: string, data: Partial<User>) {
-    // Remove password
-    if (data.password) {
-      delete data.password;
-    }
-    return this.userRepository.update(userId, data);
+  async update(userId: string, dto: UpdateUserDto) {
+    return this.userRepository.update(userId, dto);
   }
 
   async updatePassword(userId: string, password: string) {
-    return this.userRepository.update(userId, { password });
+    if (!password) {
+      throw new BadRequestException('Password is required');
+    }
+    return this.userRepository.updatePassword(userId, password);
   }
 }

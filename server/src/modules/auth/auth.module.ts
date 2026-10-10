@@ -4,32 +4,20 @@ import { AuthService } from './services/auth.service';
 import { BcryptService } from './services/password/bcrypt.service';
 import { PasswordService } from './services/password/password.service';
 
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule } from '@nestjs/config';
 import { EmailModule } from '../../infrastructure/email/email.module';
 import { UserModule } from '../user/user.module';
 import { CookieService } from './services/cookie/cookie.service';
-import { JwtTokenService } from './services/jwt/jwt.service';
+import { JwtTokenModule } from './services/jwt/jwt-token.module';
 import { SessionService } from './services/session/session.service';
 
 @Module({
-  imports: [
-    UserModule,
-    ConfigModule,
-    EmailModule,
-    JwtModule.registerAsync({
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        secret: configService.getOrThrow<string>('jwt.access.secret'),
-      }),
-    }),
-  ],
+  imports: [UserModule, ConfigModule, EmailModule, JwtTokenModule],
   controllers: [AuthController],
   providers: [
     AuthService,
     BcryptService,
     PasswordService,
-    JwtTokenService,
     SessionService,
     CookieService,
   ],

@@ -14,6 +14,7 @@ import { ForgotPasswordDto, PasswordDto, SignInDto, SignUpDto } from '../dtos';
 import type { RefreshTokenRequest } from '../guards/refresh-token.guard';
 import { RefreshTokenGuard } from '../guards/refresh-token.guard';
 
+import { Throttle } from '@nestjs/throttler';
 import type { PasswordResetRequest } from '../guards/password-reset.guard';
 import { PasswordResetGuard } from '../guards/password-reset.guard';
 import { AuthService } from '../services/auth.service';
@@ -29,6 +30,7 @@ export class AuthController {
   ) {}
 
   @Post('signup')
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
   @HttpCode(HttpStatus.CREATED)
   async signUp(
     @Body() createUserDto: SignUpDto,

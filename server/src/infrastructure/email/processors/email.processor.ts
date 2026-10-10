@@ -3,12 +3,12 @@ import { Injectable } from '@nestjs/common';
 import type { Job } from 'bullmq';
 
 import { BrevoService } from '../brevo/brevo.service';
+import { EmailTemplateService } from '../email-template.service';
 import { EMAIL_QUEUE, EmailJobName } from '../email.constants';
 import type {
   PasswordResetEmailData,
   SignupGreetingEmailData,
 } from '../email.types';
-import { EmailTemplateService } from '../templates/email-template.service';
 
 type EmailJobData = SignupGreetingEmailData | PasswordResetEmailData;
 
@@ -17,7 +17,7 @@ type EmailJobData = SignupGreetingEmailData | PasswordResetEmailData;
 export class EmailProcessor extends WorkerHost {
   constructor(
     private readonly brevoService: BrevoService,
-    private readonly templates: EmailTemplateService,
+    private readonly emailTemplateService: EmailTemplateService,
   ) {
     super();
   }
@@ -38,8 +38,9 @@ export class EmailProcessor extends WorkerHost {
   private async sendSignupGreeting(job: Job<SignupGreetingEmailData>) {
     const { recipient, userName } = job.data;
 
-    const html = this.templates.renderSignupGreeting({
+    const html = this.emailTemplateService.renderSignupGreeting({
       userName,
+      email: recipient.email,
     });
 
     return this.brevoService.sendEmail({
@@ -55,7 +56,7 @@ export class EmailProcessor extends WorkerHost {
   private async sendPasswordReset(job: Job<PasswordResetEmailData>) {
     const { recipient, resetUrl } = job.data;
 
-    const html = this.templates.renderPasswordReset({
+    const html = this.emailTemplateService.renderPasswordReset({
       resetUrl,
       userName: recipient.name ?? 'there',
     });

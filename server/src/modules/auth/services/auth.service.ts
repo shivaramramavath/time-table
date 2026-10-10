@@ -10,8 +10,8 @@ import {
   SignInDto,
   SignUpDto,
 } from '../dtos';
-import { JwtTokenService } from './jwt/jwt.service';
-import { RefreshTokenPayload } from './jwt/jwt.types';
+import { JwtTokenService } from './jwt/jwt-token.service';
+import { RefreshTokenPayload } from './jwt/jwt-token.types';
 import { PasswordService } from './password/password.service';
 import { SessionService } from './session/session.service';
 

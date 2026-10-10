@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
+import { UpdateUserDto } from '../dtos/update-user.dto';
 import { User, UserDocument } from '../entities/user.model';
 
 @Injectable()
@@ -32,7 +33,13 @@ export class UserRepository {
     return this.userModel.create(user);
   }
 
-  async update(userId: string, data: Partial<User>) {
+  async update(userId: string, data: UpdateUserDto) {
     return this.userModel.updateOne({ _id: userId }, { $set: data }).exec();
+  }
+
+  async updatePassword(userId: string, password: string) {
+    return this.userModel
+      .updateOne({ _id: userId }, { $set: { password } })
+      .exec();
   }
 }

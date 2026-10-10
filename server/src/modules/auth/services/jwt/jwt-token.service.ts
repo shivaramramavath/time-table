@@ -7,7 +7,7 @@ import type {
   AccessTokenPayload,
   PasswordResetTokenPayload,
   RefreshTokenPayload,
-} from './jwt.types';
+} from './jwt-token.types';
 
 type TokenPayload =
   AccessTokenPayload | RefreshTokenPayload | PasswordResetTokenPayload;

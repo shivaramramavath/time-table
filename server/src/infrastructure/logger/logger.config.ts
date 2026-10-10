@@ -1,9 +1,13 @@
 import type { Params } from 'nestjs-pino';
 import { randomUUID } from 'node:crypto';
 
+const enabled = (process.env.LOG_ENABLED ?? 'true') === 'true';
+const isProduction = process.env.NODE_ENV === 'production';
+
 export const loggerConfig: Params = {
   pinoHttp: {
-    level: process.env.LOG_LEVEL ?? 'debug',
+    enabled,
+    level: process.env.LOG_LEVEL ?? 'info',
 
     genReqId: (req) => {
       const requestId = req.headers['x-request-id'];
@@ -36,16 +40,15 @@ export const loggerConfig: Params = {
     },
 
     transport:
-      process.env.NODE_ENV === 'development'
+      !isProduction && enabled
         ? {
             target: 'pino-pretty',
             options: {
               colorize: true,
               levelFirst: true,
-              translateTime: 'SYS:yyyy-mm-dd HH:MM:ss.l',
+              translateTime: 'SYS:standard',
               ignore: 'pid,hostname',
               singleLine: false,
-              errorLikeObjectKeys: ['err', 'error'],
             },
           }
         : undefined,

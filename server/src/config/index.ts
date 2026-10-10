@@ -4,3 +4,4 @@ export * from './email.config.js';
 export * from './env.validation.js';
 export * from './jwt.config.js';
 export * from './redis.config.js';
+export * from './session.config.js';

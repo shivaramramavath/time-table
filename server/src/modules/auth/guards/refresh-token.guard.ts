@@ -8,8 +8,8 @@ import type { Request } from 'express';
 
 import { REFRESH_COOKIE } from '../controllers/auth.controller';
 import { CookieService } from '../services/cookie/cookie.service';
-import { JwtTokenService } from '../services/jwt/jwt.service';
-import type { RefreshTokenPayload } from '../services/jwt/jwt.types';
+import { JwtTokenService } from '../services/jwt/jwt-token.service';
+import type { RefreshTokenPayload } from '../services/jwt/jwt-token.types';
 
 export interface RefreshTokenRequest extends Request {
   refreshTokenPayload?: RefreshTokenPayload;

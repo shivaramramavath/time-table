@@ -69,6 +69,7 @@ export class SessionService {
 
     try {
       await this.redis.addToSet(userSessionsKey, sid);
+      await this.redis.expire(userSessionsKey, this.sessionTtl);
     } catch (error) {
       await this.redis.delete(sessionKey);
       throw error;
@@ -166,6 +167,8 @@ export class SessionService {
       remainingTtl,
     );
 
+    await this.redis.expire(this.userSessionsKey(session.sub), remainingTtl);
+
     return {
       sid,
       sub: session.sub,
@@ -254,7 +257,7 @@ export class SessionService {
   }
 
   private sessionKey(sid: string): string {
-    return `session:${sid}`;
+    return `user:session:${sid}`;
   }
 
   private userSessionsKey(sub: string): string {

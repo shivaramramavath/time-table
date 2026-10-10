@@ -1,29 +1,47 @@
 import { BullModule } from '@nestjs/bullmq';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AppController } from './app/app.controller';
-import { AppService } from './app/app.service';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import {
   appConfig,
   databaseConfig,
   emailConfig,
   jwtConfig,
   redisConfig,
-} from './config';
-import { envValidationSchema } from './config/env.validation';
-import { EmailModule } from './infrastructure/email/email.module';
-import { AppLoggerModule } from './infrastructure/logger/logger.module';
-import { RedisModule } from './infrastructure/redis/redis.module';
-import { AuthModule } from './modules/auth/auth.module';
-import { UserModule } from './modules/user/user.module';
+  sessionConfig,
+} from '../config';
+import { envValidationSchema } from '../config/env.validation';
+import { EmailModule } from '../infrastructure/email/email.module';
+import { AppLoggerModule } from '../infrastructure/logger/logger.module';
+import { RedisModule } from '../infrastructure/redis/redis.module';
+import { AuthModule } from '../modules/auth/auth.module';
+import { UserModule } from '../modules/user/user.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
+    ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          ttl: 60_000,
+          limit: 100,
+        },
+      ],
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
-      load: [appConfig, databaseConfig, emailConfig, jwtConfig, redisConfig],
+      load: [
+        appConfig,
+        databaseConfig,
+        emailConfig,
+        jwtConfig,
+        redisConfig,
+        sessionConfig,
+      ],
       validationSchema: envValidationSchema,
     }),
     MongooseModule.forRootAsync({
@@ -47,10 +65,16 @@ import { UserModule } from './modules/user/user.module';
     AppLoggerModule,
     RedisModule,
     EmailModule,
-    UserModule,
     AuthModule,
+    UserModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+    AppService,
+  ],
 })
 export class AppModule {}
