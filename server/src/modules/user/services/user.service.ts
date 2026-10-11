@@ -59,7 +59,7 @@ export class UserService {
   }
 
   async update(userId: string, dto: UpdateUserDto) {
-    return this.userRepository.update(userId, dto);
+    return this.userRepository.updateById(userId, dto);
   }
 
   async updatePassword(userId: string, password: string) {

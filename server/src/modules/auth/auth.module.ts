@@ -9,7 +9,9 @@ import { EmailModule } from '../../infrastructure/email/email.module';
 import { UserModule } from '../user/user.module';
 import { CookieService } from './services/cookie/cookie.service';
 import { JwtTokenModule } from './services/jwt/jwt-token.module';
+import { SessionRecordCache } from './services/session/session-record.cache';
 import { SessionService } from './services/session/session.service';
+import { UserSessionsCache } from './services/session/user-sessions.cache';
 
 @Module({
   imports: [UserModule, ConfigModule, EmailModule, JwtTokenModule],
@@ -19,6 +21,8 @@ import { SessionService } from './services/session/session.service';
     BcryptService,
     PasswordService,
     SessionService,
+    SessionRecordCache,
+    UserSessionsCache,
     CookieService,
   ],
 })

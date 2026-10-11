@@ -1,21 +1,16 @@
 import { Logger } from '@nestjs/common';
 import { Redis } from 'ioredis';
+import { BaseCache } from './base-cache';
 
-export interface CacheListOptions {
-  ttl?: number;
-}
-
-export abstract class BaseCacheList<T> {
+export abstract class BaseCacheList<T> extends BaseCache {
   protected readonly logger = new Logger(this.constructor.name);
 
   protected constructor(
     protected readonly redis: Redis,
     protected readonly prefix: string,
     protected readonly defaultTtl = 300,
-  ) {}
-
-  protected buildKey(key: string): string {
-    return `${this.prefix}:${key}`;
+  ) {
+    super(redis, prefix, defaultTtl);
   }
 
   async getList(key: string): Promise<T[] | null> {
@@ -28,26 +23,79 @@ export abstract class BaseCacheList<T> {
     }
   }
 
-  async setList(
-    key: string,
-    items: T[],
-    options: CacheListOptions = {},
-  ): Promise<void> {
-    const ttl = options.ttl ?? this.defaultTtl;
-
-    if (!Number.isInteger(ttl) || ttl <= 0) {
-      throw new Error('Cache TTL must be a positive integer in seconds');
-    }
-
+  async setList(key: string, items: T[]): Promise<void> {
     try {
-      await this.redis.set(
-        this.buildKey(key),
-        JSON.stringify(items),
-        'EX',
-        ttl,
-      );
+      const value = JSON.stringify(items);
+
+      if (value === undefined) {
+        throw new Error('List cannot be serialized');
+      }
+
+      await this.redis.set(this.buildKey(key), value, 'EX', this.buildTtl());
     } catch (error) {
       this.handleError('setList', error);
+    }
+  }
+
+  async addToList(key: string, item: T): Promise<void> {
+    try {
+      const items = (await this.getList(key)) ?? [];
+
+      items.push(item);
+
+      await this.setList(key, items);
+    } catch (error) {
+      this.handleError('addToList', error);
+    }
+  }
+
+  async removeFromList(
+    key: string,
+    predicate: (item: T) => boolean,
+  ): Promise<boolean> {
+    try {
+      const items = await this.getList(key);
+
+      if (items === null) return false;
+
+      const filteredItems = items.filter((item) => !predicate(item));
+
+      if (filteredItems.length === items.length) {
+        return false;
+      }
+
+      await this.setList(key, filteredItems);
+
+      return true;
+    } catch (error) {
+      this.handleError('removeFromList', error);
+    }
+  }
+
+  async updateInList(
+    key: string,
+    predicate: (item: T) => boolean,
+    update: Partial<T>,
+  ): Promise<boolean> {
+    try {
+      const items = await this.getList(key);
+
+      if (items === null) return false;
+
+      const index = items.findIndex(predicate);
+
+      if (index === -1) return false;
+
+      items[index] = {
+        ...items[index],
+        ...update,
+      };
+
+      await this.setList(key, items);
+
+      return true;
+    } catch (error) {
+      this.handleError('updateInList', error);
     }
   }
 
@@ -59,11 +107,7 @@ export abstract class BaseCacheList<T> {
     }
   }
 
-  async getOrSetList(
-    key: string,
-    factory: () => Promise<T[]>,
-    options: CacheListOptions = {},
-  ): Promise<T[]> {
+  async getOrSetList(key: string, factory: () => Promise<T[]>): Promise<T[]> {
     const cached = await this.getList(key);
 
     if (cached !== null) {
@@ -71,7 +115,8 @@ export abstract class BaseCacheList<T> {
     }
 
     const items = await factory();
-    await this.setList(key, items, options);
+
+    await this.setList(key, items);
 
     return items;
   }

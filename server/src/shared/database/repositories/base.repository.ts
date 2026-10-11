@@ -1,5 +1,5 @@
-import { Logger } from '@nestjs/common';
-import { FilterQuery, Model, UpdateQuery } from 'mongoose';
+import { Logger, NotFoundException } from '@nestjs/common';
+import { Model, QueryFilter, UpdateQuery } from 'mongoose';
 
 export abstract class BaseRepository<TEntity> {
   protected readonly logger = new Logger(this.constructor.name);
@@ -8,22 +8,34 @@ export abstract class BaseRepository<TEntity> {
 
   async findById(id: string) {
     try {
-      return await this.model.findById(id).exec();
+      const result = await this.model.findById(id).exec();
+
+      if (!result) {
+        throw new NotFoundException();
+      }
+
+      return result;
     } catch (error) {
       this.handleError('findById', error);
     }
   }
 
-  async findOne(filter: FilterQuery<TEntity>) {
+  async findOne(filter: QueryFilter<TEntity>) {
     try {
-      return await this.model.findOne(filter).exec();
+      const result = await this.model.findOne(filter).exec();
+      if (!result) {
+        throw new NotFoundException();
+      }
+
+      return result;
     } catch (error) {
       this.handleError('findOne', error);
     }
   }
 
-  async findMany(filter: FilterQuery<TEntity> = {}) {
+  async findMany(filter: QueryFilter<TEntity> = {}) {
     try {
+      console.log(filter);
       return await this.model.find(filter).exec();
     } catch (error) {
       this.handleError('findMany', error);

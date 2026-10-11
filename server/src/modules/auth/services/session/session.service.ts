@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { timingSafeEqual } from 'node:crypto';
 
 import {
@@ -11,7 +7,9 @@ import {
   SessionRecord,
 } from './session.types';
 
-import { RedisDataService } from '../../../../infrastructure/redis/redis-data.service';
+import { SessionRecordCache } from './session-record.cache';
+import { UserSessionsCache } from './user-sessions.cache';
+
 import {
   generateSessionId,
   generateSessionSecret,
@@ -24,7 +22,10 @@ const DEFAULT_SESSION_TTL = 30 * 24 * 60 * 60;
 export class SessionService {
   private readonly sessionTtl: number;
 
-  constructor(private readonly redis: RedisDataService) {
+  constructor(
+    private readonly sessionCache: SessionRecordCache,
+    private readonly userSessionsCache: UserSessionsCache,
+  ) {
     this.sessionTtl = DEFAULT_SESSION_TTL;
 
     if (!Number.isSafeInteger(this.sessionTtl) || this.sessionTtl <= 0) {
@@ -32,7 +33,6 @@ export class SessionService {
     }
   }
 
-  // create a new session
   async create(
     sub: string,
     email: string,
@@ -58,20 +58,12 @@ export class SessionService {
       ...(device ? { device } : {}),
     };
 
-    const sessionKey = this.sessionKey(sid);
-    const userSessionsKey = this.userSessionsKey(sub);
-
-    await this.redis.setWithExpiry(
-      sessionKey,
-      JSON.stringify(session),
-      this.sessionTtl,
-    );
+    await this.sessionCache.saveSession(session);
 
     try {
-      await this.redis.addToSet(userSessionsKey, sid);
-      await this.redis.expire(userSessionsKey, this.sessionTtl);
+      await this.userSessionsCache.addSession(sub, sid);
     } catch (error) {
-      await this.redis.delete(sessionKey);
+      await this.sessionCache.deleteSession(sid);
       throw error;
     }
 
@@ -84,46 +76,27 @@ export class SessionService {
     };
   }
 
-  // delete a session
   async destroy(sid: string, sub: string): Promise<void> {
     if (!this.isValidSessionId(sid) || !sub) {
       return;
     }
 
-    const sessionKey = this.sessionKey(sid);
-    const raw = await this.redis.get(sessionKey);
+    const session = await this.sessionCache.findSession(sid);
 
-    if (!raw) {
-      await this.redis.removeFromSet(this.userSessionsKey(sub), sid);
+    if (!session) {
+      await this.userSessionsCache.removeSession(sub, sid);
       return;
     }
-
-    const session = this.parseSession(raw);
 
     // Prevent one user from revoking another user's session.
     if (session.sid !== sid || session.sub !== sub) {
       return;
     }
 
-    const remainingTtl = this.remainingTtl(session.expiresAt);
-
-    if (remainingTtl > 0) {
-      session.status = 'revoked';
-      session.refreshTokenHash = '';
-
-      await this.redis.setWithExpiry(
-        sessionKey,
-        JSON.stringify(session),
-        remainingTtl,
-      );
-    } else {
-      await this.redis.delete(sessionKey);
-    }
-
-    await this.redis.removeFromSet(this.userSessionsKey(sub), sid);
+    await this.sessionCache.deleteSession(sid);
+    await this.userSessionsCache.removeSession(sub, sid);
   }
 
-  // rotate session
   async rotate({
     sid,
     secret,
@@ -131,16 +104,14 @@ export class SessionService {
     sid: string;
     secret: string;
   }): Promise<CreatedSession> {
-    const sessionKey = this.sessionKey(sid);
-    const raw = await this.redis.get(sessionKey);
-
-    if (!raw) {
+    if (!this.isValidSessionId(sid) || !secret) {
       throw new UnauthorizedException('Invalid session');
     }
 
-    const session = this.parseSession(raw);
+    const session = await this.sessionCache.findSession(sid);
 
     if (
+      !session ||
       session.sid !== sid ||
       session.status !== 'active' ||
       session.expiresAt <= Date.now() ||
@@ -149,25 +120,24 @@ export class SessionService {
       throw new UnauthorizedException('Invalid session');
     }
 
-    const newSecret = generateSessionSecret();
-    const now = Date.now();
     const remainingTtl = this.remainingTtl(session.expiresAt);
 
     if (remainingTtl <= 0) {
-      await this.redis.delete(sessionKey);
+      await this.sessionCache.deleteSession(sid);
       throw new UnauthorizedException('Session expired');
     }
+
+    const newSecret = generateSessionSecret();
+    const now = Date.now();
 
     session.refreshTokenHash = hashSessionSecret(newSecret);
     session.lastUsedAt = now;
 
-    await this.redis.setWithExpiry(
-      sessionKey,
-      JSON.stringify(session),
+    await this.sessionCache.setObject(
+      sid,
+      this.toCacheData(session),
       remainingTtl,
     );
-
-    await this.redis.expire(this.userSessionsKey(session.sub), remainingTtl);
 
     return {
       sid,
@@ -178,43 +148,30 @@ export class SessionService {
     };
   }
 
-  private parseSession(raw: string): SessionRecord {
-    try {
-      const value: unknown = JSON.parse(raw);
-
-      if (
-        typeof value !== 'object' ||
-        value === null ||
-        !('sid' in value) ||
-        !('sub' in value) ||
-        !('status' in value) ||
-        !('refreshTokenHash' in value) ||
-        !('expiresAt' in value) ||
-        !('createdAt' in value) ||
-        !('lastUsedAt' in value)
-      ) {
-        throw new Error('Invalid session structure');
-      }
-
-      const session = value as SessionRecord;
-
-      if (
-        typeof session.sid !== 'string' ||
-        typeof session.sub !== 'string' ||
-        !['active', 'revoked', 'compromised'].includes(session.status) ||
-        typeof session.refreshTokenHash !== 'string' ||
-        typeof session.expiresAt !== 'number' ||
-        !Number.isFinite(session.expiresAt) ||
-        typeof session.createdAt !== 'number' ||
-        typeof session.lastUsedAt !== 'number'
-      ) {
-        throw new Error('Invalid session fields');
-      }
-
-      return session;
-    } catch {
-      throw new InternalServerErrorException('Stored session data is invalid');
+  async getIdentity(sid: string): Promise<SessionIdentity | null> {
+    if (!this.isValidSessionId(sid)) {
+      return null;
     }
+
+    const session = await this.sessionCache.findSession(sid);
+
+    if (!session) {
+      return null;
+    }
+
+    if (session.status !== 'active' || session.expiresAt <= Date.now()) {
+      return null;
+    }
+
+    return this.toIdentity(session);
+  }
+
+  async getUserSessionIds(sub: string): Promise<string[]> {
+    if (!sub) {
+      return [];
+    }
+
+    return this.userSessionsCache.getSessionIds(sub);
   }
 
   private matchesSecret(secret: string, storedHash: string): boolean {
@@ -225,7 +182,10 @@ export class SessionService {
     const providedHash = Buffer.from(hashSessionSecret(secret), 'hex');
     const expectedHash = Buffer.from(storedHash, 'hex');
 
-    return timingSafeEqual(providedHash, expectedHash);
+    return (
+      providedHash.length === expectedHash.length &&
+      timingSafeEqual(providedHash, expectedHash)
+    );
   }
 
   private remainingTtl(expiresAt: number): number {
@@ -256,12 +216,10 @@ export class SessionService {
     };
   }
 
-  private sessionKey(sid: string): string {
-    return `user:session:${sid}`;
-  }
+  private toCacheData(session: SessionRecord): Omit<SessionRecord, 'sid'> {
+    const { sid: _sid, ...data } = session;
 
-  private userSessionsKey(sub: string): string {
-    return `user:sessions:${sub}`;
+    return data;
   }
 
   private isValidSessionId(sid: string): boolean {

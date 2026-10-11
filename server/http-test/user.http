@@ -1,14 +1,14 @@
-@baseUrl = http://localhost:8080/api
+@baseUrl = http://localhost:8080/api/users
 @accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YWM5ZDhjNTI4MDVmNDg4ODkxMDgzZGEiLCJlbWFpbCI6InJhbWF2YXRoc2hpdmE2MzAwQGdtYWlsLmNvbSIsInR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3OTE2MjgyMTIsImV4cCI6MTc5MTYyOTExMn0.aUG93d8257ETLHMTfNnKP_zTsXRyMw6IpF3wsAZ3eVA
 
 ### Get User Profile
-GET {{baseUrl}}/users/profile
+GET {{baseUrl}}/profile
 Authorization: Bearer {{accessToken}}
 
 ###
 
 ### Update User Profile
-PATCH {{baseUrl}}/users/profile
+PATCH {{baseUrl}}/profile
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 

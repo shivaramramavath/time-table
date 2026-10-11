@@ -1,10 +1,10 @@
 
-@baseUrl = http://localhost:8080/api
+@baseUrl = http://localhost:8080/api/auth
 @email = ramavathshiva6300@gmail.com
 @password = 12345678
 
 ### 1. Sign up
-POST {{baseUrl}}/auth/signup
+POST {{baseUrl}}/signup
 Content-Type: application/json
 Accept: application/json
 
@@ -17,7 +17,7 @@ Accept: application/json
 ###
 
 ### 2. Sign in
-POST {{baseUrl}}/auth/signin
+POST {{baseUrl}}/signin
 Content-Type: application/json
 Accept: application/json
 
@@ -30,20 +30,20 @@ Accept: application/json
 
 ### 3. Refresh access token
 # Sends the refreshToken cookie received from sign-in.
-POST {{baseUrl}}/auth/refresh
+POST {{baseUrl}}/refresh
 Accept: application/json
 
 ###
 
 ### 4. Sign out
 # Requires a valid refreshToken cookie.
-POST {{baseUrl}}/auth/signout
+POST {{baseUrl}}/signout
 Accept: application/json
 
 ###
 
 ### 5. Forgot password
-POST {{baseUrl}}/auth/forgot-password
+POST {{baseUrl}}/forgot-password
 Content-Type: application/json
 Accept: application/json
 

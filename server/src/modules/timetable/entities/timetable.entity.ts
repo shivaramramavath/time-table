@@ -9,8 +9,6 @@ export enum TimetableStatus {
   ARCHIVED = 'archived',
 }
 
-export type TimetableDocument = HydratedDocument<Timetable>;
-
 @Schema({
   timestamps: true,
   collection: 'timetables',
@@ -51,6 +49,7 @@ export class Timetable {
   status: TimetableStatus;
 }
 
+export type TimetableDocument = HydratedDocument<Timetable>;
 export const TimetableSchema = SchemaFactory.createForClass(Timetable);
 
 TimetableSchema.index({ userId: 1, createdAt: -1 });

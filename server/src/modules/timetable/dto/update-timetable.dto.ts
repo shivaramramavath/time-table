@@ -1,4 +1,19 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateTimetableDto } from './create-timetable.dto';
+import { IsEnum, IsOptional, IsString, MaxLength } from 'class-validator';
 
-export class UpdateTimetableDto extends PartialType(CreateTimetableDto) {}
+import { TimetableStatus } from '../entities/timetable.entity';
+
+export class UpdateTimetableDto {
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  title: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(200)
+  description?: string;
+
+  @IsOptional()
+  @IsEnum(TimetableStatus)
+  status?: TimetableStatus;
+}

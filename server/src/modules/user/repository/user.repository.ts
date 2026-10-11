@@ -2,18 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
-import { UpdateUserDto } from '../dtos/update-user.dto';
+import { BaseRepository } from '../../../shared/database/repositories/base.repository';
 import { User, UserDocument } from '../entities/user.entity';
 
 @Injectable()
-export class UserRepository {
+export class UserRepository extends BaseRepository<UserDocument> {
   constructor(
     @InjectModel(User.name)
     private readonly userModel: Model<UserDocument>,
-  ) {}
-
-  async findById(id: string): Promise<UserDocument | null> {
-    return this.userModel.findById(id).exec();
+  ) {
+    super(userModel);
   }
 
   async findByEmail(email: string): Promise<UserDocument | null> {
@@ -27,14 +25,6 @@ export class UserRepository {
       })
       .select('+password')
       .exec();
-  }
-
-  async create(user: Partial<User>) {
-    return this.userModel.create(user);
-  }
-
-  async update(userId: string, data: UpdateUserDto) {
-    return this.userModel.updateOne({ _id: userId }, { $set: data }).exec();
   }
 
   async updatePassword(userId: string, password: string) {
