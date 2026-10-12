@@ -55,7 +55,7 @@ Accept: application/json
 
 ### 6. Reset password
 # Replace the token with a valid reset token for testing.
-POST {{baseUrl}}/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YWM5ZDhjNTI4MDVmNDg4ODkxMDgzZGEiLCJqdGkiOiJhMjIyMjZiNi1mYjUyLTQ1MTgtOWQyYy0zYmNjZDBkYmVlMDQiLCJ0eXBlIjoicGFzc3dvcmQtcmVzZXQiLCJpYXQiOjE3OTE2MTQwMDQsImV4cCI6MTc5MTYxNDkwNH0.T1W7FtB0sFeHxAXJtB9N1fVIlquwztVFSJh-Ly2QKvc
+POST {{baseUrl}}/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YWM5ZDhjNTI4MDVmNDg4ODkxMDgzZGEiLCJqdGkiOiIxM2FkODM4Ni0wYmUzLTQzNmYtOTcyNi0wM2Y0OGQyNTFiMWUiLCJ0eXBlIjoicGFzc3dvcmQtcmVzZXQiLCJpYXQiOjE3OTE4MTM5NjMsImV4cCI6MTc5MTgxNDg2M30.Dy9-jcp9w4r-jrYuJ23XXdSe20QaWOTtO9bs-5ZylHc
 Content-Type: application/json
 Accept: application/json
 

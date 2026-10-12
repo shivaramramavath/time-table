@@ -8,7 +8,6 @@ export interface SessionRecord {
   refreshTokenHash: string;
   createdAt: number;
   lastUsedAt: number;
-  expiresAt: number;
   device?: {
     ip?: string;
     userAgent?: string;
@@ -22,7 +21,6 @@ export interface CreatedSession {
   sub: string;
   email: string;
   secret: string;
-  expiresIn: number;
 }
 
 export interface SessionIdentity {
@@ -32,7 +30,6 @@ export interface SessionIdentity {
   status: SessionStatus;
   createdAt: number;
   lastUsedAt: number;
-  expiresAt: number;
   device?: SessionRecord['device'];
 }
 
@@ -41,5 +38,4 @@ export interface SessionForgotPassword {
   sub: string;
   email: string;
   secret: string;
-  expiresIn: number;
 }

@@ -6,13 +6,10 @@ import {
   Param,
   Patch,
   Post,
-  Req,
   UseGuards,
 } from '@nestjs/common';
-import {
-  type AuthenticatedRequest,
-  AuthenticateGuard,
-} from '../../../common/guards/authenticate.guard';
+import { CurrentUser } from '../../../shared/common/decorators';
+import { AuthenticateGuard } from '../../../shared/common/guards/authenticate.guard';
 import { CreateTimetableDto } from '../dto/create-timetable.dto';
 import { UpdateTimetableDto } from '../dto/update-timetable.dto';
 import { TimetableService } from '../services/timetable.service';
@@ -24,12 +21,12 @@ export class TimetableController {
 
   @Post()
   async create(
+    @CurrentUser('id') userId: string,
     @Body() createTimetableDto: Omit<CreateTimetableDto, 'userId'>,
-    @Req() request: AuthenticatedRequest,
   ) {
     const timetable = await this.timetableService.create({
       ...createTimetableDto,
-      userId: request.user.id,
+      userId,
     });
 
     return {
@@ -39,8 +36,8 @@ export class TimetableController {
   }
 
   @Get()
-  async findMany(@Req() request: AuthenticatedRequest) {
-    const timetables = await this.timetableService.findMany(request.user.id);
+  async findMany(@CurrentUser('id') userId: string) {
+    const timetables = await this.timetableService.findMany(userId);
 
     return {
       data: timetables,

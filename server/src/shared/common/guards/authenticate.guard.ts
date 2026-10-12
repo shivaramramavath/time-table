@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { JwtTokenService } from '../../modules/auth/services/jwt/jwt-token.service';
+import { TokenService } from '../../core/security/token/token.service';
 
 export interface AuthenticatedUser {
   id: string;
@@ -18,7 +18,7 @@ export interface AuthenticatedRequest extends Request {
 
 @Injectable()
 export class AuthenticateGuard implements CanActivate {
-  constructor(private readonly jwtTokenService: JwtTokenService) {}
+  constructor(private readonly tokenService: TokenService) {}
 
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
@@ -31,7 +31,7 @@ export class AuthenticateGuard implements CanActivate {
     }
 
     try {
-      const payload = this.jwtTokenService.verifyAccessToken(token);
+      const payload = this.tokenService.verifyAccessToken(token);
 
       if (
         payload.type !== 'access' ||

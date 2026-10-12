@@ -3,6 +3,10 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PinoLogger } from 'nestjs-pino';
 import { EmailService } from '../../../infrastructure/email/email.service';
+import { PasswordService } from '../../../shared/core/security/password/password.service';
+import { SessionService } from '../../../shared/core/security/session/session.service';
+import { TokenService } from '../../../shared/core/security/token/token.service';
+import { RefreshTokenPayload } from '../../../shared/core/security/token/token.types';
 import { UserService } from '../../user/services/user.service';
 import {
   ForgotPasswordDto,
@@ -10,10 +14,6 @@ import {
   SignInDto,
   SignUpDto,
 } from '../dtos';
-import { JwtTokenService } from './jwt/jwt-token.service';
-import { RefreshTokenPayload } from './jwt/jwt-token.types';
-import { PasswordService } from './password/password.service';
-import { SessionService } from './session/session.service';
 
 @Injectable()
 export class AuthService {
@@ -21,7 +21,7 @@ export class AuthService {
     private readonly logger: PinoLogger,
     private readonly userService: UserService,
     private readonly passwordService: PasswordService,
-    private readonly jwtTokenService: JwtTokenService,
+    private readonly tokenService: TokenService,
     private readonly sessionService: SessionService,
     private readonly emailService: EmailService,
     private readonly configService: ConfigService,
@@ -43,13 +43,13 @@ export class AuthService {
     const session = await this.sessionService.create(userId, user.email);
 
     // Generate the access token
-    const accessToken = this.jwtTokenService.signAccessToken({
+    const accessToken = this.tokenService.signAccessToken({
       sub: userId,
       email: user.email,
     });
 
     // Generate the refresh token
-    const refreshToken = this.jwtTokenService.signRefreshToken({
+    const refreshToken = this.tokenService.signRefreshToken({
       sid: session.sid,
       sub: userId,
       email: user.email,
@@ -88,7 +88,7 @@ export class AuthService {
     }
 
     // Verify the password
-    const isPasswordValid = await this.passwordService.verify(
+    const isPasswordValid = await this.passwordService.compare(
       signInDto.password,
       user.password,
     );
@@ -102,13 +102,13 @@ export class AuthService {
     const session = await this.sessionService.create(userId, user.email);
 
     // Generate the access token
-    const accessToken = this.jwtTokenService.signAccessToken({
+    const accessToken = this.tokenService.signAccessToken({
       sub: userId,
       email: user.email,
     });
 
     // Generate the refresh token
-    const refreshToken = this.jwtTokenService.signRefreshToken({
+    const refreshToken = this.tokenService.signRefreshToken({
       sid: session.sid,
       sub: userId,
       email: user.email,
@@ -133,13 +133,13 @@ export class AuthService {
     const rotatedSession = await this.sessionService.rotate({ sid, secret });
 
     // Generate the access token
-    const accessToken = this.jwtTokenService.signAccessToken({
+    const accessToken = this.tokenService.signAccessToken({
       sub: rotatedSession.sub,
       email: rotatedSession.email,
     });
 
     // Generate the refresh token
-    const refreshToken = this.jwtTokenService.signRefreshToken({
+    const refreshToken = this.tokenService.signRefreshToken({
       sid: rotatedSession.sid,
       sub: rotatedSession.sub,
       email: rotatedSession.email,
@@ -167,9 +167,7 @@ export class AuthService {
     const user = await this.userService.findByEmail(dto.email);
 
     // generate a password reset token
-    const token = this.jwtTokenService.signPasswordResetToken(
-      user._id.toString(),
-    );
+    const token = this.tokenService.signPasswordResetToken(user._id.toString());
 
     // send the password reset email
     await this.emailService.sendPasswordReset({
@@ -178,6 +176,10 @@ export class AuthService {
       },
       resetUrl: `${this.configService.get('originUrl')}/reset-password?token=${token}`,
     });
+
+    console.log(
+      `${this.configService.get('originUrl')}/reset-password?token=${token}`,
+    );
 
     return {
       success: true,
@@ -190,6 +192,8 @@ export class AuthService {
 
     // update the password
     await this.userService.updatePassword(dto.userId, hashedPassword);
+
+    await this.sessionService.destroyByUserId(dto.userId);
 
     // todo: single time use the token
     return { success: true };

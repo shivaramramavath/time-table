@@ -54,7 +54,6 @@ export class SessionService {
       refreshTokenHash: hashSessionSecret(secret),
       createdAt: now,
       lastUsedAt: now,
-      expiresAt: now + this.sessionTtl * 1000,
       ...(device ? { device } : {}),
     };
 
@@ -72,7 +71,6 @@ export class SessionService {
       sub,
       email,
       secret,
-      expiresIn: this.sessionTtl,
     };
   }
 
@@ -97,6 +95,20 @@ export class SessionService {
     await this.userSessionsCache.removeSession(sub, sid);
   }
 
+  async destroyByUserId(sub: string): Promise<void> {
+    if (!sub) {
+      return;
+    }
+
+    const sessionIds = await this.userSessionsCache.getSessionIds(sub);
+
+    for (const sid of sessionIds) {
+      await this.destroy(sid, sub);
+    }
+
+    await this.userSessionsCache.deleteUserSessions(sub);
+  }
+
   async rotate({
     sid,
     secret,
@@ -114,17 +126,9 @@ export class SessionService {
       !session ||
       session.sid !== sid ||
       session.status !== 'active' ||
-      session.expiresAt <= Date.now() ||
       !this.matchesSecret(secret, session.refreshTokenHash)
     ) {
       throw new UnauthorizedException('Invalid session');
-    }
-
-    const remainingTtl = this.remainingTtl(session.expiresAt);
-
-    if (remainingTtl <= 0) {
-      await this.sessionCache.deleteSession(sid);
-      throw new UnauthorizedException('Session expired');
     }
 
     const newSecret = generateSessionSecret();
@@ -133,18 +137,13 @@ export class SessionService {
     session.refreshTokenHash = hashSessionSecret(newSecret);
     session.lastUsedAt = now;
 
-    await this.sessionCache.setObject(
-      sid,
-      this.toCacheData(session),
-      remainingTtl,
-    );
+    await this.sessionCache.setObject(sid, this.toCacheData(session));
 
     return {
       sid,
       sub: session.sub,
       email: session.email,
       secret: newSecret,
-      expiresIn: remainingTtl,
     };
   }
 
@@ -159,7 +158,7 @@ export class SessionService {
       return null;
     }
 
-    if (session.status !== 'active' || session.expiresAt <= Date.now()) {
+    if (session.status !== 'active') {
       return null;
     }
 
@@ -193,16 +192,7 @@ export class SessionService {
   }
 
   private toIdentity(session: SessionRecord): SessionIdentity {
-    const {
-      sid,
-      sub,
-      email,
-      status,
-      createdAt,
-      lastUsedAt,
-      expiresAt,
-      device,
-    } = session;
+    const { sid, sub, email, status, createdAt, lastUsedAt, device } = session;
 
     return {
       sid,
@@ -211,7 +201,6 @@ export class SessionService {
       status,
       createdAt,
       lastUsedAt,
-      expiresAt,
       device,
     };
   }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { RedisService } from '../../../../infrastructure/redis/redis.service';
-import { BaseCacheList } from '../../../../shared/cache/base-cache-list';
+import { BaseCacheList } from '../../../cache/base-cache-list';
 
 @Injectable()
 export class UserSessionsCache extends BaseCacheList<string> {

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { RedisService } from '../../../../infrastructure/redis/redis.service';
-import { BaseCacheObject } from '../../../../shared/cache/base-cache-object';
+import { BaseCacheObject } from '../../../cache/base-cache-object';
 import { SessionRecord } from './session.types';
 
 @Injectable()

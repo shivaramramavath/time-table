@@ -6,10 +6,10 @@ import {
 } from '@nestjs/common';
 import type { Request } from 'express';
 
+import { CookieService } from '../../../shared/core/security/cookie/cookie.service';
+import { TokenService } from '../../../shared/core/security/token/token.service';
+import type { RefreshTokenPayload } from '../../../shared/core/security/token/token.types';
 import { REFRESH_COOKIE } from '../controllers/auth.controller';
-import { CookieService } from '../services/cookie/cookie.service';
-import { JwtTokenService } from '../services/jwt/jwt-token.service';
-import type { RefreshTokenPayload } from '../services/jwt/jwt-token.types';
 
 export interface RefreshTokenRequest extends Request {
   refreshTokenPayload?: RefreshTokenPayload;
@@ -19,7 +19,7 @@ export interface RefreshTokenRequest extends Request {
 export class RefreshTokenGuard implements CanActivate {
   constructor(
     private readonly cookieService: CookieService,
-    private readonly jwtTokenService: JwtTokenService,
+    private readonly tokenService: TokenService,
   ) {}
 
   canActivate(context: ExecutionContext): boolean {
@@ -32,7 +32,7 @@ export class RefreshTokenGuard implements CanActivate {
     }
 
     try {
-      const payload = this.jwtTokenService.verifyRefreshToken(refreshToken);
+      const payload = this.tokenService.verifyRefreshToken(refreshToken);
 
       if (
         payload.type !== 'refresh' ||

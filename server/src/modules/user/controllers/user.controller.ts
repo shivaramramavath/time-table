@@ -5,14 +5,11 @@ import {
   HttpCode,
   HttpStatus,
   Patch,
-  Req,
   UseGuards,
 } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
-import {
-  type AuthenticatedRequest,
-  AuthenticateGuard,
-} from '../../../common/guards/authenticate.guard';
+import { CurrentUser } from '../../../shared/common/decorators';
+import { AuthenticateGuard } from '../../../shared/common/guards/authenticate.guard';
 import { UpdateUserDto } from '../dtos/update-user.dto';
 import { UserService } from '../services/user.service';
 
@@ -24,8 +21,8 @@ export class UserController {
   @Get('/profile')
   @Throttle({ default: { limit: 5, ttl: 60_000 } })
   @HttpCode(HttpStatus.OK)
-  async getProfile(@Req() request: AuthenticatedRequest) {
-    const user = await this.userService.getProfile(request.user.id);
+  async getProfile(@CurrentUser('id') userId: string) {
+    const user = await this.userService.getProfile(userId);
     return {
       data: user,
       success: true,
@@ -36,10 +33,10 @@ export class UserController {
   @Throttle({ default: { limit: 5, ttl: 60_000 } })
   @HttpCode(HttpStatus.OK)
   async updateProfile(
-    @Req() request: AuthenticatedRequest,
+    @CurrentUser('id') userId: string,
     @Body() dto: UpdateUserDto,
   ) {
-    const user = await this.userService.update(request.user.id, dto);
+    const user = await this.userService.update(userId, dto);
 
     return {
       data: user,

@@ -1,8 +1,11 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
+
 import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtTokenService } from './jwt-token.service';
+import { TokenService } from './token.service';
 
+@Global()
 @Module({
   imports: [
     JwtModule.registerAsync({
@@ -12,7 +15,12 @@ import { JwtTokenService } from './jwt-token.service';
       }),
     }),
   ],
-  providers: [JwtTokenService],
-  exports: [JwtTokenService],
+  providers: [
+    {
+      provide: TokenService,
+      useClass: JwtTokenService,
+    },
+  ],
+  exports: [TokenService],
 })
-export class JwtTokenModule {}
+export class TokenModule {}

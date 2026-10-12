@@ -3,23 +3,25 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService, type JwtSignOptions } from '@nestjs/jwt';
 import { randomUUID } from 'node:crypto';
 
+import { TokenService } from './token.service';
 import type {
   AccessTokenPayload,
   PasswordResetTokenPayload,
   RefreshTokenPayload,
-} from './jwt-token.types';
+} from './token.types';
 
 type TokenPayload =
   AccessTokenPayload | RefreshTokenPayload | PasswordResetTokenPayload;
 
 @Injectable()
-export class JwtTokenService {
+export class JwtTokenService extends TokenService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
-  ) {}
+  ) {
+    super();
+  }
 
-  // Access token
   signAccessToken(payload: Omit<AccessTokenPayload, 'type'>): string {
     return this.sign({ ...payload, type: 'access' });
   }
@@ -34,7 +36,6 @@ export class JwtTokenService {
     return payload;
   }
 
-  // Refresh token
   signRefreshToken(payload: Omit<RefreshTokenPayload, 'type'>): string {
     return this.sign({ ...payload, type: 'refresh' });
   }
@@ -52,7 +53,6 @@ export class JwtTokenService {
     return payload;
   }
 
-  // Password-reset token
   signPasswordResetToken(sub: string): string {
     return this.sign({
       sub,
@@ -80,7 +80,6 @@ export class JwtTokenService {
     );
 
     const secret = this.configService.getOrThrow<string>(secretPath);
-
     const expiresIn = this.configService.getOrThrow<string>(expiresInPath);
 
     return this.jwtService.sign(payload, {

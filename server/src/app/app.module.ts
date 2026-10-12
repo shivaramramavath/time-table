@@ -19,6 +19,7 @@ import { RedisModule } from '../infrastructure/redis/redis.module';
 import { AuthModule } from '../modules/auth/auth.module';
 import { TimetableModule } from '../modules/timetable/timetable.module';
 import { UserModule } from '../modules/user/user.module';
+import { TokenModule } from '../shared/core/security/token/token.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -63,6 +64,7 @@ import { AppService } from './app.service';
         },
       }),
     }),
+    TokenModule,
     AppLoggerModule,
     RedisModule,
     EmailModule,

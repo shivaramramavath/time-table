@@ -15,10 +15,10 @@ import type { RefreshTokenRequest } from '../guards/refresh-token.guard';
 import { RefreshTokenGuard } from '../guards/refresh-token.guard';
 
 import { Throttle } from '@nestjs/throttler';
+import { CookieService } from '../../../shared/core/security/cookie/cookie.service';
 import type { PasswordResetRequest } from '../guards/password-reset.guard';
 import { PasswordResetGuard } from '../guards/password-reset.guard';
 import { AuthService } from '../services/auth.service';
-import { CookieService } from '../services/cookie/cookie.service';
 
 export const REFRESH_COOKIE = 'refreshToken';
 
@@ -118,11 +118,11 @@ export class AuthController {
   @Post('reset-password')
   @UseGuards(PasswordResetGuard)
   @HttpCode(HttpStatus.OK)
-  resetPassword(
+  async resetPassword(
     @Req() request: PasswordResetRequest,
     @Body() dto: PasswordDto,
   ) {
-    this.authService.resetPassword({
+    await this.authService.resetPassword({
       userId: request.passwordResetPayload?.sub as string,
       password: dto.password,
     });

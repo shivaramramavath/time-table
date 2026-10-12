@@ -5,8 +5,8 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import type { Request } from 'express';
-import { JwtTokenService } from '../services/jwt/jwt-token.service';
-import type { PasswordResetTokenPayload } from '../services/jwt/jwt-token.types';
+import { TokenService } from '../../../shared/core/security/token/token.service';
+import type { PasswordResetTokenPayload } from '../../../shared/core/security/token/token.types';
 
 export interface PasswordResetRequest extends Request {
   passwordResetPayload?: PasswordResetTokenPayload;
@@ -14,7 +14,7 @@ export interface PasswordResetRequest extends Request {
 
 @Injectable()
 export class PasswordResetGuard implements CanActivate {
-  constructor(private readonly jwtTokenService: JwtTokenService) {}
+  constructor(private readonly tokenService: TokenService) {}
 
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest<PasswordResetRequest>();
@@ -26,7 +26,7 @@ export class PasswordResetGuard implements CanActivate {
     }
 
     try {
-      const payload = this.jwtTokenService.verifyPasswordResetToken(token);
+      const payload = this.tokenService.verifyPasswordResetToken(token);
 
       if (payload.type !== 'password-reset' || !payload.sub || !payload.jti) {
         throw new UnauthorizedException('Invalid password reset token');
