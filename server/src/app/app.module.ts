@@ -13,14 +13,15 @@ import {
   sessionConfig,
 } from '../config';
 import { envValidationSchema } from '../config/env.validation';
-import { EmailModule } from '../infrastructure/email/email.module';
 import { AppLoggerModule } from '../infrastructure/logger/logger.module';
 import { RedisModule } from '../infrastructure/redis/redis.module';
 import { AuthModule } from '../modules/auth/auth.module';
+import { FeedbackModule } from '../modules/feedback/feedback.module';
 import { TemplatesModule } from '../modules/templates/templates.module';
 import { TimetableModule } from '../modules/timetable/timetable.module';
 import { UserModule } from '../modules/user/user.module';
 import { TokenModule } from '../shared/core/security/token/token.module';
+import { EmailModule } from '../shared/email/email.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -73,6 +74,7 @@ import { AppService } from './app.service';
     UserModule,
     TimetableModule,
     TemplatesModule,
+    FeedbackModule,
   ],
   controllers: [AppController],
   providers: [

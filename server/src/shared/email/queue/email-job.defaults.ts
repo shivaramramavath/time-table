@@ -1,15 +1,17 @@
 import type { JobsOptions } from 'bullmq';
 
-export const EMAIL_JOB_OPTIONS: JobsOptions = {
+export const EMAIL_JOB_DEFAULTS: JobsOptions = {
   attempts: 5,
   backoff: {
     type: 'exponential',
     delay: 5_000,
   },
   removeOnComplete: {
-    count: 1_000,
+    age: 3600,
+    count: 1000,
   },
   removeOnFail: {
-    count: 5_000,
+    age: 86400,
+    count: 5000,
   },
 };

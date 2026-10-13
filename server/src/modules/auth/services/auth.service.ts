@@ -2,11 +2,11 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 
 import { ConfigService } from '@nestjs/config';
 import { PinoLogger } from 'nestjs-pino';
-import { EmailService } from '../../../infrastructure/email/email.service';
 import { PasswordService } from '../../../shared/core/security/password/password.service';
 import { SessionService } from '../../../shared/core/security/session/session.service';
 import { TokenService } from '../../../shared/core/security/token/token.service';
 import { RefreshTokenPayload } from '../../../shared/core/security/token/token.types';
+import { EmailService } from '../../../shared/email/email.service';
 import { UserService } from '../../user/services/user.service';
 import {
   ForgotPasswordDto,

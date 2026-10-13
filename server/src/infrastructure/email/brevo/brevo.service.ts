@@ -4,7 +4,7 @@ import { PinoLogger } from 'nestjs-pino';
 
 import { type ConfigType } from '@nestjs/config';
 import { emailConfig } from '../../../config';
-import type { EmailMessage } from '../email.types';
+import { EmailMessage } from './brevo.types';
 
 @Injectable()
 export class BrevoService {
@@ -31,14 +31,14 @@ export class BrevoService {
   }
 
   async sendEmail(options: EmailMessage): Promise<string | undefined> {
-    const { recipient, subject, html } = options;
+    const { recipient, subject, htmlContent } = options;
 
     try {
       const response = await this.client.transactionalEmails.sendTransacEmail({
         sender: this.sender,
         to: [recipient],
         subject,
-        htmlContent: html,
+        htmlContent,
       });
 
       this.logger.info(
