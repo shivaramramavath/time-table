@@ -16,22 +16,12 @@ import {
   hashSessionSecret,
 } from './session.utils';
 
-const DEFAULT_SESSION_TTL = 30 * 24 * 60 * 60;
-
 @Injectable()
 export class SessionService {
-  private readonly sessionTtl: number;
-
   constructor(
     private readonly sessionCache: SessionRecordCache,
     private readonly userSessionsCache: UserSessionsCache,
-  ) {
-    this.sessionTtl = DEFAULT_SESSION_TTL;
-
-    if (!Number.isSafeInteger(this.sessionTtl) || this.sessionTtl <= 0) {
-      throw new Error('Session TTL must be a positive integer');
-    }
-  }
+  ) {}
 
   async create(
     sub: string,
@@ -185,10 +175,6 @@ export class SessionService {
       providedHash.length === expectedHash.length &&
       timingSafeEqual(providedHash, expectedHash)
     );
-  }
-
-  private remainingTtl(expiresAt: number): number {
-    return Math.max(0, Math.ceil((expiresAt - Date.now()) / 1000));
   }
 
   private toIdentity(session: SessionRecord): SessionIdentity {

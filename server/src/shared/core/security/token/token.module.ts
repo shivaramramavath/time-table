@@ -1,7 +1,8 @@
 import { Global, Module } from '@nestjs/common';
 
-import { ConfigService } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import { jwtConfig } from '../../../../config';
 import { JwtTokenService } from './jwt-token.service';
 import { TokenService } from './token.service';
 
@@ -14,6 +15,7 @@ import { TokenService } from './token.service';
         secret: configService.getOrThrow<string>('jwt.access.secret'),
       }),
     }),
+    ConfigModule.forFeature(jwtConfig),
   ],
   providers: [
     {

@@ -8,6 +8,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { CurrentUser } from '../../../shared/common/decorators';
 import { AuthenticateGuard } from '../../../shared/common/guards/authenticate.guard';
 import { CreateTemplateDto } from '../dto/create-template.dto';
 import { UpdateTemplateDto } from '../dto/update-template.dto';
@@ -19,30 +20,47 @@ export class TemplatesController {
   constructor(private readonly templatesService: TemplatesService) {}
 
   @Post()
-  create(@Body() createTemplateDto: CreateTemplateDto) {
-    return this.templatesService.create(createTemplateDto);
+  create(
+    @CurrentUser('id') userId: string,
+    @Body()
+    createTemplateDto: Omit<CreateTemplateDto, 'userId'>,
+  ) {
+    return this.templatesService.create({
+      ...createTemplateDto,
+      userId,
+    });
   }
 
   @Get()
-  findAll() {
-    return this.templatesService.findAll();
+  async findAll(@CurrentUser('id') userId: string) {
+    const templates = await this.templatesService.findAll(userId);
+
+    return {
+      data: templates,
+      success: true,
+    };
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.templatesService.findOne(+id);
+  @Get(':templateId')
+  async findOne(@Param('templateId') templateId: string) {
+    const template = await this.templatesService.findOne(templateId);
+
+    return {
+      data: template,
+      success: true,
+    };
   }
 
-  @Patch(':id')
+  @Patch(':templateId')
   update(
-    @Param('id') id: string,
+    @Param('templateId') templateId: string,
     @Body() updateTemplateDto: UpdateTemplateDto,
   ) {
-    return this.templatesService.update(+id, updateTemplateDto);
+    return this.templatesService.update(templateId, updateTemplateDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.templatesService.remove(+id);
+  @Delete(':templateId')
+  async remove(@Param('templateId') templateId: string) {
+    return await this.templatesService.remove(templateId);
   }
 }

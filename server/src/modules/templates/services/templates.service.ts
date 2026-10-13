@@ -1,26 +1,57 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { Types } from 'mongoose';
 import { CreateTemplateDto } from '../dto/create-template.dto';
 import { UpdateTemplateDto } from '../dto/update-template.dto';
+import { TemplateQueueService } from '../queue/template-queue.service';
+import { TemplatesRepository } from '../repository/templates.repository';
 
 @Injectable()
 export class TemplatesService {
-  create(createTemplateDto: CreateTemplateDto) {
-    return 'This action adds a new template';
+  constructor(
+    private readonly templatesRepository: TemplatesRepository,
+    private readonly templateQueueService: TemplateQueueService,
+  ) {}
+
+  async create(createTemplateDto: CreateTemplateDto) {
+    const template = await this.templatesRepository.create({
+      ...createTemplateDto,
+      userId: new Types.ObjectId(createTemplateDto.userId),
+    });
+
+    await this.templateQueueService.enqueueCreate({
+      templateId: template._id.toString(),
+      userId: createTemplateDto.userId,
+    });
+
+    return template;
   }
 
-  findAll() {
-    return `This action returns all templates`;
+  async findAll(userId: string) {
+    return await this.templatesRepository.findMany({ userId });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} template`;
+  async findOne(templateId: string) {
+    return await this.templatesRepository.findOne({ _id: templateId });
   }
 
-  update(id: number, updateTemplateDto: UpdateTemplateDto) {
-    return `This action updates a #${id} template`;
+  async update(templateId: string, updateTemplateDto: UpdateTemplateDto) {
+    return await this.templatesRepository.updateById(
+      templateId,
+      updateTemplateDto,
+    );
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} template`;
+  async remove(templateId: string) {
+    const template = await this.templatesRepository.deleteById(templateId);
+
+    if (!template) {
+      throw new NotFoundException('Template not found');
+    }
+
+    await this.templateQueueService.enqueueRemove({
+      templateId,
+      userId: template.userId.toString(),
+    });
+    return template;
   }
 }

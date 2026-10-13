@@ -48,7 +48,7 @@ export const loggerConfig: Params = {
               levelFirst: true,
               translateTime: 'SYS:standard',
               ignore: 'pid,hostname',
-              singleLine: false,
+              singleLine: true,
             },
           }
         : undefined,

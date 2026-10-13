@@ -1,8 +1,9 @@
 import { BrevoClient, BrevoError } from '@getbrevo/brevo';
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Inject, Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
 
+import { type ConfigType } from '@nestjs/config';
+import { emailConfig } from '../../../config';
 import type { EmailMessage } from '../email.types';
 
 @Injectable()
@@ -14,21 +15,19 @@ export class BrevoService {
   };
 
   constructor(
+    @Inject(emailConfig.KEY)
+    private readonly config: ConfigType<typeof emailConfig>,
     private readonly logger: PinoLogger,
-    private readonly configService: ConfigService,
   ) {
     this.logger.setContext(BrevoService.name);
 
     this.client = new BrevoClient({
-      apiKey: this.configService.getOrThrow<string>('email.apiKey'),
-      timeoutInSeconds: this.configService.getOrThrow<number>('email.timeout'),
-      maxRetries: this.configService.getOrThrow<number>('email.maxRetries'),
+      apiKey: this.config.apiKey,
+      timeoutInSeconds: this.config.timeout,
+      maxRetries: this.config.maxRetries,
     });
 
-    this.sender = {
-      name: this.configService.getOrThrow<string>('email.sender.name'),
-      email: this.configService.getOrThrow<string>('email.sender.email'),
-    };
+    this.sender = this.config.sender;
   }
 
   async sendEmail(options: EmailMessage): Promise<string | undefined> {

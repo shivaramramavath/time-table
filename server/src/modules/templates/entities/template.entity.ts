@@ -1,6 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 
+export const TEMPLATE_STATUSES = ['processing', 'completed'] as const;
+export type TemplateStatus = (typeof TEMPLATE_STATUSES)[number];
+
+export const TEMPLATE_VISIBILITIES = ['private', 'public'] as const;
+export type TemplateVisibility = (typeof TEMPLATE_VISIBILITIES)[number];
+
 export type TemplateDocument = HydratedDocument<Template>;
 
 @Schema({
@@ -14,7 +20,7 @@ export class Template {
     required: true,
     index: true,
   })
-  userId: Types.ObjectId;
+  userId!: Types.ObjectId;
 
   @Prop({
     type: String,
@@ -23,7 +29,7 @@ export class Template {
     minlength: 3,
     maxlength: 100,
   })
-  name: string;
+  name!: string;
 
   @Prop({
     type: String,
@@ -34,12 +40,20 @@ export class Template {
 
   @Prop({
     type: String,
-    enum: ['private', 'public'],
+    enum: TEMPLATE_STATUSES,
+    default: 'processing',
+    required: true,
+  })
+  status!: TemplateStatus;
+
+  @Prop({
+    type: String,
+    enum: TEMPLATE_VISIBILITIES,
     default: 'private',
     required: true,
     index: true,
   })
-  visibility: 'private' | 'public';
+  visibility!: TemplateVisibility;
 }
 
 export const TemplateSchema = SchemaFactory.createForClass(Template);

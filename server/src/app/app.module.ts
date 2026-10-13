@@ -17,6 +17,7 @@ import { EmailModule } from '../infrastructure/email/email.module';
 import { AppLoggerModule } from '../infrastructure/logger/logger.module';
 import { RedisModule } from '../infrastructure/redis/redis.module';
 import { AuthModule } from '../modules/auth/auth.module';
+import { TemplatesModule } from '../modules/templates/templates.module';
 import { TimetableModule } from '../modules/timetable/timetable.module';
 import { UserModule } from '../modules/user/user.module';
 import { TokenModule } from '../shared/core/security/token/token.module';
@@ -71,6 +72,7 @@ import { AppService } from './app.service';
     AuthModule,
     UserModule,
     TimetableModule,
+    TemplatesModule,
   ],
   controllers: [AppController],
   providers: [

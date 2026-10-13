@@ -1,12 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { sessionConfig } from '../../../../config';
 import { RedisService } from '../../../../infrastructure/redis/redis.service';
 import { BaseCacheObject } from '../../../cache/base-cache-object';
 import { SessionRecord } from './session.types';
 
 @Injectable()
 export class SessionRecordCache extends BaseCacheObject {
-  constructor(redisService: RedisService) {
-    super(redisService.getClient(), 'user:session', 30 * 24 * 60 * 60);
+  constructor(
+    redisService: RedisService,
+    @Inject(sessionConfig.KEY)
+    private readonly config: ReturnType<typeof sessionConfig>,
+  ) {
+    super(redisService.getClient(), 'user:session', config.sessionRecordTtl);
   }
 
   async saveSession(session: SessionRecord): Promise<void> {
