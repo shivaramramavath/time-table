@@ -8,10 +8,8 @@ import type {
   AccessTokenPayload,
   PasswordResetTokenPayload,
   RefreshTokenPayload,
+  TokenPayload,
 } from './token.types';
-
-type TokenPayload =
-  AccessTokenPayload | RefreshTokenPayload | PasswordResetTokenPayload;
 
 @Injectable()
 export class JwtTokenService extends TokenService {

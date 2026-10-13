@@ -17,3 +17,6 @@ export interface PasswordResetTokenPayload {
   jti: string;
   type: 'password-reset';
 }
+
+export type TokenPayload =
+  AccessTokenPayload | RefreshTokenPayload | PasswordResetTokenPayload;

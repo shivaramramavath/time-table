@@ -1,28 +1,31 @@
 import {
+  Inject,
   Injectable,
   OnModuleDestroy,
   OnModuleInit,
   ServiceUnavailableException,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { type ConfigType } from '@nestjs/config';
 import Redis from 'ioredis';
 import { PinoLogger } from 'nestjs-pino';
+import { redisConfig } from '../../config';
 
 @Injectable()
 export class RedisService implements OnModuleInit, OnModuleDestroy {
   private readonly client: Redis;
 
   constructor(
-    private readonly configService: ConfigService,
+    @Inject(redisConfig.KEY)
+    private readonly config: ConfigType<typeof redisConfig>,
     private readonly logger: PinoLogger,
   ) {
     this.client = new Redis({
-      host: this.configService.getOrThrow<string>('redis.host'),
-      port: this.configService.getOrThrow<number>('redis.port'),
-      lazyConnect: true,
-      enableReadyCheck: true,
-      maxRetriesPerRequest: 1,
-      connectTimeout: 5000,
+      host: this.config.host,
+      port: this.config.port,
+      lazyConnect: this.config.lazyConnect,
+      enableReadyCheck: this.config.enableReadyCheck,
+      maxRetriesPerRequest: this.config.maxRetriesPerRequest,
+      connectTimeout: this.config.connectTimeout,
     });
   }
 
