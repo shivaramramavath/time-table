@@ -35,17 +35,23 @@ export class AuthService {
     const user = await this.userService.create({
       ...createUserDto,
       password,
+      role: 'user',
     });
 
     const userId = user._id.toString();
 
     // Create the session
-    const session = await this.sessionService.create(userId, user.email);
+    const session = await this.sessionService.create({
+      sub: userId,
+      email: user.email,
+      role: user.role,
+    });
 
     // Generate the access token
     const accessToken = this.tokenService.signAccessToken({
       sub: userId,
       email: user.email,
+      role: user.role,
     });
 
     // Generate the refresh token
@@ -53,6 +59,7 @@ export class AuthService {
       sid: session.sid,
       sub: userId,
       email: user.email,
+      role: user.role,
       secret: session.secret,
     });
 
@@ -99,12 +106,17 @@ export class AuthService {
 
     const userId = user._id.toString();
 
-    const session = await this.sessionService.create(userId, user.email);
+    const session = await this.sessionService.create({
+      sub: userId,
+      email: user.email,
+      role: user.role,
+    });
 
     // Generate the access token
     const accessToken = this.tokenService.signAccessToken({
       sub: userId,
       email: user.email,
+      role: user.role,
     });
 
     // Generate the refresh token
@@ -112,6 +124,7 @@ export class AuthService {
       sid: session.sid,
       sub: userId,
       email: user.email,
+      role: user.role,
       secret: session.secret,
     });
 
@@ -136,6 +149,7 @@ export class AuthService {
     const accessToken = this.tokenService.signAccessToken({
       sub: rotatedSession.sub,
       email: rotatedSession.email,
+      role: rotatedSession.role,
     });
 
     // Generate the refresh token
@@ -143,6 +157,7 @@ export class AuthService {
       sid: rotatedSession.sid,
       sub: rotatedSession.sub,
       email: rotatedSession.email,
+      role: rotatedSession.role,
       secret: rotatedSession.secret,
     });
 

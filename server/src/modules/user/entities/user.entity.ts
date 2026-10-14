@@ -1,11 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 
+export const ROLES = ['user', 'admin'] as const;
+export type Roles = (typeof ROLES)[number];
+
 @Schema({
   timestamps: true,
 })
 export class User {
-  _id: Types.ObjectId;
+  _id!: Types.ObjectId;
 
   @Prop({
     required: true,
@@ -13,7 +16,7 @@ export class User {
     minlength: 3,
     maxlength: 20,
   })
-  userName: string;
+  userName!: string;
 
   @Prop({
     required: true,
@@ -22,19 +25,27 @@ export class User {
     lowercase: true,
     trim: true,
   })
-  email: string;
+  email!: string;
 
   @Prop({
     required: true,
     minlength: 8,
     select: false,
   })
-  password: string;
+  password!: string;
+
+  @Prop({
+    type: String,
+    enum: ROLES,
+    default: 'user',
+    required: true,
+  })
+  role!: Roles;
 
   @Prop({
     default: false,
   })
-  isEmailVerified: boolean;
+  isEmailVerified!: boolean;
 
   @Prop({
     type: {
@@ -44,7 +55,7 @@ export class User {
       },
     },
   })
-  preferences: {
+  preferences!: {
     darkMode: boolean;
   };
 
@@ -52,13 +63,13 @@ export class User {
     type: String,
     default: null,
   })
-  avatar: string | null;
+  avatar!: string | null;
 
   @Prop({
     type: Date,
     default: Date.now,
   })
-  lastLoginAt: Date | null;
+  lastLoginAt!: Date | null;
 }
 
 export type UserDocument = HydratedDocument<User>;

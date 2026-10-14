@@ -3,6 +3,7 @@ import { timingSafeEqual } from 'node:crypto';
 
 import {
   CreatedSession,
+  CreatedSessionProps,
   SessionIdentity,
   SessionRecord,
 } from './session.types';
@@ -23,11 +24,12 @@ export class SessionService {
     private readonly userSessionsCache: UserSessionsCache,
   ) {}
 
-  async create(
-    sub: string,
-    email: string,
-    device?: SessionRecord['device'],
-  ): Promise<CreatedSession> {
+  async create({
+    sub,
+    email,
+    role,
+    device,
+  }: CreatedSessionProps): Promise<CreatedSession> {
     if (!sub) {
       throw new Error('User ID is required to create a session');
     }
@@ -40,6 +42,7 @@ export class SessionService {
       sid,
       sub,
       email,
+      role,
       status: 'active',
       refreshTokenHash: hashSessionSecret(secret),
       createdAt: now,
@@ -60,6 +63,7 @@ export class SessionService {
       sid,
       sub,
       email,
+      role,
       secret,
     };
   }
@@ -133,6 +137,7 @@ export class SessionService {
       sid,
       sub: session.sub,
       email: session.email,
+      role: session.role,
       secret: newSecret,
     };
   }
@@ -178,12 +183,14 @@ export class SessionService {
   }
 
   private toIdentity(session: SessionRecord): SessionIdentity {
-    const { sid, sub, email, status, createdAt, lastUsedAt, device } = session;
+    const { sid, sub, email, role, status, createdAt, lastUsedAt, device } =
+      session;
 
     return {
       sid,
       sub,
       email,
+      role,
       status,
       createdAt,
       lastUsedAt,
