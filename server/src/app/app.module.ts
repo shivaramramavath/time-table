@@ -35,6 +35,7 @@ import { AppService } from './app.service';
         },
       ],
     }),
+
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
@@ -48,6 +49,7 @@ import { AppService } from './app.service';
       ],
       validationSchema: envValidationSchema,
     }),
+
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -56,6 +58,7 @@ import { AppService } from './app.service';
         uri: configService.getOrThrow<string>('database.uri'),
       }),
     }),
+
     BullModule.forRootAsync({
       inject: [ConfigService],
 
@@ -66,6 +69,7 @@ import { AppService } from './app.service';
         },
       }),
     }),
+
     TokenModule,
     AppLoggerModule,
     RedisModule,

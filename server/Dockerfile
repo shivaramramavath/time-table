@@ -28,4 +28,4 @@ COPY --from=builder /app/dist ./dist
 
 EXPOSE 8080
 
-CMD ["node", "run", "start"]
+CMD ["node", "run", "start:prod"]

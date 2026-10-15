@@ -1,0 +1,296 @@
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <meta name='x-apple-disable-message-reformatting' />
+    <title>Welcome to Time Table</title>
+  </head>
+
+  <body
+    style='margin:0;padding:0;background-color:#f5f5f5;font-family:Arial,Helvetica,sans-serif;color:#171717;'
+  >
+    <table
+      role='presentation'
+      width='100%'
+      cellpadding='0'
+      cellspacing='0'
+      border='0'
+      style='background-color:#f5f5f5;'
+    >
+      <tr>
+        <td align='center' style='padding:40px 16px;'>
+
+          <table
+            role='presentation'
+            width='100%'
+            cellpadding='0'
+            cellspacing='0'
+            border='0'
+            style='max-width:580px;background-color:#ffffff;border:1px solid #e5e5e5;border-radius:14px;overflow:hidden;'
+          >
+
+            <!-- Brand header -->
+            <tr>
+              <td style='padding:26px 32px;border-bottom:1px solid #eeeeee;'>
+                <table
+                  role='presentation'
+                  width='100%'
+                  cellpadding='0'
+                  cellspacing='0'
+                  border='0'
+                >
+                  <tr>
+                    <td align='left' valign='middle'>
+                      <table
+                        role='presentation'
+                        cellpadding='0'
+                        cellspacing='0'
+                        border='0'
+                      >
+                        <tr>
+                          <td
+                            valign='middle'
+                            align='center'
+                            width='38'
+                            height='38'
+                            style='width:38px;height:38px;background-color:#171717;border-radius:10px;color:#ffffff;font-size:19px;font-weight:700;'
+                          >
+                            T
+                          </td>
+                          <td valign='middle' style='padding-left:11px;'>
+                            <p
+                              style='margin:0;color:#171717;font-size:18px;font-weight:700;letter-spacing:-0.5px;'
+                            >
+                              Time Table
+                            </p>
+                            <p
+                              style='margin:3px 0 0;color:#737373;font-size:11px;'
+                            >
+                              YOUR TIME, WELL SPENT
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                    <td align='right' valign='middle'>
+                      <span
+                        style='display:inline-block;padding:7px 10px;background-color:#f0fdf4;border:1px solid #dcfce7;border-radius:20px;color:#15803d;font-size:11px;font-weight:700;'
+                      >
+                        &#10003; ACCOUNT ACTIVE
+                      </span>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- Welcome section -->
+            <tr>
+              <td style='padding:42px 32px 24px;'>
+
+                <p
+                  style='margin:0 0 16px;color:#525252;font-size:12px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;'
+                >
+                  WELCOME ABOARD
+                </p>
+
+                <h1
+                  style='margin:0;color:#171717;font-size:34px;line-height:1.2;font-weight:700;letter-spacing:-1.2px;'
+                >
+                  Hello,
+                  {{userName}}.
+                </h1>
+
+                <p
+                  style='margin:18px 0 0;color:#525252;font-size:15px;line-height:1.9;'
+                >
+                  Your account is ready. A little more organization can make a
+                  big difference, and we're here to help you make the most of
+                  every day.
+                </p>
+
+                <!-- Success banner -->
+                <table
+                  role='presentation'
+                  width='100%'
+                  cellpadding='0'
+                  cellspacing='0'
+                  border='0'
+                  style='margin-top:28px;background-color:#fafafa;border:1px solid #e5e5e5;border-radius:10px;'
+                >
+                  <tr>
+                    <td
+                      width='48'
+                      valign='top'
+                      style='padding:17px 0 17px 18px;'
+                    >
+                      <table
+                        role='presentation'
+                        width='34'
+                        height='34'
+                        cellpadding='0'
+                        cellspacing='0'
+                        border='0'
+                        style='background-color:#171717;border-radius:50%;'
+                      >
+                        <tr>
+                          <td
+                            align='center'
+                            valign='middle'
+                            style='color:#ffffff;font-size:17px;font-weight:700;'
+                          >
+                            &#10003;
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                    <td valign='middle' style='padding:16px 18px 16px 10px;'>
+                      <p
+                        style='margin:0;color:#171717;font-size:14px;font-weight:700;'
+                      >
+                        Registration successful
+                      </p>
+                      <p
+                        style='margin:5px 0 0;color:#737373;font-size:12px;line-height:1.6;'
+                      >
+                        Your Time Table account has been created successfully.
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Account details -->
+                <h2
+                  style='margin:34px 0 14px;color:#171717;font-size:17px;line-height:1.4;font-weight:700;'
+                >
+                  Your account details
+                </h2>
+
+                <table
+                  role='presentation'
+                  width='100%'
+                  cellpadding='0'
+                  cellspacing='0'
+                  border='0'
+                  style='border:1px solid #e5e5e5;border-radius:10px;'
+                >
+                  <tr>
+                    <td
+                      style='padding:18px 20px;border-bottom:1px solid #eeeeee;'
+                    >
+                      <p style='margin:0 0 8px;color:#737373;font-size:12px;'>
+                        Username
+                      </p>
+                      <p
+                        style='margin:0;color:#171717;font-size:14px;font-weight:700;word-break:break-word;'
+                      >
+                        {{userName}}
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style='padding:18px 20px;'>
+                      <p style='margin:0 0 8px;color:#737373;font-size:12px;'>
+                        Email address
+                      </p>
+                      <p
+                        style='margin:0;color:#171717;font-size:14px;font-weight:700;word-break:break-word;'
+                      >
+                        {{email}}
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Getting started -->
+                <h2
+                  style='margin:34px 0 10px;color:#171717;font-size:20px;line-height:1.4;font-weight:700;letter-spacing:-0.3px;'
+                >
+                  Make room for what matters.
+                </h2>
+
+                <p
+                  style='margin:0;color:#525252;font-size:14px;line-height:1.9;'
+                >
+                  Organize your classes, plan your schedule, and keep your daily
+                  activities on track, all in one place.
+                </p>
+
+                <!-- CTA placeholder -->
+                {{#if appUrl}}
+                  <table
+                    role='presentation'
+                    cellpadding='0'
+                    cellspacing='0'
+                    border='0'
+                    style='margin-top:26px;'
+                  >
+                    <tr>
+                      <td
+                        align='center'
+                        bgcolor='#171717'
+                        style='border-radius:8px;'
+                      >
+                        <a
+                          href='{{appUrl}}'
+                          style='display:inline-block;padding:15px 24px;color:#ffffff;text-decoration:none;font-size:14px;font-weight:700;border-radius:8px;'
+                        >
+                          Get started &nbsp; &#8594;
+                        </a>
+                      </td>
+                    </tr>
+                  </table>
+                {{/if}}
+
+                <p
+                  style='margin:28px 0 0;padding-top:20px;border-top:1px solid #eeeeee;color:#737373;font-size:12px;line-height:1.8;'
+                >
+                  Didn't create this account? Please contact our support team if
+                  you believe this registration was unauthorized.
+                </p>
+
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td
+                style='padding:24px 32px;background-color:#fafafa;border-top:1px solid #eeeeee;'
+              >
+
+                <p
+                  style='margin:0;color:#171717;font-size:13px;font-weight:700;'
+                >
+                  Time Table
+                </p>
+
+                <p
+                  style='margin:8px 0 0;color:#737373;font-size:11px;line-height:1.8;'
+                >
+                  Plan smarter. Achieve more.
+                </p>
+
+                <p
+                  style='margin:18px 0 0;color:#a3a3a3;font-size:11px;line-height:1.8;'
+                >
+                  &copy; 2026 Time Table. All rights reserved.<br />
+                  This is an automated email. Please do not reply.
+                </p>
+
+              </td>
+            </tr>
+
+          </table>
+
+          <p
+            style='max-width:400px;margin:20px auto 0;color:#a3a3a3;font-size:11px;line-height:1.7;text-align:center;'
+          >
+            You're receiving this email because an account was created using
+            this email address.
+          </p>
+
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

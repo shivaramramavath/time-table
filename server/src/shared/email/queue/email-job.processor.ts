@@ -2,13 +2,13 @@ import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Injectable } from '@nestjs/common';
 import type { Job } from 'bullmq';
 import { BrevoService } from '../../../infrastructure/email/brevo/brevo.service';
+import { EmailTemplateRenderer } from '../email-template.renderer';
 import { EMAIL_DELIVERY_QUEUE, EMAIL_JOB_TYPES } from '../email.constants';
 import {
   FeedbackThankYouJob,
   PasswordResetJob,
   SignupGreetingJob,
 } from '../email.types';
-import { EmailTemplateRenderer } from '../templates/email-template.renderer';
 
 type EmailJobData = SignupGreetingJob | PasswordResetJob;
 
