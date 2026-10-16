@@ -1,7 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Types } from 'mongoose';
+import { QueryFilter, Types } from 'mongoose';
 import { EmailService } from '../../../shared/email/email.service';
 import { CreateFeedbackDto } from '../dto/create-feedback.dto';
+import { FindFeedbackQueryDto } from '../dto/find-feedback-query.dto';
+import { FeedbackDocument } from '../entities/feedback.entity';
 import { FeedbackRepository } from '../repository/feedback.repository';
 
 @Injectable()
@@ -46,6 +48,17 @@ export class FeedbackService {
     }
 
     return feedback;
+  }
+
+  async findMany(query: FindFeedbackQueryDto) {
+    const { rating, category, status } = query;
+
+    const filter: QueryFilter<FeedbackDocument> = {};
+
+    if (rating !== undefined) filter.rating = rating;
+    if (category !== undefined) filter.category = category;
+    if (status !== undefined) filter.status = status;
+    return this.feedbackRepository.findMany(filter);
   }
 
   async remove(feedbackId: string) {

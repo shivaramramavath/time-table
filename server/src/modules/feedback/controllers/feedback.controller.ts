@@ -14,16 +14,21 @@ import {
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiForbiddenResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiParam,
   ApiQuery,
   ApiResponse,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
-import { CurrentUser } from '../../../shared/common/decorators';
+import { CurrentUser, Roles } from '../../../shared/common/decorators';
 import { AuthenticateGuard } from '../../../shared/common/guards/authenticate.guard';
+import { RolesGuard } from '../../../shared/common/guards/roles.guard';
 import { CreateFeedbackDto } from '../dto/create-feedback.dto';
+import { FindFeedbackQueryDto } from '../dto/find-feedback-query.dto';
 import { FeedbackService } from '../services/feedback.service';
 
 @ApiTags('Feedback')
@@ -98,5 +103,21 @@ export class FeedbackController {
   @HttpCode(HttpStatus.OK)
   remove(@Param('feedbackId') feedbackId: string) {
     return this.feedbackService.remove(feedbackId);
+  }
+
+  @Get()
+  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'Get all feedback records' })
+  @ApiOkResponse({
+    description: 'Feedback records retrieved successfully',
+  })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiForbiddenResponse({
+    description: 'Forbidden — admin role required',
+  })
+  @UseGuards(AuthenticateGuard, RolesGuard)
+  @Roles('admin')
+  findMany(@Query() query: FindFeedbackQueryDto) {
+    return this.feedbackService.findMany(query);
   }
 }

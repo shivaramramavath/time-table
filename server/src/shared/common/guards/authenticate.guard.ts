@@ -5,11 +5,14 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Request } from 'express';
+import { ROLES } from '../../../modules/user/entities/user.entity';
 import { TokenService } from '../../core/security/token/token.service';
+import { Role } from '../../core/security/token/token.types';
 
 export interface AuthenticatedUser {
   id: string;
   email: string;
+  role: Role;
 }
 
 export interface AuthenticatedRequest extends Request {
@@ -36,7 +39,10 @@ export class AuthenticateGuard implements CanActivate {
       if (
         payload.type !== 'access' ||
         typeof payload.sub !== 'string' ||
-        typeof payload.email !== 'string'
+        !payload.sub ||
+        typeof payload.email !== 'string' ||
+        !payload.email ||
+        !ROLES.includes(payload.role)
       ) {
         throw new UnauthorizedException('Invalid access token');
       }
@@ -44,6 +50,7 @@ export class AuthenticateGuard implements CanActivate {
       request.user = {
         id: payload.sub,
         email: payload.email,
+        role: payload.role,
       };
 
       return true;
