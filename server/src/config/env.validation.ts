@@ -8,7 +8,7 @@ export const envValidationSchema = Joi.object({
 
   PORT: Joi.number().port().default(8080),
 
-  ORIGIN_URL: Joi.string()
+  CLIENT_URL: Joi.string()
     .uri({ scheme: ['http', 'https'] })
     .default('http://localhost:3000'),
 

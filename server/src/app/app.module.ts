@@ -15,9 +15,9 @@ import {
 import { envValidationSchema } from '../config/env.validation';
 import { AppLoggerModule } from '../infrastructure/logger/logger.module';
 import { RedisModule } from '../infrastructure/redis/redis.module';
+import { AcademicCatalogModule } from '../modules/academic-catalog/academic-catalog.module';
 import { AuthModule } from '../modules/auth/auth.module';
 import { FeedbackModule } from '../modules/feedback/feedback.module';
-import { RoomModule } from '../modules/room/room.module';
 import { TemplatesModule } from '../modules/templates/templates.module';
 import { TimetableModule } from '../modules/timetable/timetable.module';
 import { UserModule } from '../modules/user/user.module';
@@ -80,6 +80,7 @@ import { AppService } from './app.service';
     TimetableModule,
     TemplatesModule,
     FeedbackModule,
+    AcademicCatalogModule,
   ],
   controllers: [AppController],
   providers: [

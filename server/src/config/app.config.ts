@@ -5,5 +5,5 @@ export const appConfig = registerAs('app', () => ({
   logLevel: process.env.LOG_LEVEL ?? 'info',
   logEnabled: (process.env.LOG_ENABLED ?? 'true') === 'true',
   nodeEnv: process.env.NODE_ENV ?? 'development',
-  originUrl: process.env.ORIGIN_URL ?? 'http://localhost:3000',
+  clientUrl: process.env.CLIENT_URL ?? 'http://localhost:3000',
 }));
