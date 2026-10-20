@@ -12,7 +12,7 @@ import type { SignupFormValues } from "../schemas/signup.schema";
 
 type AuthResponse = {
   user: User;
-  token: string;
+  accessToken: string;
   message?: string;
 };
 
@@ -32,7 +32,7 @@ export const authService = {
     const response = (await authApi.signup(data)) as AuthResponse;
 
     setAuthenticatedUser(response.user);
-    Token.setToken(response.token);
+    Token.setToken(response.accessToken);
 
     return response;
   },
@@ -41,7 +41,7 @@ export const authService = {
     const response = (await authApi.signin(data)) as AuthResponse;
 
     setAuthenticatedUser(response.user);
-    Token.setToken(response.token);
+    Token.setToken(response.accessToken);
 
     return response;
   },
@@ -60,5 +60,17 @@ export const authService = {
 
   resetPassword: async (data: ResetPasswordFormValues, token: string) => {
     return await authApi.resetPassword(data, token);
+  },
+
+  refreshToken: async () => {
+    const response = (await authApi.refreshToken()) as Omit<
+      AuthResponse,
+      "user"
+    >;
+
+    console.log("refresh", response);
+    Token.setToken(response.accessToken);
+
+    return response;
   },
 };

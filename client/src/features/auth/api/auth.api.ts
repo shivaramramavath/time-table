@@ -61,6 +61,14 @@ class AuthApi {
 
     return response;
   }
+
+  async refreshToken() {
+    const { data: response } = await this.httpClient.post(
+      `${this.path}/refresh`,
+    );
+
+    return response.data;
+  }
 }
 
 export const authApi = new AuthApi(httpClient);

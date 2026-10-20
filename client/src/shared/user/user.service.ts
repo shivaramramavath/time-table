@@ -11,6 +11,14 @@ export const userService = {
     return useUserStore.getState().user;
   },
 
+  getCurrentUser: async (): Promise<User> => {
+    const user = await userApi.getCurrentUser();
+
+    useUserStore.getState().setUser(user);
+
+    return user;
+  },
+
   clearUser: (): void => {
     useUserStore.getState().clearUser();
   },

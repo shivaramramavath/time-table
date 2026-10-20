@@ -15,12 +15,30 @@ export const loggerConfig: Params = {
       return typeof requestId === 'string' ? requestId : randomUUID();
     },
 
+    // Log only the fields needed for request monitoring.
+    serializers: {
+      req: (req: any) => ({
+        id: req.id,
+        method: req.method,
+        url: req.url,
+      }),
+      res: (res) => ({
+        statusCode: res.statusCode,
+      }),
+    },
+
+    customSuccessMessage: (req, res) =>
+      `${req.method} ${req.url} ${res.statusCode}`,
+
+    customErrorMessage: (req, res) =>
+      `${req.method} ${req.url} ${res.statusCode}`,
+
     redact: {
       paths: [
         'req.headers.authorization',
         'req.headers.cookie',
-        'req.headers["set-cookie"]',
-        'res.headers["set-cookie"]',
+        'req.headers.set-cookie',
+        'res.headers.set-cookie',
         'password',
         '*.password',
         'passwordHash',

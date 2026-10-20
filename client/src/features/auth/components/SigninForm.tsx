@@ -1,20 +1,22 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 import { signinSchema, type SigninFormValues } from "../schemas/signin.schema";
+import { authService } from "../services/auth.service";
 
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { APP_CONSTANTS } from "@/shared/constants/app.constants";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { authService } from "../services/auth.service";
 
 const SigninForm = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
   const {
     register,
     handleSubmit,
@@ -30,10 +32,19 @@ const SigninForm = () => {
 
   const onSubmit = async (data: SigninFormValues) => {
     try {
-      console.log("Signin data:", data);
       await authService.signin(data);
 
-      router.replace(APP_CONSTANTS.ROUTES.DASHBOARD);
+      const redirect = searchParams.get("redirect");
+
+      // Only allow safe, internal paths.
+      const destination =
+        redirect?.startsWith("/") &&
+        !redirect.startsWith("//") &&
+        !redirect.startsWith("/\\")
+          ? redirect
+          : APP_CONSTANTS.ROUTES.DASHBOARD;
+
+      router.replace(destination);
     } catch (error) {
       console.error("Signin failed:", error);
     }
@@ -45,7 +56,6 @@ const SigninForm = () => {
       noValidate
       className="flex flex-col gap-5"
     >
-      {/* Email */}
       <div className="flex flex-col gap-2">
         <Label htmlFor="email">Email address</Label>
 
@@ -67,12 +77,12 @@ const SigninForm = () => {
         )}
       </div>
 
-      {/* Password */}
       <div className="flex flex-col gap-2">
         <div className="flex justify-between">
           <Label htmlFor="password">Password</Label>
+
           <Link
-            className="text-sm text-muted-foreground"
+            className="text-sm text-muted-foreground hover:text-foreground"
             href="/forgot-password"
           >
             Forgot password?
@@ -82,8 +92,8 @@ const SigninForm = () => {
         <Input
           id="password"
           type="password"
-          placeholder="Create a password"
-          autoComplete="new-password"
+          placeholder="Enter password"
+          autoComplete="current-password"
           aria-invalid={!!errors.password}
           aria-describedby={errors.password ? "password-error" : undefined}
           className="h-11 bg-background"
@@ -97,13 +107,12 @@ const SigninForm = () => {
         )}
       </div>
 
-      {/* Submit */}
       <Button
         type="submit"
         disabled={isSubmitting}
         className="mt-2 h-11 w-full font-semibold"
       >
-        {isSubmitting ? "Loading..." : "Sign in"}
+        {isSubmitting ? "Signing in..." : "Sign in"}
       </Button>
     </form>
   );

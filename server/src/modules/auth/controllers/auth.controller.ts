@@ -23,6 +23,7 @@ import { AuthService } from '../services/auth.service';
 export const REFRESH_COOKIE = 'refreshToken';
 
 @ApiTags('Authentication')
+@Throttle({ default: { limit: 10, ttl: 60_000 } })
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -37,7 +38,6 @@ export class AuthController {
   @ApiResponse({ status: 400, description: 'Invalid registration data' })
   @ApiResponse({ status: 409, description: 'Account already exists' })
   @ApiResponse({ status: 429, description: 'Too many requests' })
-  @Throttle({ default: { limit: 5, ttl: 60_000 } })
   @HttpCode(HttpStatus.CREATED)
   async signUp(
     @Body() createUserDto: SignUpDto,

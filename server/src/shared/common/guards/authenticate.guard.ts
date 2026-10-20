@@ -33,6 +33,8 @@ export class AuthenticateGuard implements CanActivate {
       throw new UnauthorizedException('Bearer access token is required');
     }
 
+    console.log(token);
+
     try {
       const payload = this.tokenService.verifyAccessToken(token);
 
@@ -46,6 +48,8 @@ export class AuthenticateGuard implements CanActivate {
       ) {
         throw new UnauthorizedException('Invalid access token');
       }
+
+      console.log(payload);
 
       request.user = {
         id: payload.sub,
