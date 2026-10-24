@@ -1,9 +1,11 @@
+import QueryProvider from "@/providers/QueryProvider";
+
 type Props = {
   children: React.ReactNode;
 };
 
 const Providers = ({ children }: Props) => {
-  return <>{children}</>;
+  return <QueryProvider>{children}</QueryProvider>;
 };
 
 export default Providers;

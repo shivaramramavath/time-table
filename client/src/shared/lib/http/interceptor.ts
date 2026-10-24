@@ -113,9 +113,7 @@ export const errorInterceptor = async (
           ? "Unable to connect to the server."
           : error.message || "Something went wrong.");
 
-  if (process.env.NODE_ENV === "development") {
-    console.error(`[API ${status ?? "NETWORK ERROR"}] ${message}`);
-  }
+  console.error(`[API ${status ?? "NETWORK ERROR"}] ${message}`);
 
   return Promise.reject(error);
 };

@@ -1,25 +1,24 @@
+import type { AxiosInstance } from "axios";
+
 import { httpClient } from "@/shared/lib/http/http-client";
-import { Axios } from "axios";
-import { CreateTimetable } from "../types/timetable.types";
+import type { CreateTimetable } from "../types/timetable.types";
 
 class TimetableApi {
-  private path = "/timetable";
+  private readonly path = "/timetable";
 
-  constructor(private readonly httpClient: Axios) {}
+  constructor(private readonly httpClient: AxiosInstance) {}
 
   async create(data: CreateTimetable) {
-    const { data: response } = await this.httpClient.post(`${this.path}`, data);
+    const { data: response } = await this.httpClient.post(this.path, data);
 
     return response;
   }
 
-  async getAllTimetables(data: CreateTimetable) {
-    const { data: response } = await this.httpClient.post(`${this.path}`, data);
+  async getAllTimetables() {
+    const { data: response } = await this.httpClient.get(this.path);
 
-    return response;
+    return response.data;
   }
-
-
 }
 
 export const timetableApi = new TimetableApi(httpClient);
