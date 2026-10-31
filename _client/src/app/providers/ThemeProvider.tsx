@@ -6,7 +6,7 @@ interface ThemeProviderProps {
 }
 
 const ThemeProvider = ({ children }: ThemeProviderProps) => {
-  const darkMode = useUserStore((state) => state.user?.preferences.darkMode);
+  const darkMode = useUserStore((state) => state.user?.preferences?.darkMode);
 
   useEffect(() => {
     const root = document.documentElement;

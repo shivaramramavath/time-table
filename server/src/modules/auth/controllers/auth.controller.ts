@@ -69,7 +69,7 @@ export class AuthController {
     return { data, success: true };
   }
 
-  @Post('refresh')
+  @Post('refresh-token')
   @ApiOperation({
     summary: 'Refresh the access token using the refresh cookie',
   })

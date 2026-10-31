@@ -64,7 +64,7 @@ class AuthApi {
 
   async refreshToken() {
     const { data: response } = await this.httpClient.post(
-      `${this.path}/refresh`,
+      `${this.path}/refresh-token`,
     );
 
     return response.data;
